@@ -1,1243 +1,1092 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Aura OS — Personal Life & 5TB Cloud Sanctuary</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            serif: ['"Instrument Serif"', 'serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            obsidian: '#07090E',
-            glass: 'rgba(18, 22, 34, 0.72)',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    :root {
-      --bg-primary: #07090E;
-      --text-primary: #F8FAFC;
-      --card-bg: rgba(17, 21, 34, 0.72);
-      --card-border: rgba(255, 255, 255, 0.09);
-    }
-    html.light {
-      --bg-primary: #F4F1EA;
-      --text-primary: #0F172A;
-      --card-bg: rgba(255, 255, 255, 0.82);
-      --card-border: rgba(15, 23, 42, 0.09);
-    }
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      transition: background-color 0.35s ease, color 0.35s ease;
-    }
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(22px) saturate(160%);
-      -webkit-backdrop-filter: blur(22px) saturate(160%);
-      border: 1px solid var(--card-border);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-    }
-    .aurora-blob {
-      position: fixed;
-      border-radius: 9999px;
-      filter: blur(110px);
-      opacity: 0.35;
-      z-index: -1;
-      pointer-events: none;
-      animation: floatAurora 18s ease-in-out infinite alternate;
-    }
-    @keyframes floatAurora {
-      0% { transform: translate(0px, 0px) scale(1); }
-      100% { transform: translate(40px, -30px) scale(1.12); }
-    }
-    .secret-blur {
-      filter: blur(6px);
-      transition: filter 0.25s ease;
-      cursor: pointer;
-      user-select: all;
-    }
-    .secret-blur:hover, .secret-blur.revealed {
-      filter: blur(0px);
-    }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.35); border-radius: 9999px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#07090e" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Aura OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#07090e; --txt:#f5f6fa; --mut:rgba(245,246,250,.58); --faint:rgba(245,246,250,.34);
+  --card:rgba(20,24,38,.55); --card-solid:#121624; --soft:rgba(255,255,255,.05); --soft2:rgba(255,255,255,.09);
+  --line:rgba(255,255,255,.10); --shadow:0 24px 60px -20px rgba(0,0,0,.6);
+  --a:139 92 246; --a2:251 191 36; --ok:52 211 153; --bad:251 113 133;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif; --serif:'Instrument Serif',Georgia,serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:#f5f1e8; --txt:#1c1b18; --mut:rgba(28,27,24,.62); --faint:rgba(28,27,24,.38);
+  --card:rgba(255,255,255,.62); --card-solid:#fffdf8; --soft:rgba(40,30,10,.045); --soft2:rgba(40,30,10,.08);
+  --line:rgba(40,30,10,.10); --shadow:0 24px 50px -24px rgba(80,60,20,.28);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;line-height:1.5;overflow-x:hidden;transition:background .5s var(--ease),color .4s var(--ease);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.hidden{display:none!important}
+.mono{font-family:var(--mono)} .serif{font-family:var(--serif)}
+.mut{color:var(--mut)} .faint{color:var(--faint)}
+svg.i{width:1.1em;height:1.1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.17em}
+
+/* Aurora */
+.aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:.34;animation:drift 22s ease-in-out infinite alternate}
+html[data-theme="light"] .blob{opacity:.28}
+.b1{width:42vmax;height:42vmax;background:rgb(var(--a));top:-14vmax;left:-10vmax}
+.b2{width:46vmax;height:46vmax;background:rgb(var(--a2));bottom:-20vmax;right:-12vmax;animation-delay:-7s;opacity:.22}
+.b3{width:34vmax;height:34vmax;background:rgb(45 212 191);top:38%;left:46%;animation-delay:-13s;opacity:.18}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(5vmax,-4vmax) scale(1.14)}}
+.grain{position:fixed;inset:0;z-index:-1;opacity:.04;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Glass */
+.glass{background:var(--card);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07);border-radius:28px}
+html[data-theme="light"] .glass{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9)}
+.pad{padding:24px} .pad-s{padding:16px}
+.card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em}
+.card-title .dot{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgb(var(--a)/.16);color:rgb(var(--a))}
+.label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--mono);color:var(--mut)}
+
+/* Controls */
+.inp{width:100%;padding:12px 14px;border-radius:14px;background:var(--soft);border:1px solid var(--line);outline:0;transition:border-color .25s,box-shadow .25s,background .25s;min-width:0}
+.inp::placeholder{color:var(--faint)}
+.inp:focus{border-color:rgb(var(--a)/.7);box-shadow:0 0 0 4px rgb(var(--a)/.15);background:var(--soft2)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+textarea.inp{resize:vertical;min-height:110px;line-height:1.6}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:14px;font-weight:600;font-size:13px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s,opacity .2s;white-space:nowrap}
+.btn:active{transform:scale(.96)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.7));box-shadow:0 10px 28px -10px rgb(var(--a)/.8),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px -10px rgb(var(--a)/.9),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn-ghost{background:var(--soft);border:1px solid var(--line)}
+.btn-ghost:hover{background:var(--soft2)}
+.btn-ok{color:#fff;background:linear-gradient(135deg,rgb(var(--ok)),rgb(var(--ok)/.7))}
+.btn-warn{color:rgb(var(--a2));background:rgb(var(--a2)/.12);border:1px solid rgb(var(--a2)/.3)}
+.btn-sm{padding:7px 12px;font-size:12px;border-radius:11px}
+.icon-btn{width:36px;height:36px;border-radius:12px;display:inline-grid;place-items:center;background:var(--soft);border:1px solid var(--line);transition:background .2s,transform .3s var(--ease)}
+.icon-btn:hover{background:var(--soft2);transform:translateY(-1px)}
+.icon-btn.danger:hover{color:rgb(var(--bad))}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;font-family:var(--mono);background:rgb(var(--a)/.15);color:rgb(var(--a))}
+.chip.gold{background:rgb(var(--a2)/.15);color:rgb(var(--a2))} .chip.ok{background:rgb(var(--ok)/.15);color:rgb(var(--ok))} .chip.bad{background:rgb(var(--bad)/.15);color:rgb(var(--bad))} .chip.neutral{background:var(--soft2);color:var(--mut)}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:15px;background:var(--soft);border:1px solid var(--line);flex-wrap:wrap}
+.seg button{padding:7px 12px;border-radius:11px;font-size:12px;font-weight:600;color:var(--mut);transition:all .3s var(--ease)}
+.seg button.on{background:rgb(var(--a));color:#fff;box-shadow:0 6px 16px -6px rgb(var(--a)/.9)}
+.seg button:not(.on):hover{color:var(--txt)}
+.item{padding:14px 16px;border-radius:18px;background:var(--soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;transition:transform .35s var(--ease),background .25s;animation:rise .5s var(--ease) both}
+.item:hover{background:var(--soft2)}
+.empty{padding:28px 10px;text-align:center;color:var(--faint);font-size:13px}
+.empty .big{font-size:26px;display:block;margin-bottom:6px;opacity:.7}
+.grid{display:grid;gap:20px;min-width:0}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.row{display:flex;align-items:center;gap:10px} .between{justify-content:space-between} .wrap{flex-wrap:wrap} .col{display:flex;flex-direction:column;gap:12px} .grow{flex:1;min-width:0}
+.scroll-y{overflow-y:auto;max-height:360px;padding-right:4px}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:rgb(var(--a)/.35);border-radius:99px}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.view{animation:rise .6s var(--ease) both}
+
+/* Custom checkbox */
+.chk{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:8px;border:1.5px solid var(--faint);display:inline-grid;place-items:center;flex:none;cursor:pointer;transition:all .3s var(--ease);background:transparent}
+.chk::after{content:"";width:10px;height:6px;border-left:2.4px solid #fff;border-bottom:2.4px solid #fff;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .3s var(--ease)}
+.chk:checked{background:rgb(var(--ok));border-color:rgb(var(--ok));box-shadow:0 0 0 5px rgb(var(--ok)/.15)}
+.chk:checked::after{transform:rotate(-45deg) scale(1)}
+
+/* Layout */
+.shell{max-width:1320px;margin:0 auto;padding:20px 20px 40px;display:flex;gap:24px;align-items:flex-start}
+.side{width:268px;flex:none;position:sticky;top:20px}
+main{flex:1;min-width:0;display:flex;flex-direction:column;gap:24px}
+.logo{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a2)));box-shadow:0 10px 24px -8px rgb(var(--a)/.8)}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;font-weight:600;color:var(--mut);text-align:left;transition:all .35s var(--ease)}
+.nav-btn:hover{background:var(--soft);color:var(--txt)}
+.nav-btn.active{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.72));box-shadow:0 12px 26px -10px rgb(var(--a)/.9)}
+.dock{display:none}
+.swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px var(--line);transition:transform .3s var(--ease)}
+.swatch:hover{transform:scale(1.15)} .swatch.on{border-color:var(--txt)}
+
+/* Hero */
+.hero{padding:32px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:340px;height:340px;right:-90px;top:-130px;border-radius:50%;background:radial-gradient(circle,rgb(var(--a)/.35),transparent 70%)}
+.hero-grid{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;flex-wrap:wrap;position:relative}
+.hero h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:6px 0 0;letter-spacing:-.01em}
+.intent{display:flex;align-items:center;gap:10px;margin-top:18px;padding:10px 14px;border-radius:16px;background:var(--soft);border:1px solid var(--line);max-width:520px}
+.intent input{flex:1;background:none;border:0;outline:0;font-weight:600;min-width:0}
+.clock{font-family:var(--mono);font-weight:700;font-size:clamp(34px,5vw,58px);letter-spacing:-.03em;line-height:1}
+
+/* Timer ring */
+.ring-wrap{position:relative;width:min(230px,70vw);aspect-ratio:1;margin:8px auto}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{stroke:var(--soft2);fill:none}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-linecap:round;transition:stroke-dashoffset .5s linear;filter:drop-shadow(0 0 8px rgb(var(--a)/.6))}
+.ring-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-center .t{font-family:var(--mono);font-size:44px;font-weight:700;letter-spacing:-.03em}
+.sw-time{font-family:var(--mono);font-size:clamp(38px,5vw,52px);font-weight:700;text-align:center;letter-spacing:-.03em}
+.sw-time small{font-size:.5em;opacity:.55}
+.lap{display:grid;grid-template-columns:34px 1fr 1fr 1fr;gap:6px;padding:7px 12px;border-radius:12px;background:var(--soft);font-family:var(--mono);font-size:12px;animation:rise .4s var(--ease) both}
+
+/* Stat tiles */
+.stat{padding:18px;border-radius:22px;background:var(--soft);border:1px solid var(--line)}
+.stat b{display:block;font-size:28px;font-family:var(--serif);font-weight:400;line-height:1.1}
+.bar{height:8px;border-radius:99px;background:var(--soft2);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,rgb(var(--a)),rgb(var(--a2)));transition:width .7s var(--ease)}
+
+/* Calendar */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal-h{text-align:center;font-size:10px;font-family:var(--mono);color:var(--faint);padding-bottom:4px;letter-spacing:.1em}
+.cell{min-height:78px;padding:7px;border-radius:16px;background:var(--soft);border:1px solid transparent;display:flex;flex-direction:column;gap:3px;text-align:left;overflow:hidden;transition:all .3s var(--ease)}
+.cell:hover{background:var(--soft2);border-color:rgb(var(--a)/.4);transform:translateY(-2px)}
+.cell.today{border-color:rgb(var(--a2)/.7);background:rgb(var(--a2)/.10)}
+.cell.void{background:transparent;pointer-events:none}
+.cell .n{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--mut)}
+.cell.today .n{color:rgb(var(--a2))}
+.pill{font-size:9.5px;padding:1px 6px;border-radius:6px;background:rgb(var(--a)/.25);color:rgb(var(--a));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.rdot{width:6px;height:6px;border-radius:50%;background:rgb(var(--a2));display:inline-block}
+
+/* Notes masonry */
+.masonry{columns:2 260px;column-gap:16px}
+.note{break-inside:avoid;margin-bottom:16px;padding:20px;border-radius:22px;background:var(--soft);border:1px solid var(--line);animation:rise .5s var(--ease) both;transition:transform .35s var(--ease),border-color .25s}
+.note:hover{transform:translateY(-3px);border-color:rgb(var(--a)/.4)}
+.note.pinned{border-color:rgb(var(--a2)/.5);background:linear-gradient(160deg,rgb(var(--a2)/.10),var(--soft))}
+.note h4{margin:6px 0 6px;font-size:17px;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2}
+.note p{margin:0;white-space:pre-wrap;color:var(--mut);font-size:13px;line-height:1.65;word-break:break-word}
+
+/* Photos */
+.drop{border:1.5px dashed var(--line);border-radius:22px;padding:22px;text-align:center;transition:all .3s var(--ease);background:var(--soft)}
+.drop.over{border-color:rgb(var(--a));background:rgb(var(--a)/.12);transform:scale(1.01)}
+.photos{columns:4 190px;column-gap:14px}
+.ph{break-inside:avoid;margin-bottom:14px;position:relative;border-radius:20px;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);background:var(--soft);animation:rise .5s var(--ease) both}
+.ph img{width:100%;display:block;transition:transform .8s var(--ease)}
+.ph:hover img{transform:scale(1.06)}
+.ph .cap{position:absolute;inset:auto 0 0 0;padding:34px 12px 11px;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.78),transparent);opacity:0;transform:translateY(6px);transition:all .35s var(--ease)}
+.ph:hover .cap{opacity:1;transform:none}
+.ph .tag{position:absolute;top:9px;left:9px}
+
+/* Vault */
+.secret{filter:blur(7px);transition:filter .3s var(--ease);cursor:pointer;user-select:none;font-family:var(--mono);color:rgb(var(--a2));word-break:break-all}
+.secret.revealed{filter:none;user-select:all}
+@media(hover:hover){.item:hover .secret{filter:none}}
+
+/* Overlays */
+.overlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,4,8,.62);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px)}
+.overlay.show{display:flex;animation:fade .35s ease both}
+html[data-theme="light"] .overlay{background:rgba(245,241,232,.7)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{width:100%;max-width:440px;max-height:92vh;overflow:auto;padding:28px;animation:pop .5s var(--ease) both}
+.modal.wide{max-width:560px}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin:18px 0 22px}
+.pin-dots i{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--faint);transition:all .3s var(--ease)}
+.pin-dots i.on{background:rgb(var(--a));border-color:rgb(var(--a));box-shadow:0 0 16px rgb(var(--a)/.8);transform:scale(1.15)}
+.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:290px;margin:0 auto}
+.key{height:62px;border-radius:20px;background:var(--soft);border:1px solid var(--line);font-family:var(--mono);font-size:22px;font-weight:600;transition:all .25s var(--ease)}
+.key:hover{background:var(--soft2)} .key:active{transform:scale(.92);background:rgb(var(--a)/.25)}
+.key.sm{font-size:12px;font-family:var(--sans);color:var(--mut)}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.lb{max-width:1000px;width:100%;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.lb img{max-width:100%;max-height:76vh;border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);border:1px solid var(--line);object-fit:contain}
+
+/* Toast */
+#toasts{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;z-index:100;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;font-weight:600;font-size:13px;max-width:min(360px,calc(100vw - 32px));animation:pop .5s var(--ease) both}
+.toast i{width:9px;height:9px;border-radius:50%;background:rgb(var(--ok));flex:none;box-shadow:0 0 10px rgb(var(--ok))}
+.toast.err i{background:rgb(var(--bad));box-shadow:0 0 10px rgb(var(--bad))}
+
+.cloud{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:rgb(var(--ok))}
+.cloud i{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+.cloud.warn{color:rgb(var(--a2))} .cloud.err{color:rgb(var(--bad))} .cloud.sync i{animation:pulse .6s infinite}
+@keyframes pulse{50%{opacity:.3;transform:scale(.7)}}
+
+@media(max-width:1023px){
+  .shell{flex-direction:column;padding:14px 14px 120px;gap:16px}
+  .side{width:100%;position:static}
+  .side .nav,.side .side-extra{display:none}
+  .dock{display:flex;position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;padding:8px;justify-content:space-around;border-radius:26px}
+  .dock button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:18px;font-size:10px;font-weight:600;color:var(--mut);transition:all .35s var(--ease);flex:1}
+  .dock button svg{width:20px;height:20px}
+  .dock button.active{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.7));box-shadow:0 8px 20px -8px rgb(var(--a)/.9)}
+  .g2,.g3{grid-template-columns:minmax(0,1fr)}
+  .hero{padding:22px} .pad{padding:20px}
+  .cell{min-height:58px;padding:5px;border-radius:12px} .pill{display:none} .cal{gap:4px}
+  .cell .dotrow{display:flex;gap:3px;flex-wrap:wrap}
+}
+@media(min-width:1024px){.cell .dotrow{display:none}}
+@media(max-width:640px){.inp,select.inp,textarea.inp{font-size:16px}.modal{padding:22px}.mobile-hide{display:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
-<body class="min-h-screen antialiased selection:bg-violet-500 selection:text-white">
+<body>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain"></div>
+<div id="toasts"></div>
 
-  <!-- Ambient Aurora Background -->
-  <div class="aurora-blob w-96 h-96 bg-violet-600 top-[-80px] left-[-80px]"></div>
-  <div class="aurora-blob w-[28rem] h-[28rem] bg-amber-500/70 bottom-[-120px] right-[-80px]" style="animation-delay: -6s;"></div>
-  <div class="aurora-blob w-80 h-80 bg-emerald-500/60 top-[35%] left-[42%]" style="animation-delay: -11s;"></div>
+<!-- AUTH / PIN -->
+<div id="authOverlay" class="overlay show" style="z-index:80">
+  <div class="glass modal">
+    <div class="row between" style="margin-bottom:22px">
+      <div class="row" style="gap:12px"><div class="logo">A</div><div><div style="font-weight:800;font-size:17px;letter-spacing:-.02em">Aura OS</div><div class="faint" style="font-size:12px">Your personal sanctuary</div></div></div>
+      <span class="chip ok">5TB READY</span>
+    </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed top-5 right-5 z-[100] hidden items-center gap-3 px-4 py-3 rounded-2xl glass-card border border-violet-500/40 text-sm font-medium shadow-2xl transition-all">
-    <span id="toastIcon" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-    <span id="toastMsg">Saved to 5TB Google Drive</span>
+    <div id="authForms">
+      <div class="seg" style="width:100%;margin-bottom:18px"><button id="tabLoginBtn" class="on" style="flex:1" onclick="switchAuthTab('login')">Sign In</button><button id="tabSignupBtn" style="flex:1" onclick="switchAuthTab('signup')">Create Account</button></div>
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="col" style="gap:12px">
+        <div id="nameFieldWrap" class="hidden"><div class="label" style="margin-bottom:6px">Your name</div><input id="authName" class="inp" placeholder="e.g. Aditya" autocomplete="name" /></div>
+        <div><div class="label" style="margin-bottom:6px">Email or username</div><input id="authEmail" class="inp" required placeholder="you@example.com" autocomplete="username" /></div>
+        <div class="grid g2" style="gap:12px">
+          <div><div class="label" style="margin-bottom:6px">Password</div><input id="authPassword" type="password" class="inp" required placeholder="••••••••" autocomplete="current-password" /></div>
+          <div><div class="label" style="margin-bottom:6px">4-digit PIN</div><input id="authPin" type="password" inputmode="numeric" maxlength="4" class="inp mono" placeholder="1234" style="letter-spacing:.3em" /></div>
+        </div>
+        <div><div class="label" style="margin-bottom:6px;color:rgb(var(--a2))">Google Script passkey</div><input id="authDrivePasskey" type="password" class="inp" placeholder="Your SECRET_PASSKEY for 5TB sync" style="border-color:rgb(var(--a2)/.3)" /></div>
+        <button class="btn btn-primary" style="padding:14px;margin-top:4px" type="submit"><span id="authSubmitText">Unlock my sanctuary</span></button>
+      </form>
+      <div class="row between faint" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:12px">
+        <span>In a rush?</span><button class="btn-link" onclick="instantEnter()" style="color:rgb(var(--a2));font-weight:700">Instant enter →</button>
+      </div>
+    </div>
+
+    <div id="pinPadView" class="hidden" style="text-align:center">
+      <div id="pinWho" class="mut" style="font-size:13px">Enter your quick PIN</div>
+      <div id="pinDots" class="pin-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="pad-grid">
+        <button class="key" onclick="pressPin('1')">1</button><button class="key" onclick="pressPin('2')">2</button><button class="key" onclick="pressPin('3')">3</button>
+        <button class="key" onclick="pressPin('4')">4</button><button class="key" onclick="pressPin('5')">5</button><button class="key" onclick="pressPin('6')">6</button>
+        <button class="key" onclick="pressPin('7')">7</button><button class="key" onclick="pressPin('8')">8</button><button class="key" onclick="pressPin('9')">9</button>
+        <button class="key sm" onclick="clearPin()">Clear</button><button class="key" onclick="pressPin('0')">0</button><button class="key sm" onclick="showFullLogin()">Switch</button>
+      </div>
+    </div>
   </div>
+</div>
 
-  <!-- AUTH & PIN LOCK OVERLAY -->
-  <div id="authOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl">
-    <div class="glass-card w-full max-w-md rounded-3xl p-7 sm:p-8 border border-white/15 relative overflow-hidden">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 to-amber-400 flex items-center justify-center font-bold text-white shadow-lg">A</div>
-          <div>
-            <h1 class="text-lg font-bold tracking-tight">Aura Personal OS</h1>
-            <p class="text-xs opacity-65">5TB Google Drive Sanctuary</p>
+<!-- DRIVE MODAL -->
+<div id="driveModal" class="overlay" onclick="if(event.target===this)closeDriveModal()">
+  <div class="glass modal wide col" style="gap:16px">
+    <div class="row between"><div><div style="font-weight:800;font-size:18px">5TB Google Drive bridge</div><div class="faint" style="font-size:12px">Your data lives in <span class="mono">Aura_OS_Vault</span> on your Drive.</div></div><button class="icon-btn" onclick="closeDriveModal()" data-ic="x"></button></div>
+    <div><div class="label" style="margin-bottom:6px">Apps Script web app URL</div><input id="driveUrlInput" type="url" class="inp mono" style="font-size:11px" /></div>
+    <div><div class="label" style="margin-bottom:6px">SECRET_PASSKEY</div><input id="driveKeyInput" type="password" class="inp" placeholder="Must match line 3 of your Google Script" /></div>
+    <div class="row wrap"><button class="btn btn-primary" onclick="saveDriveConfig()"><span data-ic="upload"></span>Save &amp; push</button><button class="btn btn-ok" onclick="pullFromGoogleDrive()"><span data-ic="download"></span>Pull from Drive</button></div>
+    <div id="driveStatusText" class="mono faint" style="font-size:11px;min-height:16px"></div>
+  </div>
+</div>
+
+<!-- DAY MODAL -->
+<div id="dayModal" class="overlay" onclick="if(event.target===this)closeDayModal()">
+  <div class="glass modal col" style="gap:14px">
+    <div class="row between"><div><div class="label">Selected day</div><div id="dayModalTitle" class="serif" style="font-size:28px;font-style:italic;line-height:1.1"></div></div><button class="icon-btn" onclick="closeDayModal()" data-ic="x"></button></div>
+    <div id="dayModalList" class="col" style="gap:8px"></div>
+    <form onsubmit="addDayFromModal(event)" class="col" style="gap:10px;padding-top:12px;border-top:1px solid var(--line)">
+      <input id="dmTitle" class="inp" required placeholder="Add an event to this day…" />
+      <div class="row"><select id="dmCat" class="inp grow"></select><button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Add</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightboxModal" class="overlay" style="background:rgba(0,0,0,.82)" onclick="if(event.target===this)closeLightbox()">
+  <div class="lb">
+    <img id="lightboxImg" alt="Memory" />
+    <div class="glass row between" style="padding:12px 16px;border-radius:20px;width:100%;max-width:560px;gap:12px">
+      <div style="text-align:left;min-width:0"><div id="lightboxCaption" style="font-weight:700" class="grow"></div><div id="lightboxDate" class="mono faint" style="font-size:11px"></div></div>
+      <div class="row" style="gap:6px;flex:none">
+        <button class="icon-btn" onclick="lbStep(-1)" data-ic="chevL"></button>
+        <button class="icon-btn" onclick="lbStep(1)" data-ic="chevR"></button>
+        <button class="icon-btn" onclick="lbDownload()" title="Download" data-ic="download"></button>
+        <button class="icon-btn danger" onclick="lbDelete()" title="Delete" data-ic="trash"></button>
+        <button class="icon-btn" onclick="closeLightbox()" data-ic="x"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="glass pad-s col" style="gap:18px;padding:18px">
+      <div class="row between">
+        <div class="row" style="gap:12px;min-width:0"><div class="logo">A</div><div style="min-width:0"><div id="sidebarUser" style="font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">My Sanctuary</div><button id="cloudBadge" onclick="openDriveModal()" class="cloud warn"><i></i><span id="cloudBadgeText">Connect Drive</span></button></div></div>
+        <div class="row" style="gap:6px"><button class="icon-btn" onclick="toggleTheme()" title="Light / dark" id="themeBtn" data-ic="moon"></button><button class="icon-btn" onclick="lockScreen()" title="Lock" data-ic="lock"></button></div>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-nav="dashboard" onclick="switchSection('dashboard')"><span data-ic="timer"></span>Timings &amp; hub</button>
+        <button class="nav-btn" data-nav="calendar" onclick="switchSection('calendar')"><span data-ic="calendar"></span>Calendar &amp; days</button>
+        <button class="nav-btn" data-nav="reminders" onclick="switchSection('reminders')"><span data-ic="bell"></span>Reminders</button>
+        <button class="nav-btn" data-nav="notes" onclick="switchSection('notes')"><span data-ic="book"></span>Daily journal</button>
+        <button class="nav-btn" data-nav="photos" onclick="switchSection('photos')"><span data-ic="image"></span>Photo vault</button>
+        <button class="nav-btn" data-nav="vault" onclick="switchSection('vault')"><span data-ic="shield"></span>Vault &amp; habits</button>
+      </nav>
+      <div class="side-extra col" style="gap:12px;padding-top:14px;border-top:1px solid var(--line)">
+        <div class="row" style="gap:9px;justify-content:center" id="accentRow"></div>
+        <button class="btn btn-warn" onclick="openDriveModal()"><span data-ic="cloud"></span>Drive sync</button>
+        <div class="grid g2" style="gap:8px"><button class="btn btn-ghost btn-sm" onclick="exportBackup()"><span data-ic="download"></span>Backup</button><label class="btn btn-ghost btn-sm" style="cursor:pointer"><span data-ic="upload"></span>Restore<input type="file" accept=".json" class="hidden" onchange="importBackup(event)" /></label></div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- HERO -->
+    <section class="glass hero">
+      <div class="hero-grid">
+        <div style="min-width:0;flex:1 1 320px">
+          <div id="greetingText" class="label" style="color:rgb(var(--a2))">GOOD EVENING</div>
+          <h1 id="currentDateDisplay">Loading…</h1>
+          <label class="intent"><span class="label" style="white-space:nowrap">Today's #1</span><input id="dailyIntentionInput" onchange="saveIntention()" placeholder="What matters most today?" /></label>
+        </div>
+        <div style="text-align:right">
+          <div class="row" style="justify-content:flex-end;gap:10px"><span id="liveClock" class="clock">00:00:00</span><button id="clockFormatBtn" onclick="toggleClockFormat()" class="chip neutral">12H</button></div>
+          <div id="syncTimestamp" class="mono faint" style="font-size:11px;margin-top:8px">Local cache + Google Drive</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="sec-dashboard" class="view col" style="gap:24px">
+      <div class="grid g3" style="gap:14px" id="statTiles"></div>
+      <div class="grid g2">
+        <div class="glass pad col">
+          <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="timer"></span>Focus timer</div>
+            <div class="seg" id="pomoModes"><button class="on" data-m="25" onclick="setPomodoro(25,'focus',this)">25m</button><button data-m="50" onclick="setPomodoro(50,'focus',this)">50m</button><button data-m="5" onclick="setPomodoro(5,'break',this)">5m break</button></div></div>
+          <div class="ring-wrap">
+            <svg viewBox="0 0 200 200"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:rgb(var(--a))"/><stop offset="1" style="stop-color:rgb(var(--a2))"/></linearGradient></defs>
+              <circle class="ring-bg" cx="100" cy="100" r="90" stroke-width="9"/><circle id="ringFg" class="ring-fg" cx="100" cy="100" r="90" stroke-width="9" stroke-dasharray="565.49" stroke-dashoffset="0"/></svg>
+            <div class="ring-center"><div id="pomoDisplay" class="t">25:00</div><div id="pomoStatus" class="faint" style="font-size:12px">Ready for deep work</div></div>
+          </div>
+          <div class="row" style="justify-content:center"><button id="pomoStartBtn" class="btn btn-primary" onclick="togglePomodoro()"><span data-ic="play"></span><span>Start focus</span></button><button class="btn btn-ghost" onclick="resetPomodoro()"><span data-ic="reset"></span>Reset</button></div>
+          <div class="row between wrap" style="padding-top:12px;border-top:1px solid var(--line)">
+            <form class="row" onsubmit="customPomodoro(event)" style="gap:8px"><input id="pomoCustom" type="number" min="1" max="240" class="inp mono" placeholder="min" style="width:84px;padding:8px 10px" /><button class="btn btn-ghost btn-sm" type="submit">Set custom</button></form>
+            <span class="chip gold"><span data-ic="flame"></span><span id="pomoCount">0</span> sessions today</span>
           </div>
         </div>
-        <span class="text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">5TB Bridge Ready</span>
+
+        <div class="glass pad col">
+          <div class="row between"><div class="card-title"><span class="dot" data-ic="zap"></span>Precision stopwatch</div><button class="btn btn-warn btn-sm" onclick="recordLap()"><span data-ic="flag"></span>Lap</button></div>
+          <div id="stopwatchDisplay" class="sw-time" style="padding:34px 0 22px">00:00<small>.00</small></div>
+          <div class="row" style="justify-content:center"><button id="swStartBtn" class="btn btn-ok" onclick="toggleStopwatch()"><span data-ic="play"></span><span>Start</span></button><button class="btn btn-ghost" onclick="resetStopwatch()"><span data-ic="reset"></span>Clear</button></div>
+          <div id="lapList" class="col scroll-y" style="gap:6px;max-height:170px"></div>
+        </div>
       </div>
 
-      <!-- Auth Tabs -->
-      <div id="authForms">
-        <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-white/5 mb-5 text-xs font-semibold">
-          <button onclick="switchAuthTab('login')" id="tabLoginBtn" class="py-2.5 rounded-xl bg-violet-600 text-white transition">Sign In</button>
-          <button onclick="switchAuthTab('signup')" id="tabSignupBtn" class="py-2.5 rounded-xl opacity-70 hover:opacity-100 transition">Create Account</button>
+      <div class="glass pad">
+        <div class="row between" style="margin-bottom:16px"><div class="card-title"><span class="dot" data-ic="sparkles"></span>Upcoming days to remember</div><button class="btn btn-ghost btn-sm" onclick="switchSection('calendar')">Manage all<span data-ic="chevR"></span></button></div>
+        <div id="dashboardDaysPreview" class="grid g3" style="gap:14px"></div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section id="sec-calendar" class="view hidden">
+      <div class="grid" style="grid-template-columns:minmax(0,1fr)">
+        <div class="glass pad col">
+          <div class="row between wrap"><h3 id="calMonthHeader" class="serif" style="margin:0;font-size:34px;font-style:italic;font-weight:400">Month</h3>
+            <div class="row"><button class="icon-btn" onclick="changeMonth(-1)" data-ic="chevL"></button><button class="btn btn-ghost btn-sm" onclick="goToday()">Today</button><button class="icon-btn" onclick="changeMonth(1)" data-ic="chevR"></button></div></div>
+          <div class="cal"><div class="cal-h">SUN</div><div class="cal-h">MON</div><div class="cal-h">TUE</div><div class="cal-h">WED</div><div class="cal-h">THU</div><div class="cal-h">FRI</div><div class="cal-h">SAT</div></div>
+          <div id="calendarGrid" class="cal"></div>
         </div>
+        <div class="glass pad col" style="margin-top:0">
+          <div class="card-title"><span class="dot" data-ic="sparkles"></span>Add a day to remember</div>
+          <form onsubmit="addSpecialDay(event)" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end">
+            <input id="dayTitle" class="inp" required placeholder="Mom's birthday, Trip to Pokhara…" />
+            <input id="dayDate" type="date" class="inp mono" required />
+            <select id="dayCategory" class="inp"></select>
+            <button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Save day</button>
+          </form>
+          <div id="specialDaysList" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-top:6px"></div>
+        </div>
+      </div>
+    </section>
 
-        <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3.5">
-          <div id="nameFieldWrap" class="hidden">
-            <label class="text-xs opacity-75 block mb-1">Your Name</label>
-            <input id="authName" type="text" placeholder="e.g. Alex" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-violet-500" />
-          </div>
-          <div>
-            <label class="text-xs opacity-75 block mb-1">Email or Username</label>
-            <input id="authEmail" type="text" required placeholder="you@example.com" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-violet-500" />
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="text-xs opacity-75 block mb-1">Account Password</label>
-              <input id="authPassword" type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-violet-500" />
-            </div>
-            <div>
-              <label class="text-xs opacity-75 block mb-1">4-Digit Quick PIN</label>
-              <input id="authPin" type="password" maxlength="4" placeholder="1234" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm font-mono tracking-widest focus:outline-none focus:border-violet-500" />
-            </div>
-          </div>
-          <div>
-            <label class="text-xs text-amber-300/90 block mb-1">Google Script Passkey (SECRET_PASSKEY from Line 3)</label>
-            <input id="authDrivePasskey" type="password" placeholder="Your SECRET_PASSKEY for 5TB Sync" class="w-full px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-400/30 text-sm focus:outline-none focus:border-amber-400" />
-          </div>
-
-          <button type="submit" id="authSubmitBtn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-violet-600/30 transition">
-            Unlock My Sanctuary
-          </button>
+    <!-- REMINDERS -->
+    <section id="sec-reminders" class="view hidden">
+      <div class="glass pad col">
+        <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="bell"></span>Reminders &amp; daily tasks</div>
+          <div class="seg" id="remFilter"><button class="on" data-f="active" onclick="setRemFilter('active')">Active</button><button data-f="done" onclick="setRemFilter('done')">Completed</button><button data-f="all" onclick="setRemFilter('all')">All</button></div></div>
+        <form onsubmit="addReminder(event)" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+          <input id="remText" class="inp" required placeholder="What do you need to remember?" style="grid-column:span 2" />
+          <select id="remPriority" class="inp"><option value="high">🔴 High</option><option value="med" selected>🟡 Medium</option><option value="low">🟢 Low</option></select>
+          <input id="remTime" type="datetime-local" class="inp mono" />
+          <button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Add</button>
         </form>
-
-        <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs opacity-75">
-          <span>Testing or in a rush?</span>
-          <button onclick="instantEnter()" class="text-amber-400 hover:underline font-semibold">Instant Enter &rarr;</button>
-        </div>
+        <div id="remindersList" class="col" style="gap:10px"></div>
       </div>
+    </section>
 
-      <!-- Quick PIN Pad Mode -->
-      <div id="pinPadView" class="hidden text-center space-y-4">
-        <p class="text-sm opacity-80">Enter your 4-Digit Quick PIN</p>
-        <div id="pinDots" class="flex justify-center gap-3 my-3">
-          <span class="w-3.5 h-3.5 rounded-full border border-white/40"></span>
-          <span class="w-3.5 h-3.5 rounded-full border border-white/40"></span>
-          <span class="w-3.5 h-3.5 rounded-full border border-white/40"></span>
-          <span class="w-3.5 h-3.5 rounded-full border border-white/40"></span>
-        </div>
-        <div class="grid grid-cols-3 gap-2.5 max-w-xs mx-auto">
-          <button onclick="pressPin('1')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">1</button>
-          <button onclick="pressPin('2')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">2</button>
-          <button onclick="pressPin('3')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">3</button>
-          <button onclick="pressPin('4')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">4</button>
-          <button onclick="pressPin('5')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">5</button>
-          <button onclick="pressPin('6')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">6</button>
-          <button onclick="pressPin('7')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">7</button>
-          <button onclick="pressPin('8')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">8</button>
-          <button onclick="pressPin('9')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">9</button>
-          <button onclick="clearPin()" class="py-3 rounded-2xl bg-rose-500/15 text-rose-300 text-xs font-semibold">CLR</button>
-          <button onclick="pressPin('0')" class="py-3 rounded-2xl bg-white/5 hover:bg-white/15 font-mono text-lg font-bold">0</button>
-          <button onclick="showFullLogin()" class="py-3 rounded-2xl bg-white/5 text-xs opacity-75">Switch</button>
-        </div>
+    <!-- NOTES -->
+    <section id="sec-notes" class="view hidden">
+      <div class="glass pad col">
+        <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="book"></span>Daily life journal</div>
+          <div class="row grow" style="max-width:320px;position:relative"><input id="noteSearch" oninput="renderNotes()" class="inp" placeholder="Search notes…" style="padding-left:38px" /><span style="position:absolute;left:13px;opacity:.5" data-ic="search"></span></div></div>
+        <form onsubmit="addNote(event)" class="col" style="gap:12px">
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+            <input id="noteTitle" class="inp" required placeholder="Title…" style="font-weight:600;grid-column:span 2" />
+            <select id="noteMood" class="inp"><option>✨ Inspired</option><option>🌿 Calm</option><option>🔥 Productive</option><option>💭 Reflection</option></select>
+          </div>
+          <textarea id="noteBody" class="inp" required placeholder="Write down your thoughts, memories, ideas…"></textarea>
+          <div class="row wrap"><input id="noteTags" class="inp grow" placeholder="Tags, comma separated (ideas, travel…)" style="min-width:180px" /><button class="btn btn-primary" type="submit"><span data-ic="check"></span>Save note</button></div>
+        </form>
+        <div id="tagFilter" class="row wrap" style="gap:8px"></div>
+        <div id="notesGrid" class="masonry"></div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- 5TB GOOGLE DRIVE SETTINGS MODAL -->
-  <div id="driveModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-xl">
-    <div class="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-7 border border-white/15 space-y-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-lg font-bold">5TB Google Drive Cloud Bridge</h3>
-          <p class="text-xs opacity-70">Your personal Web App URL is pre-filled below!</p>
+    <!-- PHOTOS -->
+    <section id="sec-photos" class="view hidden">
+      <div class="glass pad col">
+        <div class="card-title"><span class="dot" data-ic="image"></span>Photo memory vault</div>
+        <div id="dropZone" class="drop col" style="align-items:center;gap:12px">
+          <div class="mut">Drag &amp; drop photos here, or choose below</div>
+          <input id="photoCaptionInput" class="inp" placeholder="Optional caption (e.g. Sunset in Kathmandu)" style="max-width:420px" />
+          <div class="row wrap" style="justify-content:center">
+            <label class="btn btn-primary" style="cursor:pointer"><span data-ic="upload"></span>Upload photos<input type="file" accept="image/*" multiple class="hidden" onchange="handlePhotoUpload(event)" /></label>
+            <label class="btn btn-ghost" style="cursor:pointer"><span data-ic="image"></span>Take photo<input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoUpload(event)" /></label>
+          </div>
         </div>
-        <button onclick="closeDriveModal()" class="px-3 py-1.5 rounded-xl bg-white/10 text-xs">Close</button>
+        <div id="photoGrid" class="photos"></div>
       </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block opacity-75 mb-1">Google Apps Script Web App URL</label>
-          <input id="driveUrlInput" type="url" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 font-mono text-[11px]" />
-        </div>
-        <div>
-          <label class="block opacity-75 mb-1">Your SECRET_PASSKEY (Must match Line 3 of your Google Script)</label>
-          <input id="driveKeyInput" type="password" placeholder="Enter your SECRET_PASSKEY" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-sm" />
-        </div>
-      </div>
-      <div class="flex flex-wrap gap-2 pt-2">
-        <button onclick="saveDriveConfig()" class="px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold">Save & Push to 5TB Drive</button>
-        <button onclick="pullFromGoogleDrive()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">Pull Data from 5TB Drive</button>
-      </div>
-      <p id="driveStatusText" class="text-[11px] font-mono opacity-75"></p>
-    </div>
-  </div>
+    </section>
 
-  <!-- PHOTO LIGHTBOX MODAL -->
-  <div id="lightboxModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90 backdrop-blur-xl" onclick="closeLightbox()">
-    <div class="max-w-4xl w-full text-center space-y-3" onclick="event.stopPropagation()">
-      <img id="lightboxImg" src="" alt="Memory" class="max-h-[78vh] mx-auto rounded-2xl shadow-2xl border border-white/15 object-contain" />
-      <div class="flex items-center justify-between max-w-md mx-auto px-4 py-2.5 rounded-2xl glass-card">
-        <div class="text-left">
-          <p id="lightboxCaption" class="text-sm font-semibold"></p>
-          <p id="lightboxDate" class="text-[11px] opacity-65 font-mono"></p>
-        </div>
-        <button onclick="closeLightbox()" class="px-3 py-1.5 rounded-xl bg-white/10 text-xs">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN APP LAYOUT -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-28 lg:pb-12 flex flex-col lg:flex-row gap-6">
-
-    <!-- DESKTOP LEFT SIDEBAR -->
-    <aside class="lg:w-64 shrink-0">
-      <div class="glass-card rounded-3xl p-5 lg:sticky lg:top-6 space-y-6">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 to-amber-400 flex items-center justify-center font-bold text-white">A</div>
-            <div>
-              <h2 id="sidebarUser" class="font-bold text-sm">My Sanctuary</h2>
-              <button onclick="openDriveModal()" id="cloudBadge" class="text-[11px] font-mono text-emerald-400 flex items-center gap-1.5 hover:underline">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="cloudBadgeText">5TB Drive Connected</span>
-              </button>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="toggleTheme()" title="Switch Theme" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs">🌓</button>
-            <button onclick="lockScreen()" title="Quick PIN Lock" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs">🔒</button>
-          </div>
-        </div>
-
-        <!-- Navigation Links (Desktop) -->
-        <nav class="hidden lg:flex flex-col gap-1.5 text-sm font-medium">
-          <button onclick="switchSection('dashboard')" id="nav-dashboard" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl bg-violet-600 text-white transition">⏱️ Timings & Hub</button>
-          <button onclick="switchSection('calendar')" id="nav-calendar" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition">📅 Calendar & Days</button>
-          <button onclick="switchSection('reminders')" id="nav-reminders" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition">🔔 Smart Reminders</button>
-          <button onclick="switchSection('notes')" id="nav-notes" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition">📓 Daily Journal</button>
-          <button onclick="switchSection('photos')" id="nav-photos" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition">🖼️ 5TB Photo Vault</button>
-          <button onclick="switchSection('vault')" id="nav-vault" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition">🔐 Quick Vault & Habits</button>
-        </nav>
-
-        <div class="pt-3 border-t border-white/10 flex flex-col gap-2 text-xs">
-          <button onclick="openDriveModal()" class="w-full py-2.5 px-3 rounded-xl bg-amber-500/15 text-amber-300 border border-amber-400/30 font-semibold hover:bg-amber-500/25 transition">
-            ☁️ 5TB Google Drive Sync
-          </button>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="exportBackup()" class="py-2 px-2 rounded-xl bg-white/5 hover:bg-white/10">⬇ Backup</button>
-            <label class="py-2 px-2 rounded-xl bg-white/5 hover:bg-white/10 text-center cursor-pointer">
-              ⬆ Restore <input type="file" accept=".json" class="hidden" onchange="importBackup(event)" />
-            </label>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- MAIN CONTENT WORKSPACE -->
-    <main class="flex-1 space-y-6">
-
-      <!-- TOP HERO CLOCK & DAILY INTENTION BANNER -->
-      <section class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <p id="greetingText" class="text-xs uppercase tracking-widest text-amber-400 font-mono mb-1">GOOD EVENING</p>
-            <h1 class="font-serif italic text-3xl sm:text-4xl tracking-tight" id="currentDateDisplay">Loading date...</h1>
-            <div class="mt-3 flex items-center gap-2">
-              <span class="text-xs opacity-70">Today's Intention:</span>
-              <input id="dailyIntentionInput" onchange="saveIntention()" type="text" placeholder="Click to set your #1 focus for today..." class="bg-transparent border-b border-white/20 focus:border-violet-400 focus:outline-none text-sm font-medium w-64 sm:w-80" />
-            </div>
-          </div>
-          <div class="text-left md:text-right">
-            <div class="flex items-center md:justify-end gap-2 mb-1">
-              <span id="liveClock" class="font-mono text-3xl sm:text-5xl font-bold tracking-tight">00:00:00</span>
-              <button onclick="toggleClockFormat()" id="clockFormatBtn" class="text-[10px] font-mono px-2 py-1 rounded-lg bg-white/10">12H</button>
-            </div>
-            <p class="text-xs opacity-60 font-mono" id="syncTimestamp">Local IndexedDB + 5TB Google Drive Ready</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 1: TIMINGS HUB (POMODORO + STOPWATCH + OVERVIEW) -->
-      <section id="sec-dashboard" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Focus / Pomodoro Timer -->
-          <div class="glass-card rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="font-bold text-base">⏱️ Focus & Pomodoro Timer</h3>
-              <div class="flex gap-1.5 text-xs">
-                <button onclick="setPomodoro(25)" class="px-2.5 py-1 rounded-lg bg-violet-500/20 text-violet-300">25m</button>
-                <button onclick="setPomodoro(50)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10">50m</button>
-                <button onclick="setPomodoro(5)" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300">5m Break</button>
-              </div>
-            </div>
-            <div class="py-6 text-center">
-              <div id="pomoDisplay" class="font-mono text-5xl font-bold tracking-wider">25:00</div>
-              <p id="pomoStatus" class="text-xs opacity-60 mt-2">Ready for deep work</p>
-            </div>
-            <div class="flex justify-center gap-3">
-              <button onclick="togglePomodoro()" id="pomoStartBtn" class="px-6 py-2.5 rounded-2xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold">Start Focus</button>
-              <button onclick="resetPomodoro()" class="px-4 py-2.5 rounded-2xl bg-white/10 text-xs">Reset</button>
-            </div>
-          </div>
-
-          <!-- Precision Lap Stopwatch -->
-          <div class="glass-card rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="font-bold text-base">⚡ Precision Stopwatch & Timings</h3>
-              <button onclick="recordLap()" class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-mono">+ Record Lap</button>
-            </div>
-            <div class="py-4 text-center">
-              <div id="stopwatchDisplay" class="font-mono text-4xl sm:text-5xl font-bold">00:00.0</div>
-            </div>
-            <div class="flex justify-center gap-3">
-              <button onclick="toggleStopwatch()" id="swStartBtn" class="px-6 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">Start</button>
-              <button onclick="resetStopwatch()" class="px-4 py-2.5 rounded-2xl bg-white/10 text-xs">Clear</button>
-            </div>
-            <div id="lapList" class="max-h-24 overflow-y-auto space-y-1 text-xs font-mono opacity-80 pt-2"></div>
-          </div>
-        </div>
-
-        <!-- Upcoming Days to Remember Preview -->
-        <div class="glass-card rounded-3xl p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-bold text-base">🌟 Upcoming Days to Remember</h3>
-            <button onclick="switchSection('calendar')" class="text-xs text-violet-400 hover:underline">+ Manage All Days &rarr;</button>
-          </div>
-          <div id="dashboardDaysPreview" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 2: CALENDAR & DAYS TO REMEMBER -->
-      <section id="sec-calendar" class="hidden space-y-6">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Add Day to Remember -->
-          <div class="glass-card rounded-3xl p-6 space-y-4">
-            <h3 class="font-bold text-base">🎯 Add a Day to Remember</h3>
-            <form onsubmit="addSpecialDay(event)" class="space-y-3 text-xs">
-              <input id="dayTitle" required type="text" placeholder="Event Title (e.g., Mom's Birthday, Trip)" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10" />
-              <input id="dayDate" required type="date" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 font-mono" />
-              <select id="dayCategory" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10">
-                <option value="🎂 Birthday">🎂 Birthday</option>
-                <option value="💖 Anniversary">💖 Anniversary</option>
-                <option value="✈️ Trip / Milestone">✈️ Trip / Milestone</option>
-                <option value="📌 Deadline">📌 Deadline</option>
-              </select>
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold">Save Special Day</button>
-            </form>
-            <div id="specialDaysList" class="space-y-2.5 pt-3 max-h-80 overflow-y-auto"></div>
-          </div>
-
-          <!-- Interactive Monthly Calendar -->
-          <div class="glass-card rounded-3xl p-6 lg:col-span-2 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 id="calMonthHeader" class="font-bold text-lg">Month Year</h3>
-              <div class="flex gap-2">
-                <button onclick="changeMonth(-1)" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs">&larr; Prev</button>
-                <button onclick="changeMonth(1)" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs">Next &rarr;</button>
-              </div>
-            </div>
-            <div class="grid grid-cols-7 text-center text-[11px] font-mono opacity-60 pb-1">
-              <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
-            </div>
-            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 text-xs"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 3: SMART REMINDERS -->
-      <section id="sec-reminders" class="hidden space-y-6">
-        <div class="glass-card rounded-3xl p-6 space-y-4">
-          <h3 class="font-bold text-base">🔔 Smart Reminders & Daily Tasks</h3>
-          <form onsubmit="addReminder(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
-            <input id="remText" required type="text" placeholder="What do you need to remember?" class="sm:col-span-2 px-4 py-3 rounded-xl bg-white/5 border border-white/10" />
-            <input id="remTime" type="datetime-local" class="px-3 py-3 rounded-xl bg-white/5 border border-white/10 font-mono" />
-            <button type="submit" class="py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold">+ Add Reminder</button>
+    <!-- VAULT -->
+    <section id="sec-vault" class="view hidden">
+      <div class="grid g2">
+        <div class="glass pad col">
+          <div class="card-title"><span class="dot" data-ic="shield"></span>Quick secret vault</div>
+          <div class="faint" style="font-size:12px;margin-top:-6px">Blurred until you tap (or hover on desktop).</div>
+          <form onsubmit="addVaultItem(event)" class="col" style="gap:10px">
+            <input id="vaultLabel" class="inp" required placeholder="Label (Wi-Fi, locker PIN, ID…)" />
+            <input id="vaultSecret" class="inp mono" required placeholder="Secret value or link" />
+            <button class="btn btn-primary" type="submit"><span data-ic="lock"></span>Store in vault</button>
           </form>
-          <div id="remindersList" class="space-y-2.5 pt-3"></div>
+          <div id="vaultList" class="col" style="gap:10px"></div>
         </div>
-      </section>
-
-      <!-- SECTION 4: DAILY JOURNAL & NOTES -->
-      <section id="sec-notes" class="hidden space-y-6">
-        <div class="glass-card rounded-3xl p-6 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <h3 class="font-bold text-base">📓 Personal Notes & Daily Life Journal</h3>
-            <input id="noteSearch" oninput="renderNotes()" type="text" placeholder="Search notes or tags..." class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs w-full sm:w-64" />
-          </div>
-          <form onsubmit="addNote(event)" class="space-y-3 text-xs">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input id="noteTitle" required type="text" placeholder="Note Title..." class="sm:col-span-2 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 font-semibold" />
-              <select id="noteMood" class="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10">
-                <option value="✨ Inspired">✨ Inspired</option>
-                <option value="🌿 Calm">🌿 Calm</option>
-                <option value="🔥 Productive">🔥 Productive</option>
-                <option value="💭 Reflection">💭 Reflection</option>
-              </select>
-            </div>
-            <textarea id="noteBody" required rows="4" placeholder="Write down your thoughts, daily memories, ideas, or anything you want to keep forever..." class="w-full p-3.5 rounded-xl bg-white/5 border border-white/10"></textarea>
-            <button type="submit" class="px-6 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold">Save Note</button>
-          </form>
-          <div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3"></div>
+        <div class="glass pad col">
+          <div class="card-title"><span class="dot" data-ic="flame"></span>Daily habits &amp; streaks</div>
+          <div><div class="row between" style="margin-bottom:8px"><span class="label">Today's progress</span><span id="habitProgressText" class="mono mut" style="font-size:12px">0/0</span></div><div class="bar"><i id="habitBar" style="width:0%"></i></div></div>
+          <form onsubmit="addHabit(event)" class="row"><input id="habitName" class="inp grow" required placeholder="New habit (Read 20 min, 3L water…)" /><button class="btn btn-ok" type="submit"><span data-ic="plus"></span>Add</button></form>
+          <div id="habitsList" class="col" style="gap:10px"></div>
         </div>
-      </section>
-
-      <!-- SECTION 5: 5TB PHOTO MEMORY VAULT -->
-      <section id="sec-photos" class="hidden space-y-6">
-        <div class="glass-card rounded-3xl p-6 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 class="font-bold text-base">🖼️ 5TB Google Drive Photo Memory Vault</h3>
-              <p class="text-xs opacity-70">Photos upload straight to your `Aura_OS_Vault` folder in your 5TB Google Drive + local IndexedDB.</p>
-            </div>
-            <label class="px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-amber-500 text-white text-xs font-bold cursor-pointer shadow-lg text-center">
-              + Upload Photo Memory
-              <input type="file" accept="image/*" multiple class="hidden" onchange="handlePhotoUpload(event)" />
-            </label>
-          </div>
-          <div class="flex gap-3 text-xs">
-            <input id="photoCaptionInput" type="text" placeholder="Optional caption before uploading (e.g., Sunset in Kathmandu)..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10" />
-          </div>
-          <div id="photoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pt-3"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 6: QUICK VAULT & DAILY HABITS -->
-      <section id="sec-vault" class="hidden space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Secret Snippets / Quick Vault -->
-          <div class="glass-card rounded-3xl p-6 space-y-4">
-            <h3 class="font-bold text-base">🔐 Quick Secret Vault (Hover/Tap to Reveal)</h3>
-            <form onsubmit="addVaultItem(event)" class="space-y-3 text-xs">
-              <input id="vaultLabel" required type="text" placeholder="Label (e.g., Wi-Fi Code, Locker Pin, Important ID)" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10" />
-              <input id="vaultSecret" required type="text" placeholder="Secret value or link..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 font-mono" />
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold">Store in Vault</button>
-            </form>
-            <div id="vaultList" class="space-y-2.5 pt-2"></div>
-          </div>
-
-          <!-- Daily Habits Tracker -->
-          <div class="glass-card rounded-3xl p-6 space-y-4">
-            <h3 class="font-bold text-base">🔥 Daily Habits & Streaks</h3>
-            <form onsubmit="addHabit(event)" class="flex gap-2 text-xs">
-              <input id="habitName" required type="text" placeholder="New daily habit (e.g. Drink 3L Water, Read 20m)" class="flex-1 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10" />
-              <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold">+ Add</button>
-            </form>
-            <div id="habitsList" class="space-y-2.5 pt-2"></div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="lg:hidden fixed bottom-3 left-3 right-3 z-40 glass-card rounded-2xl px-2 py-2 flex justify-around items-center text-[11px] font-medium border border-white/15">
-    <button onclick="switchSection('dashboard')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>⏱️</span><span>Timings</span></button>
-    <button onclick="switchSection('calendar')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>📅</span><span>Days</span></button>
-    <button onclick="switchSection('reminders')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>🔔</span><span>Remind</span></button>
-    <button onclick="switchSection('notes')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>📓</span><span>Notes</span></button>
-    <button onclick="switchSection('photos')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>🖼️</span><span>Photos</span></button>
-    <button onclick="switchSection('vault')" class="flex flex-col items-center py-1 px-2 rounded-xl"><span>🔐</span><span>Vault</span></button>
-  </nav>
-
-  <script>
-    // PRE-CONFIGURED 5TB GOOGLE DRIVE APPS SCRIPT WEB APP URL
-    const DEFAULT_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
-
-    let authMode = 'login';
-    let currentUser = null;
-    let enteredPin = "";
-    let use24Hour = false;
-    let calDate = new Date();
-
-    // App State
-    let state = {
-      intention: "",
-      specialDays: [
-        { id: 1, title: "Launch My Personal OS", date: new Date().toISOString().slice(0,10), category: "✈️ Trip / Milestone" }
-      ],
-      reminders: [],
-      notes: [],
-      photos: [],
-      vault: [],
-      habits: [
-        { id: 1, name: "Morning Hydration", streak: 1, doneToday: false },
-        { id: 2, name: "Plan Tomorrow's Timings", streak: 3, doneToday: false }
-      ]
-    };
-
-    // IndexedDB Wrapper (Allows gigabytes of local storage alongside 5TB Google Drive)
-    const DB_NAME = "AuraOS_5TB_DB";
-    const STORE_NAME = "user_workspace";
-
-    function openLocalDB() {
-      return new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onupgradeneeded = (e) => {
-          e.target.result.createObjectStore(STORE_NAME);
-        };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    async function saveToIndexedDB(key, val) {
-      const db = await openLocalDB();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, "readwrite");
-        tx.objectStore(STORE_NAME).put(val, key);
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-    }
-
-    async function loadFromIndexedDB(key) {
-      const db = await openLocalDB();
-      return new Promise((resolve) => {
-        const tx = db.transaction(STORE_NAME, "readonly");
-        const req = tx.objectStore(STORE_NAME).get(key);
-        req.onsuccess = () => resolve(req.result || null);
-        req.onerror = () => resolve(null);
-      });
-    }
-
-    function showToast(msg, isError = false) {
-      const t = document.getElementById('toast');
-      const icon = document.getElementById('toastIcon');
-      document.getElementById('toastMsg').textContent = msg;
-      icon.className = `w-2.5 h-2.5 rounded-full ${isError ? 'bg-rose-400' : 'bg-emerald-400'}`;
-      t.classList.remove('hidden');
-      t.classList.add('flex');
-      setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200);
-    }
-
-    // AUTHENTICATION & PIN LOCK
-    function switchAuthTab(mode) {
-      authMode = mode;
-      document.getElementById('nameFieldWrap').classList.toggle('hidden', mode === 'login');
-      document.getElementById('tabLoginBtn').className = mode === 'login'
-        ? 'py-2.5 rounded-xl bg-violet-600 text-white transition'
-        : 'py-2.5 rounded-xl opacity-70 hover:opacity-100 transition';
-      document.getElementById('tabSignupBtn').className = mode === 'signup'
-        ? 'py-2.5 rounded-xl bg-violet-600 text-white transition'
-        : 'py-2.5 rounded-xl opacity-70 hover:opacity-100 transition';
-    }
-
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value.trim().toLowerCase();
-      const password = document.getElementById('authPassword').value;
-      const pin = document.getElementById('authPin').value.trim() || "1234";
-      const name = document.getElementById('authName').value.trim() || email.split('@')[0];
-      const passkey = document.getElementById('authDrivePasskey').value.trim();
-
-      if (passkey) {
-        localStorage.setItem('aura_drive_passkey', passkey);
-      }
-      if (!localStorage.getItem('aura_drive_url')) {
-        localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-      }
-
-      const accounts = JSON.parse(localStorage.getItem('aura_accounts') || '{}');
-      if (authMode === 'signup') {
-        accounts[email] = { name, email, password, pin };
-        localStorage.setItem('aura_accounts', JSON.stringify(accounts));
-      } else {
-        if (accounts[email] && accounts[email].password !== password) {
-          showToast("Incorrect account password", true);
-          return;
-        }
-        if (!accounts[email]) {
-          accounts[email] = { name, email, password, pin };
-          localStorage.setItem('aura_accounts', JSON.stringify(accounts));
-        }
-      }
-
-      currentUser = accounts[email];
-      localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
-      await loadUserWorkspace();
-      document.getElementById('authOverlay').classList.add('hidden');
-      showToast(`Welcome back, ${currentUser.name}!`);
-    }
-
-    async function instantEnter() {
-      if (!localStorage.getItem('aura_drive_url')) {
-        localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-      }
-      currentUser = { name: "Sanctuary Owner", email: "owner@aura.local", pin: "1234" };
-      localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
-      await loadUserWorkspace();
-      document.getElementById('authOverlay').classList.add('hidden');
-      showToast("Unlocked Sanctuary");
-    }
-
-    function lockScreen() {
-      enteredPin = "";
-      updatePinDots();
-      document.getElementById('authForms').classList.add('hidden');
-      document.getElementById('pinPadView').classList.remove('hidden');
-      document.getElementById('authOverlay').classList.remove('hidden');
-    }
-
-    function showFullLogin() {
-      document.getElementById('pinPadView').classList.add('hidden');
-      document.getElementById('authForms').classList.remove('hidden');
-    }
-
-    function pressPin(digit) {
-      if (enteredPin.length < 4) {
-        enteredPin += digit;
-        updatePinDots();
-        if (enteredPin.length === 4) {
-          const targetPin = (currentUser && currentUser.pin) ? currentUser.pin : "1234";
-          if (enteredPin === targetPin) {
-            document.getElementById('authOverlay').classList.add('hidden');
-            showToast("PIN Verified");
-          } else {
-            showToast("Incorrect PIN", true);
-            enteredPin = "";
-            updatePinDots();
-          }
-        }
-      }
-    }
-
-    function clearPin() {
-      enteredPin = "";
-      updatePinDots();
-    }
-
-    function updatePinDots() {
-      const dots = document.querySelectorAll('#pinDots span');
-      dots.forEach((d, idx) => {
-        d.className = idx < enteredPin.length
-          ? "w-3.5 h-3.5 rounded-full bg-violet-400 shadow-lg shadow-violet-500/50"
-          : "w-3.5 h-3.5 rounded-full border border-white/40";
-      });
-    }
-
-    // WORKSPACE PERSISTENCE (INDEXEDDB + 5TB GOOGLE DRIVE BRIDGE)
-    async function loadUserWorkspace() {
-      document.getElementById('sidebarUser').textContent = currentUser.name;
-      const saved = await loadFromIndexedDB(`workspace_${currentUser.email}`);
-      if (saved) state = saved;
-      renderAll();
-      // If user has configured passkey, automatically pull freshest cloud state
-      const passkey = localStorage.getItem('aura_drive_passkey');
-      if (passkey) {
-        pullFromGoogleDrive(true);
-      }
-    }
-
-    async function persistState() {
-      if (!currentUser) return;
-      await saveToIndexedDB(`workspace_${currentUser.email}`, state);
-      syncToGoogleDrive();
-    }
-
-    // 5TB GOOGLE DRIVE CLOUD FUNCTIONS
-    function openDriveModal() {
-      document.getElementById('driveUrlInput').value = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-      document.getElementById('driveKeyInput').value = localStorage.getItem('aura_drive_passkey') || '';
-      document.getElementById('driveModal').classList.remove('hidden');
-      document.getElementById('driveModal').classList.add('flex');
-    }
-
-    function closeDriveModal() {
-      document.getElementById('driveModal').classList.add('hidden');
-      document.getElementById('driveModal').classList.remove('flex');
-    }
-
-    async function saveDriveConfig() {
-      const url = document.getElementById('driveUrlInput').value.trim() || DEFAULT_DRIVE_WEB_APP_URL;
-      const key = document.getElementById('driveKeyInput').value.trim();
-      localStorage.setItem('aura_drive_url', url);
-      localStorage.setItem('aura_drive_passkey', key);
-      document.getElementById('driveStatusText').textContent = "Syncing with your 5TB Google Drive...";
-      await syncToGoogleDrive(true);
-      closeDriveModal();
-    }
-
-    async function syncToGoogleDrive(manual = false) {
-      const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-      const secret = localStorage.getItem('aura_drive_passkey');
-      if (!secret) {
-        if (manual) showToast("Please enter your SECRET_PASSKEY first", true);
-        return;
-      }
-      try {
-        document.getElementById('cloudBadgeText').textContent = "Syncing to 5TB...";
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'saveData', secret, data: state })
-        });
-        const result = await res.json();
-        if (result.status === 'saved') {
-          document.getElementById('cloudBadgeText').textContent = "5TB Drive Synced ✓";
-          document.getElementById('syncTimestamp').textContent = "Last synced to 5TB Google Drive: " + new Date().toLocaleTimeString();
-          if (manual) showToast("Synced to your 5TB Google Drive!");
-        } else {
-          document.getElementById('cloudBadgeText').textContent = "Passkey Error";
-          if (manual) showToast(result.error || "Check your SECRET_PASSKEY", true);
-        }
-      } catch (err) {
-        document.getElementById('cloudBadgeText').textContent = "Offline (Saved Locally)";
-      }
-    }
-
-    async function pullFromGoogleDrive(silent = false) {
-      const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-      const secret = localStorage.getItem('aura_drive_passkey');
-      if (!secret) {
-        if (!silent) showToast("Enter your SECRET_PASSKEY first", true);
-        return;
-      }
-      try {
-        if (!silent) document.getElementById('driveStatusText').textContent = "Downloading from 5TB Google Drive...";
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'loadData', secret })
-        });
-        const result = await res.json();
-        if (result.data) {
-          state = result.data;
-          await saveToIndexedDB(`workspace_${currentUser.email}`, state);
-          renderAll();
-          document.getElementById('cloudBadgeText').textContent = "5TB Drive Synced ✓";
-          if (!silent) {
-            showToast("Loaded latest data from 5TB Google Drive!");
-            closeDriveModal();
-          }
-        } else if (result.error) {
-          if (!silent) showToast("Drive Error: " + result.error, true);
-        }
-      } catch (e) {
-        if (!silent) showToast("Could not reach Google Script URL", true);
-      }
-    }
-
-    // NAVIGATION & THEME
-    function switchSection(sec) {
-      ['dashboard', 'calendar', 'reminders', 'notes', 'photos', 'vault'].forEach(id => {
-        document.getElementById(`sec-${id}`).classList.toggle('hidden', id !== sec);
-        const btn = document.getElementById(`nav-${id}`);
-        if (btn) {
-          btn.className = id === sec
-            ? "nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl bg-violet-600 text-white transition"
-            : "nav-btn flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 transition";
-        }
-      });
-    }
-
-    function toggleTheme() {
-      document.documentElement.classList.toggle('light');
-    }
-
-    // LIVE CLOCK & GREETING
-    function updateClock() {
-      const now = new Date();
-      const hrs = now.getHours();
-      const greet = hrs < 12 ? "GOOD MORNING" : hrs < 18 ? "GOOD AFTERNOON" : "GOOD EVENING";
-      document.getElementById('greetingText').textContent = `${greet}, ${(currentUser?.name || 'FRIEND').toUpperCase()}`;
-      document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
-      });
-      document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', {
-        hour12: !use24Hour, hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-    }
-    setInterval(updateClock, 1000);
-
-    function toggleClockFormat() {
-      use24Hour = !use24Hour;
-      document.getElementById('clockFormatBtn').textContent = use24Hour ? "24H" : "12H";
-      updateClock();
-    }
-
-    function saveIntention() {
-      state.intention = document.getElementById('dailyIntentionInput').value;
-      persistState();
-      showToast("Daily intention updated");
-    }
-
-    // POMODORO & STOPWATCH
-    let pomoSeconds = 25 * 60;
-    let pomoInterval = null;
-    function setPomodoro(mins) {
-      clearInterval(pomoInterval);
-      pomoInterval = null;
-      pomoSeconds = mins * 60;
-      renderPomo();
-      document.getElementById('pomoStartBtn').textContent = "Start Focus";
-    }
-    function renderPomo() {
-      const m = String(Math.floor(pomoSeconds / 60)).padStart(2, '0');
-      const s = String(pomoSeconds % 60).padStart(2, '0');
-      document.getElementById('pomoDisplay').textContent = `${m}:${s}`;
-    }
-    function togglePomodoro() {
-      if (pomoInterval) {
-        clearInterval(pomoInterval);
-        pomoInterval = null;
-        document.getElementById('pomoStartBtn').textContent = "Resume";
-      } else {
-        document.getElementById('pomoStartBtn').textContent = "Pause";
-        pomoInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            renderPomo();
-          } else {
-            clearInterval(pomoInterval);
-            pomoInterval = null;
-            showToast("Focus Session Complete! 🎉");
-          }
-        }, 1000);
-      }
-    }
-    function resetPomodoro() { setPomodoro(25); }
-
-    let swTenths = 0;
-    let swInterval = null;
-    function toggleStopwatch() {
-      if (swInterval) {
-        clearInterval(swInterval);
-        swInterval = null;
-        document.getElementById('swStartBtn').textContent = "Resume";
-      } else {
-        document.getElementById('swStartBtn').textContent = "Pause";
-        swInterval = setInterval(() => {
-          swTenths++;
-          const mins = String(Math.floor(swTenths / 600)).padStart(2, '0');
-          const secs = String(Math.floor((swTenths % 600) / 10)).padStart(2, '0');
-          const tenths = swTenths % 10;
-          document.getElementById('stopwatchDisplay').textContent = `${mins}:${secs}.${tenths}`;
-        }, 100);
-      }
-    }
-    function resetStopwatch() {
-      clearInterval(swInterval);
-      swInterval = null;
-      swTenths = 0;
-      document.getElementById('stopwatchDisplay').textContent = "00:00.0";
-      document.getElementById('swStartBtn').textContent = "Start";
-      document.getElementById('lapList').innerHTML = "";
-    }
-    function recordLap() {
-      const time = document.getElementById('stopwatchDisplay').textContent;
-      const div = document.createElement('div');
-      div.className = "flex justify-between px-3 py-1 rounded-lg bg-white/5";
-      div.innerHTML = `<span>Lap</span><span>${time}</span>`;
-      document.getElementById('lapList').prepend(div);
-    }
-
-    // DAYS TO REMEMBER & CALENDAR
-    function addSpecialDay(e) {
-      e.preventDefault();
-      const title = document.getElementById('dayTitle').value.trim();
-      const date = document.getElementById('dayDate').value;
-      const category = document.getElementById('dayCategory').value;
-      state.specialDays.push({ id: Date.now(), title, date, category });
-      e.target.reset();
-      persistState();
-      renderSpecialDays();
-      renderCalendar();
-      showToast("Added Day to Remember");
-    }
-
-    function deleteSpecialDay(id) {
-      state.specialDays = state.specialDays.filter(d => d.id !== id);
-      persistState();
-      renderSpecialDays();
-      renderCalendar();
-    }
-
-    function renderSpecialDays() {
-      const list = document.getElementById('specialDaysList');
-      const preview = document.getElementById('dashboardDaysPreview');
-      const today = new Date().setHours(0,0,0,0);
-
-      const sorted = [...state.specialDays].sort((a,b) => new Date(a.date) - new Date(b.date));
-      const htmlItems = sorted.map(d => {
-        const diff = Math.round((new Date(d.date).setHours(0,0,0,0) - today) / 86400000);
-        const badge = diff === 0 ? "Today! 🎉" : diff > 0 ? `In ${diff} days` : `${Math.abs(diff)}d ago`;
-        return `
-          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
-            <div>
-              <span class="text-[10px] font-mono opacity-70">${d.category} • ${d.date}</span>
-              <h4 class="font-bold text-sm">${d.title}</h4>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-mono px-2.5 py-1 rounded-full bg-violet-500/20 text-violet-300">${badge}</span>
-              <button onclick="deleteSpecialDay(${d.id})" class="text-xs opacity-50 hover:opacity-100">✕</button>
-            </div>
-          </div>`;
-      }).join('');
-
-      list.innerHTML = htmlItems || `<p class="text-xs opacity-50">No special days saved yet.</p>`;
-      preview.innerHTML = sorted.slice(0, 3).map(d => {
-        const diff = Math.round((new Date(d.date).setHours(0,0,0,0) - today) / 86400000);
-        const badge = diff === 0 ? "Today! 🎉" : diff > 0 ? `In ${diff} days` : `${Math.abs(diff)}d ago`;
-        return `
-          <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
-            <div class="flex justify-between items-center text-[11px] font-mono opacity-75 mb-1">
-              <span>${d.category}</span>
-              <span class="text-amber-300">${badge}</span>
-            </div>
-            <p class="font-bold text-sm">${d.title}</p>
-            <p class="text-xs opacity-60 font-mono mt-0.5">${d.date}</p>
-          </div>`;
-      }).join('');
-    }
-
-    function changeMonth(offset) {
-      calDate.setMonth(calDate.getMonth() + offset);
-      renderCalendar();
-    }
-
-    function renderCalendar() {
-      const year = calDate.getFullYear();
-      const month = calDate.getMonth();
-      document.getElementById('calMonthHeader').textContent = calDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-      const grid = document.getElementById('calendarGrid');
-      grid.innerHTML = "";
-
-      for (let i = 0; i < firstDay; i++) {
-        grid.innerHTML += `<div class="h-14 rounded-xl bg-transparent"></div>`;
-      }
-      const todayIso = new Date().toISOString().slice(0, 10);
-      for (let day = 1; day <= totalDays; day++) {
-        const iso = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-        const matches = state.specialDays.filter(d => d.date === iso);
-        const isToday = iso === todayIso;
-        grid.innerHTML += `
-          <div class="h-16 p-1.5 rounded-xl border ${isToday ? 'border-amber-400 bg-amber-500/10' : 'border-white/5 bg-white/5'} flex flex-col justify-between">
-            <span class="font-mono text-[11px] ${isToday ? 'text-amber-300 font-bold' : 'opacity-75'}">${day}</span>
-            ${matches.map(m => `<span class="text-[9px] truncate px-1 rounded bg-violet-600/40 text-violet-200">${m.title}</span>`).join('')}
-          </div>`;
-      }
-    }
-
-    // SMART REMINDERS
-    function addReminder(e) {
-      e.preventDefault();
-      const text = document.getElementById('remText').value.trim();
-      const time = document.getElementById('remTime').value;
-      state.reminders.unshift({ id: Date.now(), text, time, done: false });
-      e.target.reset();
-      persistState();
-      renderReminders();
-      showToast("Reminder set");
-    }
-
-    function toggleReminder(id) {
-      const r = state.reminders.find(x => x.id === id);
-      if (r) r.done = !r.done;
-      persistState();
-      renderReminders();
-    }
-
-    function deleteReminder(id) {
-      state.reminders = state.reminders.filter(x => x.id !== id);
-      persistState();
-      renderReminders();
-    }
-
-    function renderReminders() {
-      const el = document.getElementById('remindersList');
-      el.innerHTML = state.reminders.map(r => `
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" ${r.done ? 'checked' : ''} onchange="toggleReminder(${r.id})" class="w-4 h-4 accent-violet-600 rounded" />
-            <div>
-              <p class="text-sm font-medium ${r.done ? 'line-through opacity-40' : ''}">${r.text}</p>
-              ${r.time ? `<p class="text-[11px] font-mono opacity-60">${r.time.replace('T', ' ')}</p>` : ''}
-            </div>
-          </label>
-          <button onclick="deleteReminder(${r.id})" class="text-xs opacity-50 hover:opacity-100">✕</button>
-        </div>
-      `).join('') || `<p class="text-xs opacity-50">All caught up! No active reminders.</p>`;
-    }
-
-    // DAILY JOURNAL NOTES
-    function addNote(e) {
-      e.preventDefault();
-      const title = document.getElementById('noteTitle').value.trim();
-      const mood = document.getElementById('noteMood').value;
-      const body = document.getElementById('noteBody').value.trim();
-      state.notes.unshift({ id: Date.now(), title, mood, body, createdAt: new Date().toLocaleString() });
-      e.target.reset();
-      persistState();
-      renderNotes();
-      showToast("Journal entry saved");
-    }
-
-    function deleteNote(id) {
-      state.notes = state.notes.filter(n => n.id !== id);
-      persistState();
-      renderNotes();
-    }
-
-    function renderNotes() {
-      const q = (document.getElementById('noteSearch')?.value || '').toLowerCase();
-      const filtered = state.notes.filter(n => n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q));
-      document.getElementById('notesGrid').innerHTML = filtered.map(n => `
-        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between text-[11px] font-mono opacity-70 mb-1">
-              <span>${n.mood}</span>
-              <span>${n.createdAt}</span>
-            </div>
-            <h4 class="font-bold text-base mb-1">${n.title}</h4>
-            <p class="text-xs opacity-85 whitespace-pre-wrap leading-relaxed">${n.body}</p>
-          </div>
-          <div class="pt-3 flex justify-end">
-            <button onclick="deleteNote(${n.id})" class="text-[11px] text-rose-400 hover:underline">Delete</button>
-          </div>
-        </div>
-      `).join('') || `<p class="text-xs opacity-50">No journal notes found.</p>`;
-    }
-
-    // 5TB PHOTO VAULT (DIRECT UPLOAD TO GOOGLE DRIVE + INDEXEDDB)
-    async function handlePhotoUpload(e) {
-      const files = Array.from(e.target.files);
-      const captionInput = document.getElementById('photoCaptionInput');
-      const customCaption = captionInput.value.trim();
-
-      for (const file of files) {
-        const dataUrl = await readFileAsDataURL(file);
-        const photoObj = {
-          id: Date.now() + Math.random(),
-          caption: customCaption || file.name.replace(/\.[^/.]+$/, ""),
-          date: new Date().toLocaleDateString(),
-          url: dataUrl
-        };
-
-        // Upload to 5TB Google Drive if passkey is set
-        const secret = localStorage.getItem('aura_drive_passkey');
-        const scriptUrl = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-        if (secret) {
-          showToast(`Uploading ${file.name} to 5TB Google Drive...`);
-          try {
-            const res = await fetch(scriptUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({
-                action: 'uploadPhoto',
-                secret,
-                fileName: `Aura_${Date.now()}_${file.name}`,
-                dataUrl
-              })
-            });
-            const out = await res.json();
-            if (out.viewUrl) {
-              photoObj.driveUrl = out.viewUrl;
-              showToast("Saved high-res photo to your 5TB Google Drive!");
-            }
-          } catch (err) {
-            showToast("Saved photo locally (Drive offline)", true);
-          }
-        } else {
-          showToast("Photo saved to local IndexedDB Vault");
-        }
-
-        state.photos.unshift(photoObj);
-      }
-
-      captionInput.value = "";
-      e.target.value = "";
-      await persistState();
-      renderPhotos();
-    }
-
-    function readFileAsDataURL(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (ev) => resolve(ev.target.result);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function openLightbox(id) {
-      const p = state.photos.find(x => String(x.id) === String(id));
-      if (!p) return;
-      document.getElementById('lightboxImg').src = p.url || p.driveUrl;
-      document.getElementById('lightboxCaption').textContent = p.caption;
-      document.getElementById('lightboxDate').textContent = p.date;
-      document.getElementById('lightboxModal').classList.remove('hidden');
-      document.getElementById('lightboxModal').classList.add('flex');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightboxModal').classList.add('hidden');
-      document.getElementById('lightboxModal').classList.remove('flex');
-    }
-
-    function deletePhoto(id, ev) {
-      ev.stopPropagation();
-      state.photos = state.photos.filter(x => String(x.id) !== String(id));
-      persistState();
-      renderPhotos();
-    }
-
-    function renderPhotos() {
-      const grid = document.getElementById('photoGrid');
-      grid.innerHTML = state.photos.map(p => `
-        <div onclick="openLightbox('${p.id}')" class="group relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 aspect-square cursor-pointer">
-          <img src="${p.url || p.driveUrl}" alt="${p.caption}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-          <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex items-end justify-between">
-            <div>
-              <p class="text-xs font-semibold text-white truncate max-w-[130px]">${p.caption}</p>
-              <p class="text-[10px] text-white/70 font-mono">${p.date}</p>
-            </div>
-            <button onclick="deletePhoto('${p.id}', event)" class="text-xs text-rose-300 opacity-80 hover:opacity-100">✕</button>
-          </div>
-        </div>
-      `).join('') || `<p class="text-xs opacity-50 col-span-full">Your 5TB Photo Vault is ready. Upload your first photo memory!</p>`;
-    }
-
-    // QUICK VAULT & HABITS
-    function addVaultItem(e) {
-      e.preventDefault();
-      const label = document.getElementById('vaultLabel').value.trim();
-      const secret = document.getElementById('vaultSecret').value.trim();
-      state.vault.unshift({ id: Date.now(), label, secret });
-      e.target.reset();
-      persistState();
-      renderVault();
-      showToast("Saved in Quick Vault");
-    }
-
-    function deleteVaultItem(id) {
-      state.vault = state.vault.filter(v => v.id !== id);
-      persistState();
-      renderVault();
-    }
-
-    function renderVault() {
-      document.getElementById('vaultList').innerHTML = state.vault.map(v => `
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs">
-          <div>
-            <p class="font-semibold">${v.label}</p>
-            <p onclick="this.classList.toggle('revealed')" class="secret-blur font-mono text-amber-300 mt-0.5">${v.secret}</p>
-          </div>
-          <button onclick="deleteVaultItem(${v.id})" class="opacity-50 hover:opacity-100">✕</button>
-        </div>
-      `).join('') || `<p class="text-xs opacity-50">No secrets stored yet.</p>`;
-    }
-
-    function addHabit(e) {
-      e.preventDefault();
-      const name = document.getElementById('habitName').value.trim();
-      state.habits.push({ id: Date.now(), name, streak: 0, doneToday: false });
-      e.target.reset();
-      persistState();
-      renderHabits();
-    }
-
-    function toggleHabit(id) {
-      const h = state.habits.find(x => x.id === id);
-      if (h) {
-        h.doneToday = !h.doneToday;
-        h.streak += h.doneToday ? 1 : -1;
-      }
-      persistState();
-      renderHabits();
-    }
-
-    function renderHabits() {
-      document.getElementById('habitsList').innerHTML = state.habits.map(h => `
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between text-xs">
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${h.id})" class="w-4 h-4 accent-emerald-500 rounded" />
-            <span class="font-medium ${h.doneToday ? 'line-through opacity-50' : ''}">${h.name}</span>
-          </label>
-          <span class="font-mono text-amber-400">🔥 ${h.streak}d</span>
-        </div>
-      `).join('');
-    }
-
-    // BACKUP EXPORT & IMPORT
-    function exportBackup() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `aura-os-backup-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function importBackup(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          state = JSON.parse(ev.target.result);
-          await persistState();
-          renderAll();
-          showToast("Backup restored & synced!");
-        } catch (err) {
-          showToast("Invalid backup file", true);
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function renderAll() {
-      document.getElementById('dailyIntentionInput').value = state.intention || "";
-      renderSpecialDays();
-      renderCalendar();
-      renderReminders();
-      renderNotes();
-      renderPhotos();
-      renderVault();
-      renderHabits();
-    }
-
-    // Boot
-    window.addEventListener('DOMContentLoaded', async () => {
-      if (!localStorage.getItem('aura_drive_url')) {
-        localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-      }
-      updateClock();
-      const savedUser = localStorage.getItem('aura_active_user');
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        await loadUserWorkspace();
-        lockScreen(); // Require Quick PIN on refresh
-      }
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MOBILE DOCK -->
+<nav class="dock glass">
+  <button data-nav="dashboard" class="active" onclick="switchSection('dashboard')"><span data-ic="timer"></span>Hub</button>
+  <button data-nav="calendar" onclick="switchSection('calendar')"><span data-ic="calendar"></span>Days</button>
+  <button data-nav="reminders" onclick="switchSection('reminders')"><span data-ic="bell"></span>Tasks</button>
+  <button data-nav="notes" onclick="switchSection('notes')"><span data-ic="book"></span>Notes</button>
+  <button data-nav="photos" onclick="switchSection('photos')"><span data-ic="image"></span>Photos</button>
+  <button data-nav="vault" onclick="switchSection('vault')"><span data-ic="shield"></span>Vault</button>
+  <button onclick="openDriveModal()"><span data-ic="cloud"></span>Cloud</button>
+</nav>
+
+<script>
+/* ============================================================
+   CONFIG — 5TB Google Drive bridge (unchanged)
+   ============================================================ */
+const DEFAULT_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
+const DB_NAME = "AuraOS_5TB_DB", STORE_NAME = "user_workspace";
+const CATS = ["🎂 Birthday","💖 Anniversary","✈️ Trip / Milestone","📌 Deadline"];
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad2 = n => String(n).padStart(2,'0');
+const ymd = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;   // local date (not UTC)
+const parseYMD = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const daysFromToday = s => Math.round((parseYMD(s) - parseYMD(ymd())) / 864e5);
+const badgeFor = diff => diff === 0 ? "Today! 🎉" : diff === 1 ? "Tomorrow" : diff > 0 ? `In ${diff} days` : `${Math.abs(diff)}d ago`;
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* ---------- icons (inline, no CDN) ---------- */
+const ICONS = {
+  timer:'<circle cx="12" cy="14" r="8"/><path d="M12 14l3-3M10 2h4M12 2v3"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V22h16v-3"/>',
+  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
+  cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>', check:'<path d="M20 6 9 17l-5-5"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  pin:'<path d="M12 17v5M9 3h6l-1 7 3 3v2H7v-2l3-3z"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.2-.2-4.4 2-6 .5 2.5 2 4.9 4 6.5 2 1.7 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.4 1-3 0 1.4 1 2.5 2.5 2.5z"/>',
+  trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>',
+  play:'<path d="m6 3 14 9-14 9z"/>', pause:'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>',
+  reset:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/>', search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  chevL:'<path d="m15 18-6-6 6-6"/>', chevR:'<path d="m9 18 6-6-6-6"/>',
+  flag:'<path d="M4 22V4M4 4h13l-2 4 2 4H4"/>', zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+  cloudOff:'<path d="m2 2 20 20M17.5 19H9a7 7 0 0 1-3.3-13.2M10 5a7 7 0 0 1 5.7 4h1.8a4.5 4.5 0 0 1 2.9 7.9"/>'
+};
+const ic = (n, s) => `<svg class="i" viewBox="0 0 24 24"${s?` style="width:${s}px;height:${s}px"`:''}>${ICONS[n]||''}</svg>`;
+function hydrateIcons(root = document) {
+  root.querySelectorAll('[data-ic]').forEach(el => { if (!el.dataset.done) { el.insertAdjacentHTML('afterbegin', ic(el.dataset.ic)); el.dataset.done = 1; } });
+}
+
+/* ---------- state ---------- */
+const defaultState = () => ({
+  intention: "",
+  specialDays: [{ id: 1, title: "Launch My Personal OS", date: ymd(), category: "✈️ Trip / Milestone" }],
+  reminders: [], notes: [], photos: [], vault: [],
+  habits: [
+    { id: 1, name: "Morning Hydration", streak: 0, doneToday: false },
+    { id: 2, name: "Plan Tomorrow's Timings", streak: 0, doneToday: false }
+  ],
+  pomo: { date: ymd(), count: 0 }, habitDay: ymd()
+});
+let state = defaultState();
+let currentUser = null, enteredPin = "", authMode = 'login', use24Hour = false, calDate = new Date(), remFilter = 'active', tagFilter = null, currentSection = 'dashboard';
+
+/* ---------- IndexedDB (same db / store / key format) ---------- */
+function openLocalDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME);
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+async function saveToIndexedDB(key, val) {
+  const db = await openLocalDB();
+  return new Promise((res, rej) => { const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).put(val, key); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+}
+async function loadFromIndexedDB(key) {
+  const db = await openLocalDB();
+  return new Promise(res => { const tx = db.transaction(STORE_NAME, "readonly"); const r = tx.objectStore(STORE_NAME).get(key); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); });
+}
+
+/* ---------- toast + sound ---------- */
+function showToast(msg, isError = false) {
+  const t = document.createElement('div'); t.className = 'toast glass' + (isError ? ' err' : '');
+  t.innerHTML = `<i></i><span>${esc(msg)}</span>`; $('toasts').appendChild(t);
+  setTimeout(() => { t.style.transition = 'all .4s'; t.style.opacity = 0; t.style.transform = 'translateX(20px)'; setTimeout(() => t.remove(), 400); }, 3200);
+}
+let audioCtx;
+function chime() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume();
+    [659.25, 783.99, 1046.5].forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), t = audioCtx.currentTime + i * .18;
+      o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t + .03); g.gain.exponentialRampToValueAtTime(.001, t + .9);
+      o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t + 1);
     });
-  </script>
+  } catch (e) {}
+}
+
+/* ============================================================
+   AUTH & PIN
+   ============================================================ */
+async function sha(s) {
+  if (!(window.crypto && crypto.subtle)) return 'plain:' + s;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+const pwHash = (email, pw) => sha(`aura:${email}:${pw}`);
+const pinHash = (email, pin) => sha(`pin:${email}:${pin}`);
+
+function switchAuthTab(mode) {
+  authMode = mode;
+  $('nameFieldWrap').classList.toggle('hidden', mode === 'login');
+  $('tabLoginBtn').classList.toggle('on', mode === 'login'); $('tabSignupBtn').classList.toggle('on', mode === 'signup');
+  $('authSubmitText').textContent = mode === 'login' ? 'Unlock my sanctuary' : 'Create my sanctuary';
+}
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const email = $('authEmail').value.trim().toLowerCase(), password = $('authPassword').value;
+  const pinRaw = $('authPin').value.trim(), passkey = $('authDrivePasskey').value.trim();
+  const name = $('authName').value.trim() || email.split('@')[0];
+  if (pinRaw && !/^\d{4}$/.test(pinRaw)) return showToast("PIN must be exactly 4 digits", true);
+  if (passkey) localStorage.setItem('aura_drive_passkey', passkey);
+  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
+
+  const accounts = JSON.parse(localStorage.getItem('aura_accounts') || '{}');
+  const acc = accounts[email], pH = await pwHash(email, password);
+  if (authMode === 'signup' && acc) return showToast("That account already exists — sign in instead", true);
+  if (acc) {
+    const ok = acc.pwHash ? acc.pwHash === pH : acc.password === password;      // legacy plaintext accounts still work…
+    if (!ok) return showToast("Incorrect account password", true);
+    if (!acc.pwHash) { acc.pwHash = pH; delete acc.password; }                  // …and get upgraded to hashed
+    if (!acc.pinHash && acc.pin) { acc.pinHash = await pinHash(email, acc.pin); delete acc.pin; }
+    if (pinRaw) acc.pinHash = await pinHash(email, pinRaw);
+  } else {
+    accounts[email] = { name, email, pwHash: pH, pinHash: await pinHash(email, pinRaw || "1234") };
+  }
+  localStorage.setItem('aura_accounts', JSON.stringify(accounts));
+  currentUser = { name: accounts[email].name, email };
+  localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
+  await enterApp(`Welcome back, ${currentUser.name}!`);
+}
+async function instantEnter() {
+  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
+  currentUser = { name: "Sanctuary Owner", email: "owner@aura.local" };
+  localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
+  await enterApp("Unlocked sanctuary");
+}
+async function enterApp(msg) {
+  await loadUserWorkspace();
+  $('authOverlay').classList.remove('show'); showToast(msg);
+}
+function lockScreen() {
+  enteredPin = ""; updatePinDots();
+  $('pinWho').textContent = currentUser ? `Welcome back, ${currentUser.name}` : 'Enter your quick PIN';
+  $('authForms').classList.add('hidden'); $('pinPadView').classList.remove('hidden'); $('authOverlay').classList.add('show');
+}
+function showFullLogin() { $('pinPadView').classList.add('hidden'); $('authForms').classList.remove('hidden'); }
+async function expectedPinMatches(pin) {
+  const accounts = JSON.parse(localStorage.getItem('aura_accounts') || '{}');
+  const acc = currentUser && accounts[currentUser.email];
+  if (acc && acc.pinHash) return acc.pinHash === await pinHash(acc.email, pin);
+  if (acc && acc.pin) return acc.pin === pin;
+  return pin === "1234";
+}
+async function pressPin(d) {
+  if (enteredPin.length >= 4) return;
+  enteredPin += d; updatePinDots();
+  if (enteredPin.length === 4) {
+    if (await expectedPinMatches(enteredPin)) { $('authOverlay').classList.remove('show'); showToast("PIN verified"); }
+    else {
+      showToast("Incorrect PIN", true); const dots = $('pinDots'); dots.classList.add('shake'); setTimeout(() => dots.classList.remove('shake'), 450);
+      enteredPin = ""; setTimeout(updatePinDots, 250);
+    }
+  }
+}
+function clearPin() { enteredPin = ""; updatePinDots(); }
+function updatePinDots() { document.querySelectorAll('#pinDots i').forEach((d, i) => d.classList.toggle('on', i < enteredPin.length)); }
+document.addEventListener('keydown', e => {
+  if (!$('pinPadView').classList.contains('hidden') && $('authOverlay').classList.contains('show')) {
+    if (/^\d$/.test(e.key)) pressPin(e.key); else if (e.key === 'Backspace') { enteredPin = enteredPin.slice(0, -1); updatePinDots(); }
+  }
+  if (e.key === 'Escape') { closeDriveModal(); closeDayModal(); closeLightbox(); }
+  if ($('lightboxModal').classList.contains('show')) { if (e.key === 'ArrowLeft') lbStep(-1); if (e.key === 'ArrowRight') lbStep(1); }
+});
+
+/* ============================================================
+   PERSISTENCE: IndexedDB + Google Drive
+   ============================================================ */
+async function loadUserWorkspace() {
+  $('sidebarUser').textContent = currentUser.name;
+  const saved = await loadFromIndexedDB(`workspace_${currentUser.email}`);
+  state = Object.assign(defaultState(), saved || {});
+  rolloverDay(); renderAll();
+  if (localStorage.getItem('aura_drive_passkey')) pullFromGoogleDrive(true); else setCloud('Connect Drive', 'warn');
+}
+let syncTimer = null, syncing = false, syncAgain = false;
+async function persistState() {
+  if (!currentUser) return;
+  await saveToIndexedDB(`workspace_${currentUser.email}`, state);
+  clearTimeout(syncTimer); syncTimer = setTimeout(() => syncToGoogleDrive(), 1200);
+}
+function setCloud(text, cls = '') { $('cloudBadgeText').textContent = text; $('cloudBadge').className = 'cloud ' + cls; }
+function openDriveModal() {
+  $('driveUrlInput').value = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
+  $('driveKeyInput').value = localStorage.getItem('aura_drive_passkey') || ''; $('driveStatusText').textContent = '';
+  $('driveModal').classList.add('show');
+}
+function closeDriveModal() { $('driveModal').classList.remove('show'); }
+async function saveDriveConfig() {
+  localStorage.setItem('aura_drive_url', $('driveUrlInput').value.trim() || DEFAULT_DRIVE_WEB_APP_URL);
+  localStorage.setItem('aura_drive_passkey', $('driveKeyInput').value.trim());
+  $('driveStatusText').textContent = "Syncing with your 5TB Google Drive…";
+  await syncToGoogleDrive(true); closeDriveModal();
+}
+function stateForCloud() {   // full-size local image data stays on-device once it's safely on Drive
+  const copy = JSON.parse(JSON.stringify(state));
+  copy.photos.forEach(p => { if (p.driveUrl) delete p.url; });
+  return copy;
+}
+async function syncToGoogleDrive(manual = false) {
+  const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL, secret = localStorage.getItem('aura_drive_passkey');
+  if (!secret) { if (manual) showToast("Please enter your SECRET_PASSKEY first", true); return; }
+  if (syncing) { syncAgain = true; return; }
+  syncing = true; setCloud('Syncing…', 'sync');
+  try {
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'saveData', secret, data: stateForCloud() }) });
+    const r = await res.json();
+    if (r.status === 'saved') {
+      setCloud('Drive synced ✓'); $('syncTimestamp').textContent = "Last synced to Google Drive: " + new Date().toLocaleTimeString();
+      if (manual) showToast("Synced to your 5TB Google Drive!");
+    } else { setCloud('Passkey error', 'err'); if (manual) showToast(r.error || "Check your SECRET_PASSKEY", true); }
+  } catch (err) { setCloud('Offline · saved locally', 'warn'); if (manual) showToast("Couldn't reach Google — saved locally", true); }
+  syncing = false; if (syncAgain) { syncAgain = false; syncToGoogleDrive(); }
+}
+async function pullFromGoogleDrive(silent = false) {
+  const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL, secret = localStorage.getItem('aura_drive_passkey');
+  if (!secret) { if (!silent) showToast("Enter your SECRET_PASSKEY first", true); return; }
+  try {
+    if (!silent) $('driveStatusText').textContent = "Downloading from Google Drive…"; setCloud('Syncing…', 'sync');
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'loadData', secret }) });
+    const r = await res.json();
+    if (r.data) {
+      const localPhotos = new Map((state.photos || []).map(p => [String(p.id), p]));
+      const incoming = Object.assign(defaultState(), r.data);
+      incoming.photos = (incoming.photos || []).map(p => (!p.url && localPhotos.get(String(p.id))?.url) ? { ...p, url: localPhotos.get(String(p.id)).url } : p);
+      state = incoming; rolloverDay(); await saveToIndexedDB(`workspace_${currentUser.email}`, state); renderAll();
+      setCloud('Drive synced ✓'); $('syncTimestamp').textContent = "Last pulled from Google Drive: " + new Date().toLocaleTimeString();
+      if (!silent) { showToast("Loaded latest data from Google Drive!"); closeDriveModal(); }
+    } else if (r.error) { setCloud('Passkey error', 'err'); if (!silent) showToast("Drive error: " + r.error, true); }
+    else setCloud('Drive synced ✓');
+  } catch (e) { setCloud('Offline · saved locally', 'warn'); if (!silent) showToast("Could not reach Google Script URL", true); }
+}
+
+/* ============================================================
+   NAVIGATION, THEME, ACCENTS
+   ============================================================ */
+function switchSection(sec) {
+  currentSection = sec;
+  ['dashboard','calendar','reminders','notes','photos','vault'].forEach(id => {
+    const el = $('sec-' + id); el.classList.toggle('hidden', id !== sec);
+    if (id === sec) { el.classList.remove('view'); void el.offsetWidth; el.classList.add('view'); }
+  });
+  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('active', b.dataset.nav === sec));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const ACCENTS = { violet:['139 92 246','251 191 36'], rose:['244 63 94','251 191 36'], emerald:['16 185 129','250 204 21'], sky:['56 189 248','244 114 182'], amber:['245 158 11','167 139 250'] };
+function applyAccent(name) {
+  const a = ACCENTS[name] || ACCENTS.violet; document.documentElement.style.setProperty('--a', a[0]); document.documentElement.style.setProperty('--a2', a[1]);
+  localStorage.setItem('aura_accent', name);
+  $('accentRow').innerHTML = Object.keys(ACCENTS).map(k => `<button class="swatch ${k===name?'on':''}" title="${k}" style="background:rgb(${ACCENTS[k][0]})" onclick="applyAccent('${k}')"></button>`).join('');
+}
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t; localStorage.setItem('aura_theme', t);
+  document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#07090e' : '#f5f1e8';
+  const b = $('themeBtn'); b.innerHTML = ic(t === 'dark' ? 'moon' : 'sun');
+}
+function toggleTheme() { applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
+
+/* ============================================================
+   CLOCK / GREETING / INTENTION
+   ============================================================ */
+function updateClock() {
+  const now = new Date(), h = now.getHours();
+  $('greetingText').textContent = `${h < 12 ? 'GOOD MORNING' : h < 18 ? 'GOOD AFTERNOON' : 'GOOD EVENING'}, ${(currentUser?.name || 'FRIEND').toUpperCase()}`;
+  $('currentDateDisplay').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  $('liveClock').textContent = now.toLocaleTimeString('en-US', { hour12: !use24Hour, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+function toggleClockFormat() { use24Hour = !use24Hour; $('clockFormatBtn').textContent = use24Hour ? '24H' : '12H'; updateClock(); }
+function saveIntention() { state.intention = $('dailyIntentionInput').value; persistState(); showToast("Daily intention saved"); }
+
+/* ============================================================
+   POMODORO (timestamp-based, so it stays accurate in background tabs)
+   ============================================================ */
+const CIRC = 2 * Math.PI * 90;
+let pomo = { total: 25 * 60, left: 25 * 60, endAt: 0, timer: null, mode: 'focus' };
+function setPomodoro(mins, mode = 'focus', btn) {
+  clearInterval(pomo.timer); pomo = { total: mins * 60, left: mins * 60, endAt: 0, timer: null, mode };
+  document.querySelectorAll('#pomoModes button').forEach(b => b.classList.remove('on')); if (btn) btn.classList.add('on');
+  $('pomoStartBtn').innerHTML = ic('play') + '<span>Start focus</span>'; $('pomoStatus').textContent = mode === 'break' ? 'Time to breathe' : 'Ready for deep work';
+  renderPomo(); document.title = 'Aura OS';
+}
+function customPomodoro(e) { e.preventDefault(); const m = Math.max(1, Math.min(240, parseInt($('pomoCustom').value, 10) || 0)); if (!m) return; setPomodoro(m, 'focus'); $('pomoCustom').value = ''; showToast(`Custom focus: ${m} min`); }
+function renderPomo() {
+  $('pomoDisplay').textContent = `${pad2(Math.floor(pomo.left / 60))}:${pad2(pomo.left % 60)}`;
+  $('ringFg').style.strokeDashoffset = CIRC * (1 - pomo.left / pomo.total);
+  $('pomoCount').textContent = state.pomo?.count || 0;
+}
+function togglePomodoro() {
+  if (pomo.timer) {
+    clearInterval(pomo.timer); pomo.timer = null; $('pomoStartBtn').innerHTML = ic('play') + '<span>Resume</span>'; $('pomoStatus').textContent = 'Paused'; return;
+  }
+  chime.primed || (chime.primed = true);
+  pomo.endAt = Date.now() + pomo.left * 1000; $('pomoStartBtn').innerHTML = ic('pause') + '<span>Pause</span>'; $('pomoStatus').textContent = pomo.mode === 'break' ? 'Resting…' : 'In the zone';
+  pomo.timer = setInterval(() => {
+    pomo.left = Math.max(0, Math.round((pomo.endAt - Date.now()) / 1000)); renderPomo(); document.title = `${$('pomoDisplay').textContent} · Aura OS`;
+    if (pomo.left <= 0) {
+      clearInterval(pomo.timer); pomo.timer = null; chime(); document.title = 'Aura OS';
+      if (pomo.mode === 'focus') { if (state.pomo.date !== ymd()) state.pomo = { date: ymd(), count: 0 }; state.pomo.count++; persistState(); }
+      $('pomoStartBtn').innerHTML = ic('play') + '<span>Start focus</span>'; $('pomoStatus').textContent = 'Session complete'; renderPomo();
+      showToast(pomo.mode === 'focus' ? "Focus session complete! 🎉" : "Break's over — ready?");
+    }
+  }, 250);
+}
+function resetPomodoro() { setPomodoro(Math.round(pomo.total / 60), pomo.mode); }
+
+/* ============================================================
+   STOPWATCH (performance.now + rAF; laps with deltas)
+   ============================================================ */
+let sw = { run: false, base: 0, start: 0, raf: 0, laps: [] };
+const swElapsed = () => sw.base + (sw.run ? performance.now() - sw.start : 0);
+function fmtSW(ms) { const c = Math.floor(ms / 10) % 100, s = Math.floor(ms / 1000) % 60, m = Math.floor(ms / 60000); return `${pad2(m)}:${pad2(s)}<small>.${pad2(c)}</small>`; }
+function fmtPlain(ms) { return fmtSW(ms).replace(/<\/?small>/g, ''); }
+function swTick() { $('stopwatchDisplay').innerHTML = fmtSW(swElapsed()); if (sw.run) sw.raf = requestAnimationFrame(swTick); }
+function toggleStopwatch() {
+  if (sw.run) { sw.base = swElapsed(); sw.run = false; cancelAnimationFrame(sw.raf); $('swStartBtn').innerHTML = ic('play') + '<span>Resume</span>'; swTick(); }
+  else { sw.start = performance.now(); sw.run = true; $('swStartBtn').innerHTML = ic('pause') + '<span>Pause</span>'; swTick(); }
+}
+function resetStopwatch() { cancelAnimationFrame(sw.raf); sw = { run: false, base: 0, start: 0, raf: 0, laps: [] }; $('stopwatchDisplay').innerHTML = fmtSW(0); $('swStartBtn').innerHTML = ic('play') + '<span>Start</span>'; renderLaps(); }
+function recordLap() { const t = swElapsed(); if (t <= 0) return; const prev = sw.laps.length ? sw.laps[sw.laps.length - 1].total : 0; sw.laps.push({ total: t, split: t - prev }); renderLaps(); }
+function renderLaps() {
+  const splits = sw.laps.map(l => l.split), best = Math.min(...splits), worst = Math.max(...splits);
+  $('lapList').innerHTML = sw.laps.map((l, i) => {
+    const d = i ? l.split - sw.laps[i - 1].split : 0, col = sw.laps.length > 2 ? (l.split === best ? 'rgb(var(--ok))' : l.split === worst ? 'rgb(var(--bad))' : '') : '';
+    return `<div class="lap"><span class="faint">#${i + 1}</span><span style="${col ? 'color:' + col : ''}">${fmtPlain(l.split)}</span><span class="mut">${fmtPlain(l.total)}</span><span class="faint" style="text-align:right">${i ? (d >= 0 ? '+' : '−') + (Math.abs(d) / 1000).toFixed(2) + 's' : '—'}</span></div>`;
+  }).reverse().join('');
+}
+
+/* ============================================================
+   DAYS TO REMEMBER + CALENDAR
+   ============================================================ */
+function fillCats() { const o = CATS.map(c => `<option value="${c}">${c}</option>`).join(''); $('dayCategory').innerHTML = o; $('dmCat').innerHTML = o; }
+function pushDay(title, date, category) { state.specialDays.push({ id: uid(), title, date, category }); persistState(); renderSpecialDays(); renderCalendar(); showToast("Day to remember added"); }
+function addSpecialDay(e) { e.preventDefault(); pushDay($('dayTitle').value.trim(), $('dayDate').value, $('dayCategory').value); e.target.reset(); }
+function deleteSpecialDay(id) { state.specialDays = state.specialDays.filter(d => String(d.id) !== String(id)); persistState(); renderSpecialDays(); renderCalendar(); if ($('dayModal').classList.contains('show')) openDayModal(dayModalDate); }
+function dayCard(d, withDel = true) {
+  const diff = daysFromToday(d.date), cls = diff === 0 ? 'gold' : diff > 0 ? '' : 'neutral';
+  return `<div class="item"><div style="min-width:0"><div class="mono faint" style="font-size:10.5px">${esc(d.category)} · ${esc(d.date)}</div><div style="font-weight:700;margin-top:2px;overflow:hidden;text-overflow:ellipsis">${esc(d.title)}</div></div>
+    <div class="row" style="gap:8px;flex:none"><span class="chip ${cls}">${badgeFor(diff)}</span>${withDel ? `<button class="icon-btn danger" style="width:30px;height:30px" onclick="deleteSpecialDay('${d.id}')">${ic('x')}</button>` : ''}</div></div>`;
+}
+function renderSpecialDays() {
+  const sorted = [...state.specialDays].sort((a, b) => a.date.localeCompare(b.date));
+  $('specialDaysList').innerHTML = sorted.map(d => dayCard(d)).join('') || `<div class="empty" style="grid-column:1/-1"><span class="big">🌟</span>No special days yet — add one above.</div>`;
+  const upcoming = sorted.filter(d => daysFromToday(d.date) >= 0), show = (upcoming.length ? upcoming : sorted.slice().reverse()).slice(0, 3);
+  $('dashboardDaysPreview').innerHTML = show.map(d => {
+    const diff = daysFromToday(d.date);
+    return `<div class="stat"><div class="row between" style="margin-bottom:10px"><span class="mono faint" style="font-size:11px">${esc(d.category)}</span><span class="chip ${diff === 0 ? 'gold' : diff > 0 ? '' : 'neutral'}">${badgeFor(diff)}</span></div><div style="font-weight:700;font-size:16px">${esc(d.title)}</div><div class="mono faint" style="font-size:11px;margin-top:3px">${esc(d.date)}</div></div>`;
+  }).join('') || `<div class="empty" style="grid-column:1/-1"><span class="big">🌟</span>Nothing on the horizon yet.</div>`;
+}
+function changeMonth(o) { calDate = new Date(calDate.getFullYear(), calDate.getMonth() + o, 1); renderCalendar(); }
+function goToday() { calDate = new Date(); renderCalendar(); }
+function renderCalendar() {
+  const y = calDate.getFullYear(), m = calDate.getMonth(), first = new Date(y, m, 1).getDay(), total = new Date(y, m + 1, 0).getDate(), today = ymd();
+  $('calMonthHeader').textContent = calDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  let h = '';
+  for (let i = 0; i < first; i++) h += `<div class="cell void"></div>`;
+  for (let d = 1; d <= total; d++) {
+    const iso = `${y}-${pad2(m + 1)}-${pad2(d)}`, ev = state.specialDays.filter(x => x.date === iso), rem = state.reminders.filter(r => r.time && r.time.slice(0, 10) === iso && !r.done);
+    h += `<button class="cell ${iso === today ? 'today' : ''}" onclick="openDayModal('${iso}')"><span class="n">${d}</span>
+      ${ev.slice(0, 2).map(e => `<span class="pill">${esc(e.title)}</span>`).join('')}${ev.length > 2 ? `<span class="faint" style="font-size:9px">+${ev.length - 2} more</span>` : ''}
+      <span class="dotrow">${ev.map(() => `<span class="rdot" style="background:rgb(var(--a))"></span>`).join('')}${rem.map(() => `<span class="rdot"></span>`).join('')}</span>
+      ${rem.length ? `<span class="mono mobile-hide" style="font-size:9px;color:rgb(var(--a2))">🔔 ${rem.length}</span>` : ''}</button>`;
+  }
+  $('calendarGrid').innerHTML = h;
+}
+let dayModalDate = ymd();
+function openDayModal(iso) {
+  dayModalDate = iso; $('dayModalTitle').textContent = parseYMD(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  const ev = state.specialDays.filter(d => d.date === iso), rem = state.reminders.filter(r => r.time && r.time.slice(0, 10) === iso);
+  $('dayModalList').innerHTML = (ev.map(d => dayCard(d)).join('') + rem.map(r => `<div class="item"><div>${ic('bell')} <span style="${r.done ? 'text-decoration:line-through;opacity:.5' : ''}">${esc(r.text)}</span></div><span class="mono faint" style="font-size:11px">${esc(r.time.slice(11, 16))}</span></div>`).join('')) || `<div class="empty">Nothing planned. A blank page ✨</div>`;
+  $('dayModal').classList.add('show');
+}
+function closeDayModal() { $('dayModal').classList.remove('show'); }
+function addDayFromModal(e) { e.preventDefault(); pushDay($('dmTitle').value.trim(), dayModalDate, $('dmCat').value); $('dmTitle').value = ''; openDayModal(dayModalDate); }
+
+/* ============================================================
+   REMINDERS
+   ============================================================ */
+const PRI = { high: { w: 0, label: 'High', cls: 'bad' }, med: { w: 1, label: 'Medium', cls: 'gold' }, low: { w: 2, label: 'Low', cls: 'ok' } };
+function addReminder(e) {
+  e.preventDefault();
+  state.reminders.unshift({ id: uid(), text: $('remText').value.trim(), time: $('remTime').value, priority: $('remPriority').value, done: false });
+  if ($('remTime').value && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+  e.target.reset(); $('remPriority').value = 'med'; persistState(); renderReminders(); renderCalendar(); renderStats(); showToast("Reminder set");
+}
+function toggleReminder(id) { const r = state.reminders.find(x => String(x.id) === String(id)); if (r) r.done = !r.done; persistState(); renderReminders(); renderCalendar(); renderStats(); }
+function deleteReminder(id) { state.reminders = state.reminders.filter(x => String(x.id) !== String(id)); persistState(); renderReminders(); renderCalendar(); renderStats(); }
+function setRemFilter(f) { remFilter = f; document.querySelectorAll('#remFilter button').forEach(b => b.classList.toggle('on', b.dataset.f === f)); renderReminders(); }
+function renderReminders() {
+  let list = state.reminders.filter(r => remFilter === 'all' || (remFilter === 'done' ? r.done : !r.done));
+  list.sort((a, b) => (a.done - b.done) || (PRI[a.priority || 'med'].w - PRI[b.priority || 'med'].w) || (a.time || '9').localeCompare(b.time || '9'));
+  const now = new Date();
+  $('remindersList').innerHTML = list.map(r => {
+    const p = PRI[r.priority || 'med'], overdue = !r.done && r.time && new Date(r.time) < now;
+    return `<div class="item"><label class="row grow" style="gap:14px;cursor:pointer;min-width:0"><input type="checkbox" class="chk" ${r.done ? 'checked' : ''} onchange="toggleReminder('${r.id}')" />
+      <div style="min-width:0"><div style="font-weight:600;${r.done ? 'text-decoration:line-through;opacity:.45' : ''}">${esc(r.text)}</div>
+      <div class="row wrap" style="gap:8px;margin-top:4px"><span class="chip ${p.cls}">${p.label}</span>${r.time ? `<span class="mono ${overdue ? '' : 'faint'}" style="font-size:11px;${overdue ? 'color:rgb(var(--bad))' : ''}">${overdue ? 'Overdue · ' : ''}${esc(r.time.replace('T', ' '))}</span>` : ''}</div></div></label>
+      <button class="icon-btn danger" onclick="deleteReminder('${r.id}')">${ic('trash')}</button></div>`;
+  }).join('') || `<div class="empty"><span class="big">🌿</span>${remFilter === 'done' ? 'Nothing completed yet.' : 'All caught up. Enjoy the quiet.'}</div>`;
+}
+function checkDueReminders() {
+  let changed = false; const now = new Date();
+  state.reminders.forEach(r => {
+    if (!r.done && r.time && !r.notified && new Date(r.time) <= now) {
+      r.notified = true; changed = true; chime(); showToast("🔔 " + r.text);
+      if ('Notification' in window && Notification.permission === 'granted') try { new Notification('Aura reminder', { body: r.text }); } catch (e) {}
+    }
+  });
+  if (changed) { persistState(); renderReminders(); }
+}
+
+/* ============================================================
+   JOURNAL
+   ============================================================ */
+function addNote(e) {
+  e.preventDefault();
+  const tags = $('noteTags').value.split(',').map(t => t.trim().replace(/^#/, '').toLowerCase()).filter(Boolean);
+  state.notes.unshift({ id: uid(), title: $('noteTitle').value.trim(), mood: $('noteMood').value, body: $('noteBody').value.trim(), tags, pinned: false, createdAt: new Date().toLocaleString() });
+  e.target.reset(); persistState(); renderNotes(); renderStats(); showToast("Journal entry saved");
+}
+function deleteNote(id) { if (!confirm('Delete this note?')) return; state.notes = state.notes.filter(n => String(n.id) !== String(id)); persistState(); renderNotes(); renderStats(); }
+function pinNote(id) { const n = state.notes.find(x => String(x.id) === String(id)); if (n) n.pinned = !n.pinned; persistState(); renderNotes(); }
+function setTag(t) { tagFilter = tagFilter === t ? null : t; renderNotes(); }
+function renderNotes() {
+  const q = ($('noteSearch')?.value || '').toLowerCase(), all = [...new Set(state.notes.flatMap(n => n.tags || []))];
+  $('tagFilter').innerHTML = all.map(t => `<button class="chip ${tagFilter === t ? '' : 'neutral'}" onclick="setTag('${esc(t)}')">#${esc(t)}</button>`).join('');
+  const list = state.notes.filter(n => (!tagFilter || (n.tags || []).includes(tagFilter)) && (n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q) || (n.tags || []).some(t => t.includes(q))))
+    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+  $('notesGrid').innerHTML = list.map(n => `<div class="note ${n.pinned ? 'pinned' : ''}">
+    <div class="row between"><span class="chip neutral">${esc(n.mood)}</span><span class="mono faint" style="font-size:10.5px">${esc(n.createdAt)}</span></div>
+    <h4>${esc(n.title)}</h4><p>${esc(n.body)}</p>
+    ${(n.tags || []).length ? `<div class="row wrap" style="gap:6px;margin-top:12px">${n.tags.map(t => `<span class="chip">#${esc(t)}</span>`).join('')}</div>` : ''}
+    <div class="row" style="justify-content:flex-end;gap:6px;margin-top:14px"><button class="icon-btn" style="width:32px;height:32px;${n.pinned ? 'color:rgb(var(--a2))' : ''}" title="Pin" onclick="pinNote('${n.id}')">${ic('pin')}</button><button class="icon-btn danger" style="width:32px;height:32px" onclick="deleteNote('${n.id}')">${ic('trash')}</button></div></div>`).join('')
+    || `<div class="empty" style="column-span:all"><span class="big">📓</span>No journal notes found.</div>`;
+}
+
+/* ============================================================
+   PHOTO VAULT → Drive (uploadPhoto) + local compressed copy
+   ============================================================ */
+const readFileAsDataURL = f => new Promise(r => { const fr = new FileReader(); fr.onload = e => r(e.target.result); fr.readAsDataURL(f); });
+function shrinkImage(dataUrl, max = 1600) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .86));
+    };
+    img.onerror = () => res(dataUrl); img.src = dataUrl;
+  });
+}
+async function processFiles(files) {
+  const caption = $('photoCaptionInput').value.trim(), secret = localStorage.getItem('aura_drive_passkey'), scriptUrl = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const original = await readFileAsDataURL(file), local = await shrinkImage(original);
+    const photo = { id: uid(), caption: caption || file.name.replace(/\.[^/.]+$/, ""), date: new Date().toLocaleDateString(), url: local };
+    if (secret) {
+      showToast(`Uploading ${file.name} to Google Drive…`);
+      try {
+        const res = await fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'uploadPhoto', secret, fileName: `Aura_${Date.now()}_${file.name}`, dataUrl: original }) });
+        const out = await res.json();
+        if (out.viewUrl) { photo.driveUrl = out.viewUrl; photo.fileId = out.fileId; showToast("Saved high-res photo to your 5TB Drive!"); }
+        else showToast(out.error || "Drive rejected the upload — kept locally", true);
+      } catch (err) { showToast("Saved photo locally (Drive offline)", true); }
+    } else showToast("Photo saved to local vault");
+    state.photos.unshift(photo); renderPhotos(); renderStats();
+  }
+  $('photoCaptionInput').value = ""; await persistState();
+}
+function handlePhotoUpload(e) { const f = Array.from(e.target.files); e.target.value = ""; processFiles(f); }
+let lbList = [], lbIdx = 0;
+function openLightbox(id) {
+  lbList = state.photos; lbIdx = lbList.findIndex(x => String(x.id) === String(id)); if (lbIdx < 0) return; showLb(); $('lightboxModal').classList.add('show');
+}
+function showLb() { const p = lbList[lbIdx]; $('lightboxImg').src = p.url || p.driveUrl; $('lightboxCaption').textContent = p.caption; $('lightboxDate').textContent = p.date; }
+function lbStep(d) { if (!lbList.length) return; lbIdx = (lbIdx + d + lbList.length) % lbList.length; showLb(); }
+function closeLightbox() { $('lightboxModal').classList.remove('show'); }
+function lbDownload() { const p = lbList[lbIdx]; if (!p) return; const a = document.createElement('a'); a.href = p.url || p.driveUrl; a.download = (p.caption || 'memory') + '.jpg'; a.target = '_blank'; a.click(); }
+function lbDelete() { const p = lbList[lbIdx]; if (p && confirm('Delete this photo from your vault?\n(The original stays in your Drive folder.)')) { removePhoto(p.id); closeLightbox(); } }
+function removePhoto(id) { state.photos = state.photos.filter(x => String(x.id) !== String(id)); persistState(); renderPhotos(); renderStats(); }
+function renderPhotos() {
+  const hasKey = !!localStorage.getItem('aura_drive_passkey');
+  $('photoGrid').innerHTML = state.photos.map(p => `<div class="ph" onclick="openLightbox('${p.id}')"><img loading="lazy" src="${esc(p.url || p.driveUrl)}" alt="${esc(p.caption)}" />
+    ${hasKey && !p.driveUrl ? `<span class="chip gold tag">${ic('cloudOff', 12)} Local</span>` : ''}
+    <div class="cap row between"><div style="min-width:0"><div style="font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.caption)}</div><div class="mono" style="font-size:10px;opacity:.7">${esc(p.date)}</div></div></div></div>`).join('')
+    || `<div class="empty" style="column-span:all"><span class="big">🖼️</span>Your vault is ready. Upload your first memory!</div>`;
+}
+
+/* ============================================================
+   SECRET VAULT + HABITS
+   ============================================================ */
+function addVaultItem(e) { e.preventDefault(); state.vault.unshift({ id: uid(), label: $('vaultLabel').value.trim(), secret: $('vaultSecret').value.trim() }); e.target.reset(); persistState(); renderVault(); showToast("Saved in vault"); }
+function deleteVaultItem(id) { if (!confirm('Remove this secret?')) return; state.vault = state.vault.filter(v => String(v.id) !== String(id)); persistState(); renderVault(); }
+function copySecret(id) {
+  const v = state.vault.find(x => String(x.id) === String(id)); if (!v) return;
+  const done = () => showToast("Copied to clipboard");
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(v.secret).then(done, () => showToast("Copy failed", true));
+  else { const t = document.createElement('textarea'); t.value = v.secret; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { showToast("Copy failed", true); } t.remove(); }
+}
+function renderVault() {
+  $('vaultList').innerHTML = state.vault.map(v => `<div class="item"><div style="min-width:0;flex:1"><div style="font-weight:700">${esc(v.label)}</div><div class="secret" onclick="this.classList.toggle('revealed')" style="margin-top:3px;font-size:13px">${esc(v.secret)}</div></div>
+    <div class="row" style="gap:6px;flex:none"><button class="icon-btn" onclick="copySecret('${v.id}')" title="Copy">${ic('copy')}</button><button class="icon-btn danger" onclick="deleteVaultItem('${v.id}')">${ic('trash')}</button></div></div>`).join('')
+    || `<div class="empty"><span class="big">🔐</span>No secrets stored yet.</div>`;
+}
+function rolloverDay() {
+  const today = ymd(), yest = ymd(new Date(Date.now() - 864e5));
+  state.habits.forEach(h => {
+    if (h.lastDone && h.lastDone < yest) h.streak = 0;
+    if (state.habitDay !== today && !h.lastDone) h.doneToday = false;
+    if (h.lastDone) h.doneToday = h.lastDone === today;
+  });
+  state.habitDay = today; if (!state.pomo || state.pomo.date !== today) state.pomo = { date: today, count: 0 };
+}
+function addHabit(e) { e.preventDefault(); state.habits.push({ id: uid(), name: $('habitName').value.trim(), streak: 0, doneToday: false }); e.target.reset(); persistState(); renderHabits(); renderStats(); }
+function deleteHabit(id) { state.habits = state.habits.filter(h => String(h.id) !== String(id)); persistState(); renderHabits(); renderStats(); }
+function toggleHabit(id) {
+  const h = state.habits.find(x => String(x.id) === String(id)); if (!h) return;
+  const today = ymd(), yest = ymd(new Date(Date.now() - 864e5));
+  if (!h.doneToday) { h.streak = (h.lastDone === yest || !h.lastDone ? h.streak : 0) + 1; h.lastDone = today; h.doneToday = true; if (h.streak > 0 && h.streak % 7 === 0) showToast(`🔥 ${h.streak}-day streak on "${h.name}"!`); }
+  else { h.streak = Math.max(0, h.streak - 1); h.lastDone = h.streak > 0 ? yest : null; h.doneToday = false; }
+  persistState(); renderHabits(); renderStats();
+}
+function renderHabits() {
+  const done = state.habits.filter(h => h.doneToday).length, tot = state.habits.length;
+  $('habitProgressText').textContent = `${done}/${tot}`; $('habitBar').style.width = tot ? (done / tot * 100) + '%' : '0%';
+  $('habitsList').innerHTML = state.habits.map(h => `<div class="item"><label class="row grow" style="gap:14px;cursor:pointer;min-width:0"><input type="checkbox" class="chk" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit('${h.id}')" /><span style="font-weight:600;${h.doneToday ? 'text-decoration:line-through;opacity:.5' : ''}">${esc(h.name)}</span></label>
+    <div class="row" style="gap:8px;flex:none"><span class="chip gold">${ic('flame')} ${h.streak}d</span><button class="icon-btn danger" style="width:30px;height:30px" onclick="deleteHabit('${h.id}')">${ic('x')}</button></div></div>`).join('')
+    || `<div class="empty"><span class="big">🔥</span>Add your first habit.</div>`;
+}
+
+/* ============================================================
+   STATS + BACKUP
+   ============================================================ */
+function renderStats() {
+  const open = state.reminders.filter(r => !r.done).length, done = state.habits.filter(h => h.doneToday).length;
+  $('statTiles').innerHTML = [
+    ['Open tasks', open, 'bell', 'reminders'], ['Habits today', `${done}/${state.habits.length}`, 'flame', 'vault'], ['Memories', state.photos.length, 'image', 'photos']
+  ].map(([l, v, i, s]) => `<button class="stat glass" style="text-align:left;border-radius:22px;padding:18px" onclick="switchSection('${s}')"><div class="row between"><span class="label">${l}</span><span style="color:rgb(var(--a))">${ic(i)}</span></div><b style="margin-top:8px">${v}</b></button>`).join('');
+}
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `aura-os-backup-${ymd()}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function importBackup(e) {
+  const file = e.target.files[0]; if (!file) return; const r = new FileReader();
+  r.onload = async ev => {
+    try { const d = JSON.parse(ev.target.result); if (typeof d !== 'object' || d === null) throw 0; state = Object.assign(defaultState(), d); rolloverDay(); await persistState(); renderAll(); showToast("Backup restored & synced!"); }
+    catch (err) { showToast("Invalid backup file", true); }
+  };
+  r.readAsText(file); e.target.value = '';
+}
+function renderAll() {
+  $('dailyIntentionInput').value = state.intention || '';
+  renderSpecialDays(); renderCalendar(); renderReminders(); renderNotes(); renderPhotos(); renderVault(); renderHabits(); renderStats(); renderPomo();
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+function setupDropZone() {
+  const z = $('dropZone');
+  ['dragenter', 'dragover'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.classList.remove('over'); }));
+  z.addEventListener('drop', e => processFiles(Array.from(e.dataTransfer.files)));
+}
+function setupManifest() {   // makes "Add to Home Screen" feel like an app
+  try {
+    const icon = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#fbbf24"/></linearGradient></defs><rect width="192" height="192" rx="44" fill="url(#g)"/><text x="96" y="130" font-family="Georgia,serif" font-size="110" font-weight="700" fill="#fff" text-anchor="middle">A</text></svg>');
+    const m = { name: "Aura OS", short_name: "Aura", display: "standalone", background_color: "#07090e", theme_color: "#07090e", start_url: location.href, icons: [{ src: icon, sizes: "192x192", type: "image/svg+xml" }] };
+    const l = document.createElement('link'); l.rel = 'manifest'; l.href = URL.createObjectURL(new Blob([JSON.stringify(m)], { type: 'application/manifest+json' })); document.head.appendChild(l);
+    const ai = document.createElement('link'); ai.rel = 'apple-touch-icon'; ai.href = icon; document.head.appendChild(ai);
+  } catch (e) {}
+}
+window.addEventListener('DOMContentLoaded', async () => {
+  hydrateIcons(); fillCats(); setupDropZone(); setupManifest();
+  applyTheme(localStorage.getItem('aura_theme') || 'dark'); applyAccent(localStorage.getItem('aura_accent') || 'violet');
+  $('dayDate').value = ymd();
+  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
+  updateClock(); setInterval(updateClock, 1000); setInterval(checkDueReminders, 15000);
+  setInterval(() => { if (currentUser && state.habitDay !== ymd()) { rolloverDay(); renderAll(); persistState(); } }, 60000);
+  $('stopwatchDisplay').innerHTML = fmtSW(0);
+  let saved = null; try { saved = JSON.parse(localStorage.getItem('aura_active_user') || 'null'); } catch (e) {}
+  if (saved) { currentUser = { name: saved.name, email: saved.email }; lockScreen(); await loadUserWorkspace(); }   // PIN required on refresh
+  else renderAll();
+});
+</script>
 </body>
 </html>
