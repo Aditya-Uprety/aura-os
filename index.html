@@ -1,1092 +1,1830 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#07090e" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>Aura OS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<style>
-:root{
-  --bg:#07090e; --txt:#f5f6fa; --mut:rgba(245,246,250,.58); --faint:rgba(245,246,250,.34);
-  --card:rgba(20,24,38,.55); --card-solid:#121624; --soft:rgba(255,255,255,.05); --soft2:rgba(255,255,255,.09);
-  --line:rgba(255,255,255,.10); --shadow:0 24px 60px -20px rgba(0,0,0,.6);
-  --a:139 92 246; --a2:251 191 36; --ok:52 211 153; --bad:251 113 133;
-  --ease:cubic-bezier(.22,1,.36,1);
-  --sans:'Plus Jakarta Sans',system-ui,sans-serif; --serif:'Instrument Serif',Georgia,serif; --mono:'JetBrains Mono',ui-monospace,monospace;
-  color-scheme:dark;
-}
-html[data-theme="light"]{
-  --bg:#f5f1e8; --txt:#1c1b18; --mut:rgba(28,27,24,.62); --faint:rgba(28,27,24,.38);
-  --card:rgba(255,255,255,.62); --card-solid:#fffdf8; --soft:rgba(40,30,10,.045); --soft2:rgba(40,30,10,.08);
-  --line:rgba(40,30,10,.10); --shadow:0 24px 50px -24px rgba(80,60,20,.28);
-  color-scheme:light;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%}
-body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;line-height:1.5;overflow-x:hidden;transition:background .5s var(--ease),color .4s var(--ease);-webkit-font-smoothing:antialiased}
-button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer;border:0;background:none}
-.hidden{display:none!important}
-.mono{font-family:var(--mono)} .serif{font-family:var(--serif)}
-.mut{color:var(--mut)} .faint{color:var(--faint)}
-svg.i{width:1.1em;height:1.1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:-.17em}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F4F1" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)" />
+  <title>Aura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #F5F4F1;
+      --surface: #FFFFFF;
+      --surface-2: #F0EEEA;
+      --surface-3: #E8E5E0;
+      --border: #E5E2DC;
+      --border-strong: #D4D0C8;
+      --text: #1E2124;
+      --muted: #6A6F75;
+      --faint: #9A9EA3;
+      --accent: #3E6B63;
+      --accent-hover: #335A53;
+      --accent-soft: #E2ECE9;
+      --on-accent: #FFFFFF;
+      --danger: #A94A43;
+      --danger-soft: #F6E6E4;
+      --warn: #94661F;
+      --warn-soft: #F4EBDC;
+      --shadow: 0 1px 2px rgba(30, 33, 36, 0.04), 0 1px 3px rgba(30, 33, 36, 0.04);
+      --shadow-lg: 0 12px 32px rgba(30, 33, 36, 0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #111315;
+        --surface: #181B1E;
+        --surface-2: #1F2326;
+        --surface-3: #272C30;
+        --border: #2A2F33;
+        --border-strong: #363C41;
+        --text: #E6E8E9;
+        --muted: #9BA1A6;
+        --faint: #6E757B;
+        --accent: #7DB0A6;
+        --accent-hover: #91C0B6;
+        --accent-soft: #1E2D2A;
+        --on-accent: #0F1A18;
+        --danger: #E08A82;
+        --danger-soft: #2E1E1D;
+        --warn: #D9AE63;
+        --warn-soft: #2D2619;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #111315;
+      --surface: #181B1E;
+      --surface-2: #1F2326;
+      --surface-3: #272C30;
+      --border: #2A2F33;
+      --border-strong: #363C41;
+      --text: #E6E8E9;
+      --muted: #9BA1A6;
+      --faint: #6E757B;
+      --accent: #7DB0A6;
+      --accent-hover: #91C0B6;
+      --accent-soft: #1E2D2A;
+      --on-accent: #0F1A18;
+      --danger: #E08A82;
+      --danger-soft: #2E1E1D;
+      --warn: #D9AE63;
+      --warn-soft: #2D2619;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
 
-/* Aurora */
-.aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-.blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:.34;animation:drift 22s ease-in-out infinite alternate}
-html[data-theme="light"] .blob{opacity:.28}
-.b1{width:42vmax;height:42vmax;background:rgb(var(--a));top:-14vmax;left:-10vmax}
-.b2{width:46vmax;height:46vmax;background:rgb(var(--a2));bottom:-20vmax;right:-12vmax;animation-delay:-7s;opacity:.22}
-.b3{width:34vmax;height:34vmax;background:rgb(45 212 191);top:38%;left:46%;animation-delay:-13s;opacity:.18}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(5vmax,-4vmax) scale(1.14)}}
-.grain{position:fixed;inset:0;z-index:-1;opacity:.04;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+    h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+    h3 { font-size: 14px; font-weight: 600; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; }
+    .tiny { font-size: 12px; }
+    .mono { font-family: var(--mono); }
+    .tabular { font-variant-numeric: tabular-nums; }
 
-/* Glass */
-.glass{background:var(--card);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07);border-radius:28px}
-html[data-theme="light"] .glass{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9)}
-.pad{padding:24px} .pad-s{padding:16px}
-.card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em}
-.card-title .dot{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgb(var(--a)/.16);color:rgb(var(--a))}
-.label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--mono);color:var(--mut)}
+    .icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      fill: none; stroke: currentColor; stroke-width: 1.75;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .icon-sm { width: 16px; height: 16px; }
 
-/* Controls */
-.inp{width:100%;padding:12px 14px;border-radius:14px;background:var(--soft);border:1px solid var(--line);outline:0;transition:border-color .25s,box-shadow .25s,background .25s;min-width:0}
-.inp::placeholder{color:var(--faint)}
-.inp:focus{border-color:rgb(var(--a)/.7);box-shadow:0 0 0 4px rgb(var(--a)/.15);background:var(--soft2)}
-select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
-textarea.inp{resize:vertical;min-height:110px;line-height:1.6}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:14px;font-weight:600;font-size:13px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s,opacity .2s;white-space:nowrap}
-.btn:active{transform:scale(.96)}
-.btn-primary{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.7));box-shadow:0 10px 28px -10px rgb(var(--a)/.8),inset 0 1px 0 rgba(255,255,255,.25)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px -10px rgb(var(--a)/.9),inset 0 1px 0 rgba(255,255,255,.3)}
-.btn-ghost{background:var(--soft);border:1px solid var(--line)}
-.btn-ghost:hover{background:var(--soft2)}
-.btn-ok{color:#fff;background:linear-gradient(135deg,rgb(var(--ok)),rgb(var(--ok)/.7))}
-.btn-warn{color:rgb(var(--a2));background:rgb(var(--a2)/.12);border:1px solid rgb(var(--a2)/.3)}
-.btn-sm{padding:7px 12px;font-size:12px;border-radius:11px}
-.icon-btn{width:36px;height:36px;border-radius:12px;display:inline-grid;place-items:center;background:var(--soft);border:1px solid var(--line);transition:background .2s,transform .3s var(--ease)}
-.icon-btn:hover{background:var(--soft2);transform:translateY(-1px)}
-.icon-btn.danger:hover{color:rgb(var(--bad))}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;font-family:var(--mono);background:rgb(var(--a)/.15);color:rgb(var(--a))}
-.chip.gold{background:rgb(var(--a2)/.15);color:rgb(var(--a2))} .chip.ok{background:rgb(var(--ok)/.15);color:rgb(var(--ok))} .chip.bad{background:rgb(var(--bad)/.15);color:rgb(var(--bad))} .chip.neutral{background:var(--soft2);color:var(--mut)}
-.seg{display:inline-flex;gap:4px;padding:4px;border-radius:15px;background:var(--soft);border:1px solid var(--line);flex-wrap:wrap}
-.seg button{padding:7px 12px;border-radius:11px;font-size:12px;font-weight:600;color:var(--mut);transition:all .3s var(--ease)}
-.seg button.on{background:rgb(var(--a));color:#fff;box-shadow:0 6px 16px -6px rgb(var(--a)/.9)}
-.seg button:not(.on):hover{color:var(--txt)}
-.item{padding:14px 16px;border-radius:18px;background:var(--soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;transition:transform .35s var(--ease),background .25s;animation:rise .5s var(--ease) both}
-.item:hover{background:var(--soft2)}
-.empty{padding:28px 10px;text-align:center;color:var(--faint);font-size:13px}
-.empty .big{font-size:26px;display:block;margin-bottom:6px;opacity:.7}
-.grid{display:grid;gap:20px;min-width:0}
-.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.row{display:flex;align-items:center;gap:10px} .between{justify-content:space-between} .wrap{flex-wrap:wrap} .col{display:flex;flex-direction:column;gap:12px} .grow{flex:1;min-width:0}
-.scroll-y{overflow-y:auto;max-height:360px;padding-right:4px}
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:rgb(var(--a)/.35);border-radius:99px}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.view{animation:rise .6s var(--ease) both}
+    /* ---------- Layout ---------- */
+    .app { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar {
+      position: sticky; top: 0; height: 100vh;
+      display: flex; flex-direction: column; gap: 24px;
+      padding: 20px 12px 16px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px; }
+    .brand-mark {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: var(--accent); color: var(--on-accent);
+      font-weight: 700; font-size: 15px;
+    }
+    .brand-name { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; }
+    .nav { display: flex; flex-direction: column; gap: 2px; }
+    .nav-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--faint); padding: 12px 12px 6px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      background: none; border: 0; text-align: left;
+      color: var(--muted); font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-item:hover { background: var(--surface-2); color: var(--text); }
+    .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+    .sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding: 0 4px; }
+    .sidebar-actions { display: flex; gap: 6px; }
+    .sidebar-actions .btn { flex: 1; }
 
-/* Custom checkbox */
-.chk{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:8px;border:1.5px solid var(--faint);display:inline-grid;place-items:center;flex:none;cursor:pointer;transition:all .3s var(--ease);background:transparent}
-.chk::after{content:"";width:10px;height:6px;border-left:2.4px solid #fff;border-bottom:2.4px solid #fff;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .3s var(--ease)}
-.chk:checked{background:rgb(var(--ok));border-color:rgb(var(--ok));box-shadow:0 0 0 5px rgb(var(--ok)/.15)}
-.chk:checked::after{transform:rotate(-45deg) scale(1)}
+    .main { min-width: 0; padding: 36px 48px 72px; }
+    .content { max-width: 1000px; margin: 0 auto; }
+    .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    .page-head p { margin-top: 4px; }
 
-/* Layout */
-.shell{max-width:1320px;margin:0 auto;padding:20px 20px 40px;display:flex;gap:24px;align-items:flex-start}
-.side{width:268px;flex:none;position:sticky;top:20px}
-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:24px}
-.logo{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a2)));box-shadow:0 10px 24px -8px rgb(var(--a)/.8)}
-.nav{display:flex;flex-direction:column;gap:4px}
-.nav-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;font-weight:600;color:var(--mut);text-align:left;transition:all .35s var(--ease)}
-.nav-btn:hover{background:var(--soft);color:var(--txt)}
-.nav-btn.active{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.72));box-shadow:0 12px 26px -10px rgb(var(--a)/.9)}
-.dock{display:none}
-.swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px var(--line);transition:transform .3s var(--ease)}
-.swatch:hover{transform:scale(1.15)} .swatch.on{border-color:var(--txt)}
+    .section { display: flex; flex-direction: column; gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .stack { display: flex; flex-direction: column; gap: 12px; }
+    .row { display: flex; align-items: center; gap: 8px; }
+    .row.center { justify-content: center; }
+    .row.end { justify-content: flex-end; }
+    .row.between { justify-content: space-between; }
+    .grow { flex: 1; min-width: 0; }
 
-/* Hero */
-.hero{padding:32px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;width:340px;height:340px;right:-90px;top:-130px;border-radius:50%;background:radial-gradient(circle,rgb(var(--a)/.35),transparent 70%)}
-.hero-grid{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;flex-wrap:wrap;position:relative}
-.hero h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:6px 0 0;letter-spacing:-.01em}
-.intent{display:flex;align-items:center;gap:10px;margin-top:18px;padding:10px 14px;border-radius:16px;background:var(--soft);border:1px solid var(--line);max-width:520px}
-.intent input{flex:1;background:none;border:0;outline:0;font-weight:600;min-width:0}
-.clock{font-family:var(--mono);font-weight:700;font-size:clamp(34px,5vw,58px);letter-spacing:-.03em;line-height:1}
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; min-height: 32px; }
+    .card-head .count { color: var(--faint); font-weight: 500; margin-left: 6px; }
 
-/* Timer ring */
-.ring-wrap{position:relative;width:min(230px,70vw);aspect-ratio:1;margin:8px auto}
-.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring-bg{stroke:var(--soft2);fill:none}
-.ring-fg{fill:none;stroke:url(#ringGrad);stroke-linecap:round;transition:stroke-dashoffset .5s linear;filter:drop-shadow(0 0 8px rgb(var(--a)/.6))}
-.ring-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
-.ring-center .t{font-family:var(--mono);font-size:44px;font-weight:700;letter-spacing:-.03em}
-.sw-time{font-family:var(--mono);font-size:clamp(38px,5vw,52px);font-weight:700;text-align:center;letter-spacing:-.03em}
-.sw-time small{font-size:.5em;opacity:.55}
-.lap{display:grid;grid-template-columns:34px 1fr 1fr 1fr;gap:6px;padding:7px 12px;border-radius:12px;background:var(--soft);font-family:var(--mono);font-size:12px;animation:rise .4s var(--ease) both}
+    /* ---------- Controls ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      height: 36px; padding: 0 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--surface); color: var(--text);
+      font-weight: 500; font-size: 14px; white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn:hover { background: var(--surface-2); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn-ghost { background: none; border-color: transparent; color: var(--muted); }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+    .btn-sm { height: 30px; padding: 0 10px; font-size: 13px; }
+    .btn-block { width: 100%; height: 42px; }
+    .btn:disabled { opacity: 0.6; cursor: default; }
+    .btn-icon {
+      display: inline-grid; place-items: center;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: 0; background: none; color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-icon:hover { background: var(--surface-2); color: var(--text); }
+    .btn-icon.danger:hover { background: var(--danger-soft); color: var(--danger); }
+    .link { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; font-size: 13px; }
+    .link:hover { text-decoration: underline; }
 
-/* Stat tiles */
-.stat{padding:18px;border-radius:22px;background:var(--soft);border:1px solid var(--line)}
-.stat b{display:block;font-size:28px;font-family:var(--serif);font-weight:400;line-height:1.1}
-.bar{height:8px;border-radius:99px;background:var(--soft2);overflow:hidden}
-.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,rgb(var(--a)),rgb(var(--a2)));transition:width .7s var(--ease)}
+    .input {
+      width: 100%; height: 38px; padding: 0 12px;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+      font-size: 14px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input::placeholder { color: var(--faint); }
+    .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    textarea.input { height: auto; padding: 10px 12px; resize: vertical; line-height: 1.55; }
+    select.input {
+      appearance: none; -webkit-appearance: none; padding-right: 34px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a8f94' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .input-quiet { border-color: transparent; background: var(--surface-2); }
+    .input-quiet:focus { background: var(--surface); }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field > span { font-size: 13px; font-weight: 500; color: var(--muted); }
+    .form-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .form-row > .input:not(.grow) { width: auto; }
+    .form-error { color: var(--danger); font-size: 13px; min-height: 0; }
+    .form-error:empty { display: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .input:focus-visible { outline: none; }
 
-/* Calendar */
-.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.cal-h{text-align:center;font-size:10px;font-family:var(--mono);color:var(--faint);padding-bottom:4px;letter-spacing:.1em}
-.cell{min-height:78px;padding:7px;border-radius:16px;background:var(--soft);border:1px solid transparent;display:flex;flex-direction:column;gap:3px;text-align:left;overflow:hidden;transition:all .3s var(--ease)}
-.cell:hover{background:var(--soft2);border-color:rgb(var(--a)/.4);transform:translateY(-2px)}
-.cell.today{border-color:rgb(var(--a2)/.7);background:rgb(var(--a2)/.10)}
-.cell.void{background:transparent;pointer-events:none}
-.cell .n{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--mut)}
-.cell.today .n{color:rgb(var(--a2))}
-.pill{font-size:9.5px;padding:1px 6px;border-radius:6px;background:rgb(var(--a)/.25);color:rgb(var(--a));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.rdot{width:6px;height:6px;border-radius:50%;background:rgb(var(--a2));display:inline-block}
+    .seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: var(--radius-sm); }
+    .seg button {
+      height: 28px; padding: 0 10px; border: 0; border-radius: 6px;
+      background: none; color: var(--muted); font-size: 13px; font-weight: 500;
+    }
+    .seg button:hover { color: var(--text); }
+    .seg button.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
 
-/* Notes masonry */
-.masonry{columns:2 260px;column-gap:16px}
-.note{break-inside:avoid;margin-bottom:16px;padding:20px;border-radius:22px;background:var(--soft);border:1px solid var(--line);animation:rise .5s var(--ease) both;transition:transform .35s var(--ease),border-color .25s}
-.note:hover{transform:translateY(-3px);border-color:rgb(var(--a)/.4)}
-.note.pinned{border-color:rgb(var(--a2)/.5);background:linear-gradient(160deg,rgb(var(--a2)/.10),var(--soft))}
-.note h4{margin:6px 0 6px;font-size:17px;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2}
-.note p{margin:0;white-space:pre-wrap;color:var(--mut);font-size:13px;line-height:1.65;word-break:break-word}
+    .badge {
+      display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+      border-radius: 999px; font-size: 12px; font-weight: 500; white-space: nowrap;
+      background: var(--surface-2); color: var(--muted);
+    }
+    .badge.accent { background: var(--accent-soft); color: var(--accent); }
+    .badge.warn { background: var(--warn-soft); color: var(--warn); }
 
-/* Photos */
-.drop{border:1.5px dashed var(--line);border-radius:22px;padding:22px;text-align:center;transition:all .3s var(--ease);background:var(--soft)}
-.drop.over{border-color:rgb(var(--a));background:rgb(var(--a)/.12);transform:scale(1.01)}
-.photos{columns:4 190px;column-gap:14px}
-.ph{break-inside:avoid;margin-bottom:14px;position:relative;border-radius:20px;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);background:var(--soft);animation:rise .5s var(--ease) both}
-.ph img{width:100%;display:block;transition:transform .8s var(--ease)}
-.ph:hover img{transform:scale(1.06)}
-.ph .cap{position:absolute;inset:auto 0 0 0;padding:34px 12px 11px;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.78),transparent);opacity:0;transform:translateY(6px);transition:all .35s var(--ease)}
-.ph:hover .cap{opacity:1;transform:none}
-.ph .tag{position:absolute;top:9px;left:9px}
+    .check {
+      appearance: none; -webkit-appearance: none; margin: 0;
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid var(--border-strong); border-radius: 5px;
+      background: var(--surface); display: grid; place-items: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .check:checked { background: var(--accent); border-color: var(--accent); }
+    .check:checked::after {
+      content: ""; width: 5px; height: 9px; margin-top: -2px;
+      border: solid var(--on-accent); border-width: 0 2px 2px 0; transform: rotate(45deg);
+    }
 
-/* Vault */
-.secret{filter:blur(7px);transition:filter .3s var(--ease);cursor:pointer;user-select:none;font-family:var(--mono);color:rgb(var(--a2));word-break:break-all}
-.secret.revealed{filter:none;user-select:all}
-@media(hover:hover){.item:hover .secret{filter:none}}
+    /* ---------- Lists ---------- */
+    .list { display: flex; flex-direction: column; }
+    .item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-top: 1px solid var(--border);
+    }
+    .item:first-child { border-top: 0; padding-top: 0; }
+    .item:last-child { padding-bottom: 0; }
+    .item-main { flex: 1; min-width: 0; }
+    .item-title { font-weight: 500; overflow-wrap: anywhere; }
+    .item-sub { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+    .item.done .item-title { color: var(--faint); text-decoration: line-through; }
+    .item .btn-icon { opacity: 0.55; }
+    .item:hover .btn-icon { opacity: 1; }
+    label.item { cursor: pointer; }
+    .empty { color: var(--faint); font-size: 13px; padding: 4px 0; }
+    .card-link { font-size: 13px; color: var(--muted); background: none; border: 0; padding: 0; font-weight: 500; }
+    .card-link:hover { color: var(--accent); }
 
-/* Overlays */
-.overlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,4,8,.62);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px)}
-.overlay.show{display:flex;animation:fade .35s ease both}
-html[data-theme="light"] .overlay{background:rgba(245,241,232,.7)}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.modal{width:100%;max-width:440px;max-height:92vh;overflow:auto;padding:28px;animation:pop .5s var(--ease) both}
-.modal.wide{max-width:560px}
-@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
-.pin-dots{display:flex;gap:14px;justify-content:center;margin:18px 0 22px}
-.pin-dots i{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--faint);transition:all .3s var(--ease)}
-.pin-dots i.on{background:rgb(var(--a));border-color:rgb(var(--a));box-shadow:0 0 16px rgb(var(--a)/.8);transform:scale(1.15)}
-.pad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:290px;margin:0 auto}
-.key{height:62px;border-radius:20px;background:var(--soft);border:1px solid var(--line);font-family:var(--mono);font-size:22px;font-weight:600;transition:all .25s var(--ease)}
-.key:hover{background:var(--soft2)} .key:active{transform:scale(.92);background:rgb(var(--a)/.25)}
-.key.sm{font-size:12px;font-family:var(--sans);color:var(--mut)}
-.shake{animation:shake .45s}
-@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
-.lb{max-width:1000px;width:100%;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
-.lb img{max-width:100%;max-height:76vh;border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);border:1px solid var(--line);object-fit:contain}
+    /* ---------- Today ---------- */
+    .hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 40px; flex-wrap: wrap; padding: 24px; }
+    .eyebrow { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .clock { display: flex; align-items: baseline; gap: 2px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+    .clock-main { font-size: 52px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+    .clock-sec { font-size: 22px; color: var(--faint); font-weight: 500; }
+    .clock-ampm { font-size: 15px; color: var(--muted); font-weight: 500; margin-left: 8px; }
+    .intention { flex: 1; min-width: 240px; max-width: 440px; display: flex; flex-direction: column; gap: 6px; }
+    .intention > span { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .intention .input { height: 42px; font-size: 15px; }
 
-/* Toast */
-#toasts{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;z-index:100;display:flex;flex-direction:column;gap:10px;pointer-events:none}
-.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;font-weight:600;font-size:13px;max-width:min(360px,calc(100vw - 32px));animation:pop .5s var(--ease) both}
-.toast i{width:9px;height:9px;border-radius:50%;background:rgb(var(--ok));flex:none;box-shadow:0 0 10px rgb(var(--ok))}
-.toast.err i{background:rgb(var(--bad));box-shadow:0 0 10px rgb(var(--bad))}
+    .timer-display { font-size: 48px; font-weight: 600; letter-spacing: -0.03em; text-align: center; font-variant-numeric: tabular-nums; line-height: 1.1; padding: 12px 0 4px; }
+    .timer-status { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+    .progress { height: 4px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin: 12px auto 10px; max-width: 280px; }
+    .progress > div { height: 100%; width: 0; background: var(--accent); transition: width 0.4s linear; }
+    .laps { margin-top: 16px; max-height: 132px; overflow-y: auto; font-size: 13px; }
+    .lap { display: flex; justify-content: space-between; padding: 6px 2px; border-top: 1px solid var(--border); color: var(--muted); font-variant-numeric: tabular-nums; }
+    .lap:first-child { border-top: 0; }
+    .lap strong { color: var(--text); font-weight: 500; }
 
-.cloud{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:rgb(var(--ok))}
-.cloud i{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
-.cloud.warn{color:rgb(var(--a2))} .cloud.err{color:rgb(var(--bad))} .cloud.sync i{animation:pulse .6s infinite}
-@keyframes pulse{50%{opacity:.3;transform:scale(.7)}}
+    /* ---------- Calendar ---------- */
+    .cal-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+    .cal-weekdays, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+    .cal-weekdays { font-size: 12px; color: var(--faint); font-weight: 500; text-align: center; margin-bottom: 6px; }
+    .cal-day {
+      min-height: 76px; padding: 6px; border-radius: var(--radius-sm);
+      border: 1px solid transparent; background: var(--surface-2);
+      display: flex; flex-direction: column; align-items: stretch; gap: 3px;
+      text-align: left; overflow: hidden; transition: border-color 0.15s;
+    }
+    .cal-day:hover { border-color: var(--border-strong); }
+    .cal-day.blank { background: none; pointer-events: none; }
+    .cal-day .num { font-size: 12.5px; color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .cal-day.is-today { background: var(--accent-soft); }
+    .cal-day.is-today .num { color: var(--accent); font-weight: 700; }
+    .cal-events { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .cal-event {
+      display: block; max-width: 100%;
+      font-size: 11px; line-height: 1.3; padding: 2px 5px; border-radius: 4px;
+      background: var(--surface); color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      border-left: 2px solid var(--accent);
+    }
+    .cal-more { font-size: 11px; color: var(--muted); padding-left: 2px; }
 
-@media(max-width:1023px){
-  .shell{flex-direction:column;padding:14px 14px 120px;gap:16px}
-  .side{width:100%;position:static}
-  .side .nav,.side .side-extra{display:none}
-  .dock{display:flex;position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;padding:8px;justify-content:space-around;border-radius:26px}
-  .dock button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:18px;font-size:10px;font-weight:600;color:var(--mut);transition:all .35s var(--ease);flex:1}
-  .dock button svg{width:20px;height:20px}
-  .dock button.active{color:#fff;background:linear-gradient(135deg,rgb(var(--a)),rgb(var(--a)/.7));box-shadow:0 8px 20px -8px rgb(var(--a)/.9)}
-  .g2,.g3{grid-template-columns:minmax(0,1fr)}
-  .hero{padding:22px} .pad{padding:20px}
-  .cell{min-height:58px;padding:5px;border-radius:12px} .pill{display:none} .cal{gap:4px}
-  .cell .dotrow{display:flex;gap:3px;flex-wrap:wrap}
-}
-@media(min-width:1024px){.cell .dotrow{display:none}}
-@media(max-width:640px){.inp,select.inp,textarea.inp{font-size:16px}.modal{padding:22px}.mobile-hide{display:none!important}}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
+    /* ---------- Journal ---------- */
+    .notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .note { display: flex; flex-direction: column; gap: 8px; }
+    .note-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--faint); }
+    .note-body { white-space: pre-wrap; color: var(--muted); font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere; }
+    .note-foot { margin-top: auto; padding-top: 4px; display: flex; justify-content: flex-end; }
+
+    /* ---------- Photos ---------- */
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .photo {
+      position: relative; margin: 0; aspect-ratio: 1; overflow: hidden;
+      border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); cursor: zoom-in;
+    }
+    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .photo:hover img { transform: scale(1.03); }
+    .photo figcaption {
+      position: absolute; inset: auto 0 0 0; padding: 24px 10px 8px;
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+      color: #fff; font-size: 12.5px; font-weight: 500;
+    }
+    .photo figcaption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .photo .btn-icon { color: #fff; width: 28px; height: 28px; opacity: 0; }
+    .photo:hover .btn-icon, .photo .btn-icon:focus-visible { opacity: 1; }
+    .photo .btn-icon:hover { background: rgba(0,0,0,0.35); color: #fff; }
+
+    /* ---------- Vault ---------- */
+    .secret { font-family: var(--mono); font-size: 13px; color: var(--muted); filter: blur(5px); transition: filter 0.2s; user-select: none; overflow-wrap: anywhere; }
+    .secret.revealed { filter: none; user-select: all; color: var(--text); }
+
+    /* ---------- Settings ---------- */
+    .settings-group h2 { margin-bottom: 4px; }
+    .settings-group > p.muted { margin-bottom: 16px; font-size: 13px; }
+    .setting-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--border); }
+    .setting-row:first-of-type { border-top: 0; padding-top: 0; }
+    .setting-row .item-sub { margin-top: 2px; }
+    .settings-form { padding: 16px 0; border-top: 1px solid var(--border); }
+    .settings-form:last-child { padding-bottom: 0; }
+    .settings-form .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 12px 0; }
+    details.advanced { border-top: 1px solid var(--border); padding-top: 14px; }
+    details.advanced summary { cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 500; }
+    details.advanced[open] summary { margin-bottom: 12px; }
+
+    .sync-status { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); padding: 0 8px; }
+    .sync-status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); flex-shrink: 0; }
+    .sync-status[data-state="ok"] .dot { background: var(--accent); }
+    .sync-status[data-state="syncing"] .dot { background: var(--warn); animation: pulse 1s ease-in-out infinite; }
+    .sync-status[data-state="error"] .dot { background: var(--danger); }
+    @keyframes pulse { 50% { opacity: 0.35; } }
+
+    /* ---------- Gate (setup + lock) ---------- */
+    .gate {
+      position: fixed; inset: 0; z-index: 100;
+      display: grid; place-items: center; padding: 24px 16px;
+      background: var(--bg); overflow-y: auto;
+    }
+    body:has(.gate:not(.hidden)) { overflow: hidden; }
+    .gate-card { width: 100%; max-width: 340px; text-align: center; }
+    .gate-card .brand-mark { width: 44px; height: 44px; border-radius: 12px; font-size: 20px; margin: 0 auto 20px; }
+    .gate-view h1 { font-size: 20px; }
+    .gate-view > p.muted { margin-top: 6px; font-size: 14px; }
+    .gate-form { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; text-align: left; }
+    .gate-form .input { height: 42px; }
+    .pin-dots { display: flex; justify-content: center; gap: 14px; margin: 28px 0; }
+    .pin-dots span { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border-strong); transition: background 0.12s, border-color 0.12s; }
+    .pin-dots span.filled { background: var(--accent); border-color: var(--accent); }
+    .pin-dots.error { animation: shake 0.35s; }
+    .pin-dots.error span { border-color: var(--danger); }
+    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 252px; margin: 0 auto; }
+    .key {
+      height: 60px; border-radius: 14px; border: 1px solid var(--border);
+      background: var(--surface); font-size: 22px; font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      display: grid; place-items: center; transition: background 0.12s;
+    }
+    .key:hover { background: var(--surface-2); }
+    .key:active { background: var(--surface-3); }
+    .key.plain { border-color: transparent; background: none; color: var(--muted); }
+    .key.plain:hover { background: var(--surface-2); }
+    .gate-alt { margin-top: 24px; }
+
+    /* ---------- Overlays ---------- */
+    .toast {
+      position: fixed; z-index: 200; right: 24px; bottom: 24px;
+      display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px);
+      padding: 10px 14px; border-radius: 10px;
+      background: var(--text); color: var(--bg);
+      font-size: 13.5px; font-weight: 500; box-shadow: var(--shadow-lg);
+      opacity: 0; transform: translateY(8px); pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .toast.show { opacity: 1; transform: none; }
+    .toast .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .toast.error .dot { background: var(--danger); }
+
+    .lightbox { position: fixed; inset: 0; z-index: 150; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; background: rgba(10, 11, 12, 0.88); }
+    .lightbox img { max-width: 100%; max-height: 80vh; border-radius: var(--radius); object-fit: contain; }
+    .lightbox-bar { display: flex; align-items: center; gap: 16px; color: #fff; }
+    .lightbox-bar p { font-weight: 500; }
+    .lightbox-bar span { font-size: 12.5px; color: rgba(255,255,255,0.65); }
+    .lightbox .btn-icon { color: #fff; }
+    .lightbox .btn-icon:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* ---------- Mobile ---------- */
+    .tabbar, .mobile-only { display: none; }
+    .sheet-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,0.3); }
+    .sheet {
+      position: fixed; z-index: 61; left: 8px; right: 8px; bottom: calc(72px + env(safe-area-inset-bottom));
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: var(--shadow-lg); padding: 8px;
+    }
+    .sheet .nav-item { width: 100%; padding: 12px; }
+    .sheet hr { border: 0; border-top: 1px solid var(--border); margin: 6px 4px; }
+
+    @media (max-width: 1080px) {
+      .cal-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 20px 16px calc(96px + env(safe-area-inset-bottom)); }
+      .mobile-only { display: inline-grid; }
+      .page-head { margin-bottom: 18px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .input { font-size: 16px; }
+      .clock-main { font-size: 44px; }
+      .tabbar {
+        display: flex; position: fixed; z-index: 50; left: 0; right: 0; bottom: 0;
+        padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+        background: var(--surface); border-top: 1px solid var(--border);
+      }
+      .tab {
+        flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+        padding: 6px 0; border: 0; background: none; color: var(--faint);
+        font-size: 11px; font-weight: 500;
+      }
+      .tab .icon { width: 20px; height: 20px; }
+      .tab.active { color: var(--accent); }
+      .toast { left: 16px; right: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); justify-content: center; }
+    }
+    @media (max-width: 600px) {
+      .card { padding: 16px; }
+      .hero { padding: 20px; }
+      .cal-day { min-height: 48px; padding: 4px; align-items: center; }
+      .cal-day .num { font-size: 13px; }
+      .cal-events { flex-direction: row; justify-content: center; }
+      .cal-event { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%; background: var(--accent); font-size: 0; }
+      .cal-more { display: none; }
+      .form-row > .input:not(.grow) { flex: 1 1 140px; }
+      .form-row > .btn { flex: 1 1 auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
 </head>
 <body>
-<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-<div class="grain"></div>
-<div id="toasts"></div>
 
-<!-- AUTH / PIN -->
-<div id="authOverlay" class="overlay show" style="z-index:80">
-  <div class="glass modal">
-    <div class="row between" style="margin-bottom:22px">
-      <div class="row" style="gap:12px"><div class="logo">A</div><div><div style="font-weight:800;font-size:17px;letter-spacing:-.02em">Aura OS</div><div class="faint" style="font-size:12px">Your personal sanctuary</div></div></div>
-      <span class="chip ok">5TB READY</span>
-    </div>
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/></symbol>
+    <symbol id="i-habit" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/><path d="m18 9-6 6M12 9l6 6"/></symbol>
+  </svg>
 
-    <div id="authForms">
-      <div class="seg" style="width:100%;margin-bottom:18px"><button id="tabLoginBtn" class="on" style="flex:1" onclick="switchAuthTab('login')">Sign In</button><button id="tabSignupBtn" style="flex:1" onclick="switchAuthTab('signup')">Create Account</button></div>
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="col" style="gap:12px">
-        <div id="nameFieldWrap" class="hidden"><div class="label" style="margin-bottom:6px">Your name</div><input id="authName" class="inp" placeholder="e.g. Aditya" autocomplete="name" /></div>
-        <div><div class="label" style="margin-bottom:6px">Email or username</div><input id="authEmail" class="inp" required placeholder="you@example.com" autocomplete="username" /></div>
-        <div class="grid g2" style="gap:12px">
-          <div><div class="label" style="margin-bottom:6px">Password</div><input id="authPassword" type="password" class="inp" required placeholder="••••••••" autocomplete="current-password" /></div>
-          <div><div class="label" style="margin-bottom:6px">4-digit PIN</div><input id="authPin" type="password" inputmode="numeric" maxlength="4" class="inp mono" placeholder="1234" style="letter-spacing:.3em" /></div>
+  <!-- SETUP + LOCK -->
+  <div id="gate" class="gate">
+    <div class="gate-card">
+      <div class="brand-mark">A</div>
+
+      <form id="setupView" class="gate-view hidden" onsubmit="completeSetup(event)" autocomplete="off">
+        <h1>Welcome to Aura</h1>
+        <p class="muted">Enter your password to connect your Google Drive.</p>
+        <div class="gate-form">
+          <label class="field"><span>Password</span>
+            <input id="setupPassword" class="input" type="password" required autocomplete="current-password" />
+          </label>
+          <label class="field" id="setupPinField"><span>Choose a 4-digit PIN</span>
+            <input id="setupPin" class="input mono" type="password" inputmode="numeric" maxlength="4" autocomplete="off" />
+          </label>
+          <p class="form-error" id="setupError"></p>
+          <button type="submit" class="btn btn-primary btn-block" id="setupBtn">Continue</button>
         </div>
-        <div><div class="label" style="margin-bottom:6px;color:rgb(var(--a2))">Google Script passkey</div><input id="authDrivePasskey" type="password" class="inp" placeholder="Your SECRET_PASSKEY for 5TB sync" style="border-color:rgb(var(--a2)/.3)" /></div>
-        <button class="btn btn-primary" style="padding:14px;margin-top:4px" type="submit"><span id="authSubmitText">Unlock my sanctuary</span></button>
       </form>
-      <div class="row between faint" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:12px">
-        <span>In a rush?</span><button class="btn-link" onclick="instantEnter()" style="color:rgb(var(--a2));font-weight:700">Instant enter →</button>
+
+      <div id="pinView" class="gate-view hidden">
+        <h1>Welcome back</h1>
+        <p class="muted" id="pinPrompt">Enter your PIN</p>
+        <div class="pin-dots" id="pinDots"><span></span><span></span><span></span><span></span></div>
+        <div class="keypad">
+          <button class="key" onclick="pinPress('1')">1</button>
+          <button class="key" onclick="pinPress('2')">2</button>
+          <button class="key" onclick="pinPress('3')">3</button>
+          <button class="key" onclick="pinPress('4')">4</button>
+          <button class="key" onclick="pinPress('5')">5</button>
+          <button class="key" onclick="pinPress('6')">6</button>
+          <button class="key" onclick="pinPress('7')">7</button>
+          <button class="key" onclick="pinPress('8')">8</button>
+          <button class="key" onclick="pinPress('9')">9</button>
+          <span></span>
+          <button class="key" onclick="pinPress('0')">0</button>
+          <button class="key plain" onclick="pinBackspace()" aria-label="Delete"><svg class="icon"><use href="#i-back"/></svg></button>
+        </div>
+        <div class="gate-alt"><button class="link" onclick="showGateView('password')">Use password instead</button></div>
       </div>
-    </div>
 
-    <div id="pinPadView" class="hidden" style="text-align:center">
-      <div id="pinWho" class="mut" style="font-size:13px">Enter your quick PIN</div>
-      <div id="pinDots" class="pin-dots"><i></i><i></i><i></i><i></i></div>
-      <div class="pad-grid">
-        <button class="key" onclick="pressPin('1')">1</button><button class="key" onclick="pressPin('2')">2</button><button class="key" onclick="pressPin('3')">3</button>
-        <button class="key" onclick="pressPin('4')">4</button><button class="key" onclick="pressPin('5')">5</button><button class="key" onclick="pressPin('6')">6</button>
-        <button class="key" onclick="pressPin('7')">7</button><button class="key" onclick="pressPin('8')">8</button><button class="key" onclick="pressPin('9')">9</button>
-        <button class="key sm" onclick="clearPin()">Clear</button><button class="key" onclick="pressPin('0')">0</button><button class="key sm" onclick="showFullLogin()">Switch</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- DRIVE MODAL -->
-<div id="driveModal" class="overlay" onclick="if(event.target===this)closeDriveModal()">
-  <div class="glass modal wide col" style="gap:16px">
-    <div class="row between"><div><div style="font-weight:800;font-size:18px">5TB Google Drive bridge</div><div class="faint" style="font-size:12px">Your data lives in <span class="mono">Aura_OS_Vault</span> on your Drive.</div></div><button class="icon-btn" onclick="closeDriveModal()" data-ic="x"></button></div>
-    <div><div class="label" style="margin-bottom:6px">Apps Script web app URL</div><input id="driveUrlInput" type="url" class="inp mono" style="font-size:11px" /></div>
-    <div><div class="label" style="margin-bottom:6px">SECRET_PASSKEY</div><input id="driveKeyInput" type="password" class="inp" placeholder="Must match line 3 of your Google Script" /></div>
-    <div class="row wrap"><button class="btn btn-primary" onclick="saveDriveConfig()"><span data-ic="upload"></span>Save &amp; push</button><button class="btn btn-ok" onclick="pullFromGoogleDrive()"><span data-ic="download"></span>Pull from Drive</button></div>
-    <div id="driveStatusText" class="mono faint" style="font-size:11px;min-height:16px"></div>
-  </div>
-</div>
-
-<!-- DAY MODAL -->
-<div id="dayModal" class="overlay" onclick="if(event.target===this)closeDayModal()">
-  <div class="glass modal col" style="gap:14px">
-    <div class="row between"><div><div class="label">Selected day</div><div id="dayModalTitle" class="serif" style="font-size:28px;font-style:italic;line-height:1.1"></div></div><button class="icon-btn" onclick="closeDayModal()" data-ic="x"></button></div>
-    <div id="dayModalList" class="col" style="gap:8px"></div>
-    <form onsubmit="addDayFromModal(event)" class="col" style="gap:10px;padding-top:12px;border-top:1px solid var(--line)">
-      <input id="dmTitle" class="inp" required placeholder="Add an event to this day…" />
-      <div class="row"><select id="dmCat" class="inp grow"></select><button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Add</button></div>
-    </form>
-  </div>
-</div>
-
-<!-- LIGHTBOX -->
-<div id="lightboxModal" class="overlay" style="background:rgba(0,0,0,.82)" onclick="if(event.target===this)closeLightbox()">
-  <div class="lb">
-    <img id="lightboxImg" alt="Memory" />
-    <div class="glass row between" style="padding:12px 16px;border-radius:20px;width:100%;max-width:560px;gap:12px">
-      <div style="text-align:left;min-width:0"><div id="lightboxCaption" style="font-weight:700" class="grow"></div><div id="lightboxDate" class="mono faint" style="font-size:11px"></div></div>
-      <div class="row" style="gap:6px;flex:none">
-        <button class="icon-btn" onclick="lbStep(-1)" data-ic="chevL"></button>
-        <button class="icon-btn" onclick="lbStep(1)" data-ic="chevR"></button>
-        <button class="icon-btn" onclick="lbDownload()" title="Download" data-ic="download"></button>
-        <button class="icon-btn danger" onclick="lbDelete()" title="Delete" data-ic="trash"></button>
-        <button class="icon-btn" onclick="closeLightbox()" data-ic="x"></button>
-      </div>
+      <form id="passwordView" class="gate-view hidden" onsubmit="unlockWithPassword(event)" autocomplete="off">
+        <h1>Unlock with password</h1>
+        <p class="muted">You can change your PIN in Settings afterwards.</p>
+        <div class="gate-form">
+          <input id="unlockPassword" class="input" type="password" placeholder="Password" required autocomplete="current-password" />
+          <p class="form-error" id="unlockError"></p>
+          <button type="submit" class="btn btn-primary btn-block">Unlock</button>
+        </div>
+        <div class="gate-alt"><button type="button" class="link" onclick="showGateView('pin')">Use PIN</button></div>
+      </form>
     </div>
   </div>
-</div>
 
-<div class="shell">
-  <!-- SIDEBAR -->
-  <aside class="side">
-    <div class="glass pad-s col" style="gap:18px;padding:18px">
-      <div class="row between">
-        <div class="row" style="gap:12px;min-width:0"><div class="logo">A</div><div style="min-width:0"><div id="sidebarUser" style="font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">My Sanctuary</div><button id="cloudBadge" onclick="openDriveModal()" class="cloud warn"><i></i><span id="cloudBadgeText">Connect Drive</span></button></div></div>
-        <div class="row" style="gap:6px"><button class="icon-btn" onclick="toggleTheme()" title="Light / dark" id="themeBtn" data-ic="moon"></button><button class="icon-btn" onclick="lockScreen()" title="Lock" data-ic="lock"></button></div>
-      </div>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">A</div><span class="brand-name">Aura</span></div>
       <nav class="nav">
-        <button class="nav-btn active" data-nav="dashboard" onclick="switchSection('dashboard')"><span data-ic="timer"></span>Timings &amp; hub</button>
-        <button class="nav-btn" data-nav="calendar" onclick="switchSection('calendar')"><span data-ic="calendar"></span>Calendar &amp; days</button>
-        <button class="nav-btn" data-nav="reminders" onclick="switchSection('reminders')"><span data-ic="bell"></span>Reminders</button>
-        <button class="nav-btn" data-nav="notes" onclick="switchSection('notes')"><span data-ic="book"></span>Daily journal</button>
-        <button class="nav-btn" data-nav="photos" onclick="switchSection('photos')"><span data-ic="image"></span>Photo vault</button>
-        <button class="nav-btn" data-nav="vault" onclick="switchSection('vault')"><span data-ic="shield"></span>Vault &amp; habits</button>
+        <button class="nav-item" data-section="today" onclick="switchSection('today')"><svg class="icon"><use href="#i-today"/></svg>Today</button>
+        <button class="nav-item" data-section="calendar" onclick="switchSection('calendar')"><svg class="icon"><use href="#i-calendar"/></svg>Calendar</button>
+        <button class="nav-item" data-section="reminders" onclick="switchSection('reminders')"><svg class="icon"><use href="#i-bell"/></svg>Reminders</button>
+        <button class="nav-item" data-section="journal" onclick="switchSection('journal')"><svg class="icon"><use href="#i-book"/></svg>Journal</button>
+        <div class="nav-label">Collections</div>
+        <button class="nav-item" data-section="photos" onclick="switchSection('photos')"><svg class="icon"><use href="#i-image"/></svg>Photos</button>
+        <button class="nav-item" data-section="vault" onclick="switchSection('vault')"><svg class="icon"><use href="#i-key"/></svg>Vault</button>
+        <button class="nav-item" data-section="habits" onclick="switchSection('habits')"><svg class="icon"><use href="#i-habit"/></svg>Habits</button>
       </nav>
-      <div class="side-extra col" style="gap:12px;padding-top:14px;border-top:1px solid var(--line)">
-        <div class="row" style="gap:9px;justify-content:center" id="accentRow"></div>
-        <button class="btn btn-warn" onclick="openDriveModal()"><span data-ic="cloud"></span>Drive sync</button>
-        <div class="grid g2" style="gap:8px"><button class="btn btn-ghost btn-sm" onclick="exportBackup()"><span data-ic="download"></span>Backup</button><label class="btn btn-ghost btn-sm" style="cursor:pointer"><span data-ic="upload"></span>Restore<input type="file" accept=".json" class="hidden" onchange="importBackup(event)" /></label></div>
+      <div class="sidebar-foot">
+        <div class="sync-status" data-state="local"><span class="dot"></span><span class="sync-text">Saved on this device</span></div>
+        <button class="nav-item" data-section="settings" onclick="switchSection('settings')"><svg class="icon"><use href="#i-settings"/></svg>Settings</button>
+        <div class="sidebar-actions">
+          <button class="btn btn-sm" onclick="toggleTheme()" title="Switch light / dark"><svg class="icon icon-sm"><use href="#i-moon"/></svg>Theme</button>
+          <button class="btn btn-sm" onclick="lock()" title="Lock"><svg class="icon icon-sm"><use href="#i-lock"/></svg>Lock</button>
+        </div>
       </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="content">
+        <header class="page-head">
+          <div>
+            <h1 id="pageTitle">Today</h1>
+            <p id="pageSub" class="muted"></p>
+          </div>
+          <button class="btn-icon mobile-only" onclick="lock()" aria-label="Lock"><svg class="icon"><use href="#i-lock"/></svg></button>
+        </header>
+
+        <!-- TODAY -->
+        <section id="sec-today" class="section">
+          <div class="card hero">
+            <div>
+              <p class="eyebrow" id="greeting">Good day</p>
+              <div class="clock">
+                <span class="clock-main" id="clockMain">--:--</span>
+                <span class="clock-sec" id="clockSec"></span>
+                <span class="clock-ampm" id="clockAmPm"></span>
+              </div>
+            </div>
+            <label class="intention">
+              <span>Today's focus</span>
+              <input id="intentionInput" class="input input-quiet" type="text" placeholder="What matters most today?" onchange="saveIntention()" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h2>Focus timer</h2>
+                <div class="seg" id="pomoSeg">
+                  <button data-min="25" onclick="setPomodoro(25)" class="active">25m</button>
+                  <button data-min="50" onclick="setPomodoro(50)">50m</button>
+                  <button data-min="5" onclick="setPomodoro(5)">Break</button>
+                </div>
+              </div>
+              <div class="timer-display" id="pomoDisplay">25:00</div>
+              <div class="progress"><div id="pomoBar"></div></div>
+              <p class="timer-status" id="pomoStatus">Ready when you are</p>
+              <div class="row center">
+                <button class="btn btn-primary" id="pomoStartBtn" onclick="togglePomodoro()">Start</button>
+                <button class="btn" onclick="resetPomodoro()">Reset</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h2>Stopwatch</h2></div>
+              <div class="timer-display" id="stopwatchDisplay">00:00.0</div>
+              <div class="progress" style="visibility:hidden"><div></div></div>
+              <p class="timer-status" id="swStatus">Not started</p>
+              <div class="row center">
+                <button class="btn btn-primary" id="swStartBtn" onclick="toggleStopwatch()">Start</button>
+                <button class="btn" onclick="recordLap()">Lap</button>
+                <button class="btn" onclick="resetStopwatch()">Reset</button>
+              </div>
+              <div class="laps" id="lapList"></div>
+            </div>
+          </div>
+
+          <div class="grid-auto">
+            <div class="card">
+              <div class="card-head"><h2>Coming up</h2><button class="card-link" onclick="switchSection('calendar')">Calendar</button></div>
+              <div class="list" id="todayDays"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Reminders</h2><button class="card-link" onclick="switchSection('reminders')">View all</button></div>
+              <div class="list" id="todayReminders"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>Habits</h2><button class="card-link" onclick="switchSection('habits')">Manage</button></div>
+              <div class="list" id="todayHabits"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CALENDAR -->
+        <section id="sec-calendar" class="section hidden">
+          <div class="cal-layout">
+            <div class="card">
+              <div class="card-head">
+                <h2 id="calMonthHeader">Month</h2>
+                <div class="row">
+                  <button class="btn-icon" onclick="changeMonth(-1)" aria-label="Previous month"><svg class="icon"><use href="#i-left"/></svg></button>
+                  <button class="btn btn-sm" onclick="goToToday()">Today</button>
+                  <button class="btn-icon" onclick="changeMonth(1)" aria-label="Next month"><svg class="icon"><use href="#i-right"/></svg></button>
+                </div>
+              </div>
+              <div class="cal-weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+              <div class="cal-grid" id="calendarGrid"></div>
+            </div>
+
+            <div class="stack">
+              <div class="card">
+                <div class="card-head"><h2>Add a date</h2></div>
+                <form class="stack" onsubmit="addSpecialDay(event)">
+                  <input id="dayTitle" class="input" type="text" required placeholder="e.g. Mom's birthday" />
+                  <input id="dayDate" class="input" type="date" required />
+                  <select id="dayCategory" class="input">
+                    <option>Birthday</option>
+                    <option>Anniversary</option>
+                    <option>Trip / Milestone</option>
+                    <option>Deadline</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary">Save date</button>
+                </form>
+              </div>
+              <div class="card">
+                <div class="card-head"><h2>Saved dates</h2></div>
+                <div class="list" id="specialDaysList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REMINDERS -->
+        <section id="sec-reminders" class="section hidden">
+          <div class="card">
+            <form class="form-row" onsubmit="addReminder(event)">
+              <input id="remText" class="input grow" type="text" required placeholder="Add a reminder" style="min-width:200px" />
+              <input id="remTime" class="input" type="datetime-local" />
+              <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Open<span class="count" id="remOpenCount"></span></h2></div>
+            <div class="list" id="remindersOpen"></div>
+          </div>
+          <div class="card" id="remDoneCard">
+            <div class="card-head"><h2>Completed<span class="count" id="remDoneCount"></span></h2></div>
+            <div class="list" id="remindersDone"></div>
+          </div>
+        </section>
+
+        <!-- JOURNAL -->
+        <section id="sec-journal" class="section hidden">
+          <div class="card">
+            <form class="stack" onsubmit="addNote(event)">
+              <div class="form-row">
+                <input id="noteTitle" class="input grow" type="text" required placeholder="Title" style="min-width:200px" />
+                <select id="noteMood" class="input">
+                  <option>Calm</option>
+                  <option>Inspired</option>
+                  <option>Productive</option>
+                  <option>Reflection</option>
+                </select>
+              </div>
+              <textarea id="noteBody" class="input" rows="5" required placeholder="Write something…"></textarea>
+              <div class="row end"><button type="submit" class="btn btn-primary">Save entry</button></div>
+            </form>
+          </div>
+          <div class="row between">
+            <h2>Entries<span class="count muted" id="noteCount" style="font-weight:500;margin-left:6px"></span></h2>
+            <input id="noteSearch" class="input" type="search" placeholder="Search entries" oninput="renderNotes()" style="max-width:260px" />
+          </div>
+          <div class="notes" id="notesGrid"></div>
+        </section>
+
+        <!-- PHOTOS -->
+        <section id="sec-photos" class="section hidden">
+          <div class="card">
+            <div class="form-row">
+              <input id="photoCaptionInput" class="input grow" type="text" placeholder="Caption (optional)" style="min-width:200px" />
+              <label class="btn btn-primary">
+                <svg class="icon icon-sm"><use href="#i-upload"/></svg>Upload photos
+                <input type="file" accept="image/*" multiple class="hidden" onchange="handlePhotoUpload(event)" />
+              </label>
+            </div>
+          </div>
+          <div class="photo-grid" id="photoGrid"></div>
+        </section>
+
+        <!-- VAULT -->
+        <section id="sec-vault" class="section hidden">
+          <div class="card">
+            <form class="form-row" onsubmit="addVaultItem(event)">
+              <input id="vaultLabel" class="input grow" type="text" required placeholder="Label, e.g. Wi-Fi" style="min-width:160px" />
+              <input id="vaultSecret" class="input grow mono" type="text" required placeholder="Value" autocomplete="off" style="min-width:160px" />
+              <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+          </div>
+          <div class="card"><div class="list" id="vaultList"></div></div>
+        </section>
+
+        <!-- HABITS -->
+        <section id="sec-habits" class="section hidden">
+          <div class="card">
+            <form class="form-row" onsubmit="addHabit(event)">
+              <input id="habitName" class="input grow" type="text" required placeholder="New habit, e.g. Read 20 minutes" />
+              <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+          </div>
+          <div class="card"><div class="list" id="habitsList"></div></div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="sec-settings" class="section hidden">
+          <div class="card settings-group">
+            <h2>Sync</h2>
+            <p class="muted">Everything is saved on this device and backed up to your Google Drive.</p>
+            <div class="setting-row">
+              <div>
+                <div class="sync-status" data-state="local" style="padding:0"><span class="dot"></span><span class="sync-text">Saved on this device</span></div>
+              </div>
+              <div class="row">
+                <button class="btn" onclick="pullFromCloud(false)">Pull latest</button>
+                <button class="btn btn-primary" onclick="syncToCloud(true)">Sync now</button>
+              </div>
+            </div>
+            <details class="advanced">
+              <summary>Sync address</summary>
+              <form class="form-row" onsubmit="saveSyncUrl(event)">
+                <input id="syncUrlInput" class="input grow mono" type="url" style="font-size:12.5px" />
+                <button type="submit" class="btn">Save</button>
+              </form>
+            </details>
+          </div>
+
+          <div class="card settings-group">
+            <h2>Security</h2>
+            <p class="muted">Your PIN unlocks the app. Your password is needed to change it.</p>
+            <form class="settings-form" onsubmit="changePin(event)" autocomplete="off" style="border-top:0;padding-top:0">
+              <h3>Change PIN</h3>
+              <div class="fields">
+                <label class="field"><span>Password</span><input name="pw" class="input" type="password" required autocomplete="current-password" /></label>
+                <label class="field"><span>New PIN</span><input name="newPin" class="input mono" type="password" inputmode="numeric" maxlength="4" required autocomplete="off" /></label>
+                <label class="field"><span>Confirm new PIN</span><input name="confirmPin" class="input mono" type="password" inputmode="numeric" maxlength="4" required autocomplete="off" /></label>
+              </div>
+              <p class="form-error"></p>
+              <div class="row end"><button type="submit" class="btn btn-primary">Update PIN</button></div>
+            </form>
+            <form class="settings-form" onsubmit="changePassword(event)" autocomplete="off">
+              <h3>Change password</h3>
+              <p class="muted small" style="margin-top:2px">Must match the passkey in your Google Apps Script.</p>
+              <div class="fields">
+                <label class="field"><span>Current password</span><input name="current" class="input" type="password" required autocomplete="current-password" /></label>
+                <label class="field"><span>New password</span><input name="next" class="input" type="password" required autocomplete="new-password" /></label>
+              </div>
+              <p class="form-error"></p>
+              <div class="row end"><button type="submit" class="btn">Update password</button></div>
+            </form>
+          </div>
+
+          <div class="card settings-group">
+            <h2>Preferences</h2>
+            <p class="muted">How Aura looks on this device.</p>
+            <div class="setting-row">
+              <div><div class="item-title">Appearance</div></div>
+              <div class="seg" id="themeSeg">
+                <button data-val="system" onclick="setTheme('system')">System</button>
+                <button data-val="light" onclick="setTheme('light')">Light</button>
+                <button data-val="dark" onclick="setTheme('dark')">Dark</button>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div><div class="item-title">Clock</div></div>
+              <div class="seg" id="clockSeg">
+                <button data-val="12" onclick="setClockFormat(false)">12-hour</button>
+                <button data-val="24" onclick="setClockFormat(true)">24-hour</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card settings-group">
+            <h2>Backup</h2>
+            <p class="muted">Keep an offline copy of your data as a JSON file.</p>
+            <div class="setting-row">
+              <div>
+                <div class="item-title">Export or restore</div>
+                <div class="item-sub">Restoring replaces what's currently in the app.</div>
+              </div>
+              <div class="row">
+                <label class="btn">Restore<input type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)" /></label>
+                <button class="btn" onclick="exportBackup()">Download backup</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MOBILE TAB BAR -->
+  <nav class="tabbar">
+    <button class="tab" data-section="today" onclick="switchSection('today')"><svg class="icon"><use href="#i-today"/></svg>Today</button>
+    <button class="tab" data-section="calendar" onclick="switchSection('calendar')"><svg class="icon"><use href="#i-calendar"/></svg>Calendar</button>
+    <button class="tab" data-section="reminders" onclick="switchSection('reminders')"><svg class="icon"><use href="#i-bell"/></svg>Reminders</button>
+    <button class="tab" data-section="journal" onclick="switchSection('journal')"><svg class="icon"><use href="#i-book"/></svg>Journal</button>
+    <button class="tab" id="moreTab" onclick="toggleMore()"><svg class="icon"><use href="#i-more"/></svg>More</button>
+  </nav>
+  <div id="moreBackdrop" class="sheet-backdrop hidden" onclick="toggleMore(false)"></div>
+  <div id="moreSheet" class="sheet hidden">
+    <button class="nav-item" data-section="photos" onclick="switchSection('photos')"><svg class="icon"><use href="#i-image"/></svg>Photos</button>
+    <button class="nav-item" data-section="vault" onclick="switchSection('vault')"><svg class="icon"><use href="#i-key"/></svg>Vault</button>
+    <button class="nav-item" data-section="habits" onclick="switchSection('habits')"><svg class="icon"><use href="#i-habit"/></svg>Habits</button>
+    <button class="nav-item" data-section="settings" onclick="switchSection('settings')"><svg class="icon"><use href="#i-settings"/></svg>Settings</button>
+    <hr />
+    <button class="nav-item" onclick="toggleMore(false); toggleTheme()"><svg class="icon"><use href="#i-moon"/></svg>Switch theme</button>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()" />
+    <div class="lightbox-bar" onclick="event.stopPropagation()">
+      <div><p id="lightboxCaption"></p><span id="lightboxDate"></span></div>
+      <button class="btn-icon" onclick="closeLightbox()" aria-label="Close"><svg class="icon"><use href="#i-x"/></svg></button>
     </div>
-  </aside>
+  </div>
 
-  <main>
-    <!-- HERO -->
-    <section class="glass hero">
-      <div class="hero-grid">
-        <div style="min-width:0;flex:1 1 320px">
-          <div id="greetingText" class="label" style="color:rgb(var(--a2))">GOOD EVENING</div>
-          <h1 id="currentDateDisplay">Loading…</h1>
-          <label class="intent"><span class="label" style="white-space:nowrap">Today's #1</span><input id="dailyIntentionInput" onchange="saveIntention()" placeholder="What matters most today?" /></label>
-        </div>
-        <div style="text-align:right">
-          <div class="row" style="justify-content:flex-end;gap:10px"><span id="liveClock" class="clock">00:00:00</span><button id="clockFormatBtn" onclick="toggleClockFormat()" class="chip neutral">12H</button></div>
-          <div id="syncTimestamp" class="mono faint" style="font-size:11px;margin-top:8px">Local cache + Google Drive</div>
-        </div>
-      </div>
-    </section>
+  <div id="toast" class="toast" role="status"><span class="dot"></span><span id="toastMsg"></span></div>
 
-    <!-- DASHBOARD -->
-    <section id="sec-dashboard" class="view col" style="gap:24px">
-      <div class="grid g3" style="gap:14px" id="statTiles"></div>
-      <div class="grid g2">
-        <div class="glass pad col">
-          <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="timer"></span>Focus timer</div>
-            <div class="seg" id="pomoModes"><button class="on" data-m="25" onclick="setPomodoro(25,'focus',this)">25m</button><button data-m="50" onclick="setPomodoro(50,'focus',this)">50m</button><button data-m="5" onclick="setPomodoro(5,'break',this)">5m break</button></div></div>
-          <div class="ring-wrap">
-            <svg viewBox="0 0 200 200"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:rgb(var(--a))"/><stop offset="1" style="stop-color:rgb(var(--a2))"/></linearGradient></defs>
-              <circle class="ring-bg" cx="100" cy="100" r="90" stroke-width="9"/><circle id="ringFg" class="ring-fg" cx="100" cy="100" r="90" stroke-width="9" stroke-dasharray="565.49" stroke-dashoffset="0"/></svg>
-            <div class="ring-center"><div id="pomoDisplay" class="t">25:00</div><div id="pomoStatus" class="faint" style="font-size:12px">Ready for deep work</div></div>
-          </div>
-          <div class="row" style="justify-content:center"><button id="pomoStartBtn" class="btn btn-primary" onclick="togglePomodoro()"><span data-ic="play"></span><span>Start focus</span></button><button class="btn btn-ghost" onclick="resetPomodoro()"><span data-ic="reset"></span>Reset</button></div>
-          <div class="row between wrap" style="padding-top:12px;border-top:1px solid var(--line)">
-            <form class="row" onsubmit="customPomodoro(event)" style="gap:8px"><input id="pomoCustom" type="number" min="1" max="240" class="inp mono" placeholder="min" style="width:84px;padding:8px 10px" /><button class="btn btn-ghost btn-sm" type="submit">Set custom</button></form>
-            <span class="chip gold"><span data-ic="flame"></span><span id="pomoCount">0</span> sessions today</span>
-          </div>
-        </div>
+  <script>
+    // Google Apps Script web app that stores the workspace in Drive.
+    const DEFAULT_SYNC_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
 
-        <div class="glass pad col">
-          <div class="row between"><div class="card-title"><span class="dot" data-ic="zap"></span>Precision stopwatch</div><button class="btn btn-warn btn-sm" onclick="recordLap()"><span data-ic="flag"></span>Lap</button></div>
-          <div id="stopwatchDisplay" class="sw-time" style="padding:34px 0 22px">00:00<small>.00</small></div>
-          <div class="row" style="justify-content:center"><button id="swStartBtn" class="btn btn-ok" onclick="toggleStopwatch()"><span data-ic="play"></span><span>Start</span></button><button class="btn btn-ghost" onclick="resetStopwatch()"><span data-ic="reset"></span>Clear</button></div>
-          <div id="lapList" class="col scroll-y" style="gap:6px;max-height:170px"></div>
-        </div>
-      </div>
-
-      <div class="glass pad">
-        <div class="row between" style="margin-bottom:16px"><div class="card-title"><span class="dot" data-ic="sparkles"></span>Upcoming days to remember</div><button class="btn btn-ghost btn-sm" onclick="switchSection('calendar')">Manage all<span data-ic="chevR"></span></button></div>
-        <div id="dashboardDaysPreview" class="grid g3" style="gap:14px"></div>
-      </div>
-    </section>
-
-    <!-- CALENDAR -->
-    <section id="sec-calendar" class="view hidden">
-      <div class="grid" style="grid-template-columns:minmax(0,1fr)">
-        <div class="glass pad col">
-          <div class="row between wrap"><h3 id="calMonthHeader" class="serif" style="margin:0;font-size:34px;font-style:italic;font-weight:400">Month</h3>
-            <div class="row"><button class="icon-btn" onclick="changeMonth(-1)" data-ic="chevL"></button><button class="btn btn-ghost btn-sm" onclick="goToday()">Today</button><button class="icon-btn" onclick="changeMonth(1)" data-ic="chevR"></button></div></div>
-          <div class="cal"><div class="cal-h">SUN</div><div class="cal-h">MON</div><div class="cal-h">TUE</div><div class="cal-h">WED</div><div class="cal-h">THU</div><div class="cal-h">FRI</div><div class="cal-h">SAT</div></div>
-          <div id="calendarGrid" class="cal"></div>
-        </div>
-        <div class="glass pad col" style="margin-top:0">
-          <div class="card-title"><span class="dot" data-ic="sparkles"></span>Add a day to remember</div>
-          <form onsubmit="addSpecialDay(event)" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end">
-            <input id="dayTitle" class="inp" required placeholder="Mom's birthday, Trip to Pokhara…" />
-            <input id="dayDate" type="date" class="inp mono" required />
-            <select id="dayCategory" class="inp"></select>
-            <button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Save day</button>
-          </form>
-          <div id="specialDaysList" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-top:6px"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- REMINDERS -->
-    <section id="sec-reminders" class="view hidden">
-      <div class="glass pad col">
-        <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="bell"></span>Reminders &amp; daily tasks</div>
-          <div class="seg" id="remFilter"><button class="on" data-f="active" onclick="setRemFilter('active')">Active</button><button data-f="done" onclick="setRemFilter('done')">Completed</button><button data-f="all" onclick="setRemFilter('all')">All</button></div></div>
-        <form onsubmit="addReminder(event)" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
-          <input id="remText" class="inp" required placeholder="What do you need to remember?" style="grid-column:span 2" />
-          <select id="remPriority" class="inp"><option value="high">🔴 High</option><option value="med" selected>🟡 Medium</option><option value="low">🟢 Low</option></select>
-          <input id="remTime" type="datetime-local" class="inp mono" />
-          <button class="btn btn-primary" type="submit"><span data-ic="plus"></span>Add</button>
-        </form>
-        <div id="remindersList" class="col" style="gap:10px"></div>
-      </div>
-    </section>
-
-    <!-- NOTES -->
-    <section id="sec-notes" class="view hidden">
-      <div class="glass pad col">
-        <div class="row between wrap"><div class="card-title"><span class="dot" data-ic="book"></span>Daily life journal</div>
-          <div class="row grow" style="max-width:320px;position:relative"><input id="noteSearch" oninput="renderNotes()" class="inp" placeholder="Search notes…" style="padding-left:38px" /><span style="position:absolute;left:13px;opacity:.5" data-ic="search"></span></div></div>
-        <form onsubmit="addNote(event)" class="col" style="gap:12px">
-          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
-            <input id="noteTitle" class="inp" required placeholder="Title…" style="font-weight:600;grid-column:span 2" />
-            <select id="noteMood" class="inp"><option>✨ Inspired</option><option>🌿 Calm</option><option>🔥 Productive</option><option>💭 Reflection</option></select>
-          </div>
-          <textarea id="noteBody" class="inp" required placeholder="Write down your thoughts, memories, ideas…"></textarea>
-          <div class="row wrap"><input id="noteTags" class="inp grow" placeholder="Tags, comma separated (ideas, travel…)" style="min-width:180px" /><button class="btn btn-primary" type="submit"><span data-ic="check"></span>Save note</button></div>
-        </form>
-        <div id="tagFilter" class="row wrap" style="gap:8px"></div>
-        <div id="notesGrid" class="masonry"></div>
-      </div>
-    </section>
-
-    <!-- PHOTOS -->
-    <section id="sec-photos" class="view hidden">
-      <div class="glass pad col">
-        <div class="card-title"><span class="dot" data-ic="image"></span>Photo memory vault</div>
-        <div id="dropZone" class="drop col" style="align-items:center;gap:12px">
-          <div class="mut">Drag &amp; drop photos here, or choose below</div>
-          <input id="photoCaptionInput" class="inp" placeholder="Optional caption (e.g. Sunset in Kathmandu)" style="max-width:420px" />
-          <div class="row wrap" style="justify-content:center">
-            <label class="btn btn-primary" style="cursor:pointer"><span data-ic="upload"></span>Upload photos<input type="file" accept="image/*" multiple class="hidden" onchange="handlePhotoUpload(event)" /></label>
-            <label class="btn btn-ghost" style="cursor:pointer"><span data-ic="image"></span>Take photo<input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoUpload(event)" /></label>
-          </div>
-        </div>
-        <div id="photoGrid" class="photos"></div>
-      </div>
-    </section>
-
-    <!-- VAULT -->
-    <section id="sec-vault" class="view hidden">
-      <div class="grid g2">
-        <div class="glass pad col">
-          <div class="card-title"><span class="dot" data-ic="shield"></span>Quick secret vault</div>
-          <div class="faint" style="font-size:12px;margin-top:-6px">Blurred until you tap (or hover on desktop).</div>
-          <form onsubmit="addVaultItem(event)" class="col" style="gap:10px">
-            <input id="vaultLabel" class="inp" required placeholder="Label (Wi-Fi, locker PIN, ID…)" />
-            <input id="vaultSecret" class="inp mono" required placeholder="Secret value or link" />
-            <button class="btn btn-primary" type="submit"><span data-ic="lock"></span>Store in vault</button>
-          </form>
-          <div id="vaultList" class="col" style="gap:10px"></div>
-        </div>
-        <div class="glass pad col">
-          <div class="card-title"><span class="dot" data-ic="flame"></span>Daily habits &amp; streaks</div>
-          <div><div class="row between" style="margin-bottom:8px"><span class="label">Today's progress</span><span id="habitProgressText" class="mono mut" style="font-size:12px">0/0</span></div><div class="bar"><i id="habitBar" style="width:0%"></i></div></div>
-          <form onsubmit="addHabit(event)" class="row"><input id="habitName" class="inp grow" required placeholder="New habit (Read 20 min, 3L water…)" /><button class="btn btn-ok" type="submit"><span data-ic="plus"></span>Add</button></form>
-          <div id="habitsList" class="col" style="gap:10px"></div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- MOBILE DOCK -->
-<nav class="dock glass">
-  <button data-nav="dashboard" class="active" onclick="switchSection('dashboard')"><span data-ic="timer"></span>Hub</button>
-  <button data-nav="calendar" onclick="switchSection('calendar')"><span data-ic="calendar"></span>Days</button>
-  <button data-nav="reminders" onclick="switchSection('reminders')"><span data-ic="bell"></span>Tasks</button>
-  <button data-nav="notes" onclick="switchSection('notes')"><span data-ic="book"></span>Notes</button>
-  <button data-nav="photos" onclick="switchSection('photos')"><span data-ic="image"></span>Photos</button>
-  <button data-nav="vault" onclick="switchSection('vault')"><span data-ic="shield"></span>Vault</button>
-  <button onclick="openDriveModal()"><span data-ic="cloud"></span>Cloud</button>
-</nav>
-
-<script>
-/* ============================================================
-   CONFIG — 5TB Google Drive bridge (unchanged)
-   ============================================================ */
-const DEFAULT_DRIVE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
-const DB_NAME = "AuraOS_5TB_DB", STORE_NAME = "user_workspace";
-const CATS = ["🎂 Birthday","💖 Anniversary","✈️ Trip / Milestone","📌 Deadline"];
-
-/* ---------- helpers ---------- */
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pad2 = n => String(n).padStart(2,'0');
-const ymd = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;   // local date (not UTC)
-const parseYMD = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
-const daysFromToday = s => Math.round((parseYMD(s) - parseYMD(ymd())) / 864e5);
-const badgeFor = diff => diff === 0 ? "Today! 🎉" : diff === 1 ? "Tomorrow" : diff > 0 ? `In ${diff} days` : `${Math.abs(diff)}d ago`;
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-
-/* ---------- icons (inline, no CDN) ---------- */
-const ICONS = {
-  timer:'<circle cx="12" cy="14" r="8"/><path d="M12 14l3-3M10 2h4M12 2v3"/>',
-  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
-  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
-  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V22h16v-3"/>',
-  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
-  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
-  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
-  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
-  cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/>',
-  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
-  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
-  plus:'<path d="M12 5v14M5 12h14"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>', check:'<path d="M20 6 9 17l-5-5"/>',
-  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
-  pin:'<path d="M12 17v5M9 3h6l-1 7 3 3v2H7v-2l3-3z"/>',
-  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.2-.2-4.4 2-6 .5 2.5 2 4.9 4 6.5 2 1.7 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.4 1-3 0 1.4 1 2.5 2.5 2.5z"/>',
-  trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>',
-  play:'<path d="m6 3 14 9-14 9z"/>', pause:'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>',
-  reset:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/>', search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
-  sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
-  chevL:'<path d="m15 18-6-6 6-6"/>', chevR:'<path d="m9 18 6-6-6-6"/>',
-  flag:'<path d="M4 22V4M4 4h13l-2 4 2 4H4"/>', zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
-  cloudOff:'<path d="m2 2 20 20M17.5 19H9a7 7 0 0 1-3.3-13.2M10 5a7 7 0 0 1 5.7 4h1.8a4.5 4.5 0 0 1 2.9 7.9"/>'
-};
-const ic = (n, s) => `<svg class="i" viewBox="0 0 24 24"${s?` style="width:${s}px;height:${s}px"`:''}>${ICONS[n]||''}</svg>`;
-function hydrateIcons(root = document) {
-  root.querySelectorAll('[data-ic]').forEach(el => { if (!el.dataset.done) { el.insertAdjacentHTML('afterbegin', ic(el.dataset.ic)); el.dataset.done = 1; } });
-}
-
-/* ---------- state ---------- */
-const defaultState = () => ({
-  intention: "",
-  specialDays: [{ id: 1, title: "Launch My Personal OS", date: ymd(), category: "✈️ Trip / Milestone" }],
-  reminders: [], notes: [], photos: [], vault: [],
-  habits: [
-    { id: 1, name: "Morning Hydration", streak: 0, doneToday: false },
-    { id: 2, name: "Plan Tomorrow's Timings", streak: 0, doneToday: false }
-  ],
-  pomo: { date: ymd(), count: 0 }, habitDay: ymd()
-});
-let state = defaultState();
-let currentUser = null, enteredPin = "", authMode = 'login', use24Hour = false, calDate = new Date(), remFilter = 'active', tagFilter = null, currentSection = 'dashboard';
-
-/* ---------- IndexedDB (same db / store / key format) ---------- */
-function openLocalDB() {
-  return new Promise((res, rej) => {
-    const r = indexedDB.open(DB_NAME, 1);
-    r.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME);
-    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
-  });
-}
-async function saveToIndexedDB(key, val) {
-  const db = await openLocalDB();
-  return new Promise((res, rej) => { const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).put(val, key); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
-}
-async function loadFromIndexedDB(key) {
-  const db = await openLocalDB();
-  return new Promise(res => { const tx = db.transaction(STORE_NAME, "readonly"); const r = tx.objectStore(STORE_NAME).get(key); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); });
-}
-
-/* ---------- toast + sound ---------- */
-function showToast(msg, isError = false) {
-  const t = document.createElement('div'); t.className = 'toast glass' + (isError ? ' err' : '');
-  t.innerHTML = `<i></i><span>${esc(msg)}</span>`; $('toasts').appendChild(t);
-  setTimeout(() => { t.style.transition = 'all .4s'; t.style.opacity = 0; t.style.transform = 'translateX(20px)'; setTimeout(() => t.remove(), 400); }, 3200);
-}
-let audioCtx;
-function chime() {
-  try {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume();
-    [659.25, 783.99, 1046.5].forEach((f, i) => {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain(), t = audioCtx.currentTime + i * .18;
-      o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t + .03); g.gain.exponentialRampToValueAtTime(.001, t + .9);
-      o.connect(g).connect(audioCtx.destination); o.start(t); o.stop(t + 1);
-    });
-  } catch (e) {}
-}
-
-/* ============================================================
-   AUTH & PIN
-   ============================================================ */
-async function sha(s) {
-  if (!(window.crypto && crypto.subtle)) return 'plain:' + s;
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-const pwHash = (email, pw) => sha(`aura:${email}:${pw}`);
-const pinHash = (email, pin) => sha(`pin:${email}:${pin}`);
-
-function switchAuthTab(mode) {
-  authMode = mode;
-  $('nameFieldWrap').classList.toggle('hidden', mode === 'login');
-  $('tabLoginBtn').classList.toggle('on', mode === 'login'); $('tabSignupBtn').classList.toggle('on', mode === 'signup');
-  $('authSubmitText').textContent = mode === 'login' ? 'Unlock my sanctuary' : 'Create my sanctuary';
-}
-async function handleAuthSubmit(e) {
-  e.preventDefault();
-  const email = $('authEmail').value.trim().toLowerCase(), password = $('authPassword').value;
-  const pinRaw = $('authPin').value.trim(), passkey = $('authDrivePasskey').value.trim();
-  const name = $('authName').value.trim() || email.split('@')[0];
-  if (pinRaw && !/^\d{4}$/.test(pinRaw)) return showToast("PIN must be exactly 4 digits", true);
-  if (passkey) localStorage.setItem('aura_drive_passkey', passkey);
-  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-
-  const accounts = JSON.parse(localStorage.getItem('aura_accounts') || '{}');
-  const acc = accounts[email], pH = await pwHash(email, password);
-  if (authMode === 'signup' && acc) return showToast("That account already exists — sign in instead", true);
-  if (acc) {
-    const ok = acc.pwHash ? acc.pwHash === pH : acc.password === password;      // legacy plaintext accounts still work…
-    if (!ok) return showToast("Incorrect account password", true);
-    if (!acc.pwHash) { acc.pwHash = pH; delete acc.password; }                  // …and get upgraded to hashed
-    if (!acc.pinHash && acc.pin) { acc.pinHash = await pinHash(email, acc.pin); delete acc.pin; }
-    if (pinRaw) acc.pinHash = await pinHash(email, pinRaw);
-  } else {
-    accounts[email] = { name, email, pwHash: pH, pinHash: await pinHash(email, pinRaw || "1234") };
-  }
-  localStorage.setItem('aura_accounts', JSON.stringify(accounts));
-  currentUser = { name: accounts[email].name, email };
-  localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
-  await enterApp(`Welcome back, ${currentUser.name}!`);
-}
-async function instantEnter() {
-  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-  currentUser = { name: "Sanctuary Owner", email: "owner@aura.local" };
-  localStorage.setItem('aura_active_user', JSON.stringify(currentUser));
-  await enterApp("Unlocked sanctuary");
-}
-async function enterApp(msg) {
-  await loadUserWorkspace();
-  $('authOverlay').classList.remove('show'); showToast(msg);
-}
-function lockScreen() {
-  enteredPin = ""; updatePinDots();
-  $('pinWho').textContent = currentUser ? `Welcome back, ${currentUser.name}` : 'Enter your quick PIN';
-  $('authForms').classList.add('hidden'); $('pinPadView').classList.remove('hidden'); $('authOverlay').classList.add('show');
-}
-function showFullLogin() { $('pinPadView').classList.add('hidden'); $('authForms').classList.remove('hidden'); }
-async function expectedPinMatches(pin) {
-  const accounts = JSON.parse(localStorage.getItem('aura_accounts') || '{}');
-  const acc = currentUser && accounts[currentUser.email];
-  if (acc && acc.pinHash) return acc.pinHash === await pinHash(acc.email, pin);
-  if (acc && acc.pin) return acc.pin === pin;
-  return pin === "1234";
-}
-async function pressPin(d) {
-  if (enteredPin.length >= 4) return;
-  enteredPin += d; updatePinDots();
-  if (enteredPin.length === 4) {
-    if (await expectedPinMatches(enteredPin)) { $('authOverlay').classList.remove('show'); showToast("PIN verified"); }
-    else {
-      showToast("Incorrect PIN", true); const dots = $('pinDots'); dots.classList.add('shake'); setTimeout(() => dots.classList.remove('shake'), 450);
-      enteredPin = ""; setTimeout(updatePinDots, 250);
-    }
-  }
-}
-function clearPin() { enteredPin = ""; updatePinDots(); }
-function updatePinDots() { document.querySelectorAll('#pinDots i').forEach((d, i) => d.classList.toggle('on', i < enteredPin.length)); }
-document.addEventListener('keydown', e => {
-  if (!$('pinPadView').classList.contains('hidden') && $('authOverlay').classList.contains('show')) {
-    if (/^\d$/.test(e.key)) pressPin(e.key); else if (e.key === 'Backspace') { enteredPin = enteredPin.slice(0, -1); updatePinDots(); }
-  }
-  if (e.key === 'Escape') { closeDriveModal(); closeDayModal(); closeLightbox(); }
-  if ($('lightboxModal').classList.contains('show')) { if (e.key === 'ArrowLeft') lbStep(-1); if (e.key === 'ArrowRight') lbStep(1); }
-});
-
-/* ============================================================
-   PERSISTENCE: IndexedDB + Google Drive
-   ============================================================ */
-async function loadUserWorkspace() {
-  $('sidebarUser').textContent = currentUser.name;
-  const saved = await loadFromIndexedDB(`workspace_${currentUser.email}`);
-  state = Object.assign(defaultState(), saved || {});
-  rolloverDay(); renderAll();
-  if (localStorage.getItem('aura_drive_passkey')) pullFromGoogleDrive(true); else setCloud('Connect Drive', 'warn');
-}
-let syncTimer = null, syncing = false, syncAgain = false;
-async function persistState() {
-  if (!currentUser) return;
-  await saveToIndexedDB(`workspace_${currentUser.email}`, state);
-  clearTimeout(syncTimer); syncTimer = setTimeout(() => syncToGoogleDrive(), 1200);
-}
-function setCloud(text, cls = '') { $('cloudBadgeText').textContent = text; $('cloudBadge').className = 'cloud ' + cls; }
-function openDriveModal() {
-  $('driveUrlInput').value = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-  $('driveKeyInput').value = localStorage.getItem('aura_drive_passkey') || ''; $('driveStatusText').textContent = '';
-  $('driveModal').classList.add('show');
-}
-function closeDriveModal() { $('driveModal').classList.remove('show'); }
-async function saveDriveConfig() {
-  localStorage.setItem('aura_drive_url', $('driveUrlInput').value.trim() || DEFAULT_DRIVE_WEB_APP_URL);
-  localStorage.setItem('aura_drive_passkey', $('driveKeyInput').value.trim());
-  $('driveStatusText').textContent = "Syncing with your 5TB Google Drive…";
-  await syncToGoogleDrive(true); closeDriveModal();
-}
-function stateForCloud() {   // full-size local image data stays on-device once it's safely on Drive
-  const copy = JSON.parse(JSON.stringify(state));
-  copy.photos.forEach(p => { if (p.driveUrl) delete p.url; });
-  return copy;
-}
-async function syncToGoogleDrive(manual = false) {
-  const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL, secret = localStorage.getItem('aura_drive_passkey');
-  if (!secret) { if (manual) showToast("Please enter your SECRET_PASSKEY first", true); return; }
-  if (syncing) { syncAgain = true; return; }
-  syncing = true; setCloud('Syncing…', 'sync');
-  try {
-    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'saveData', secret, data: stateForCloud() }) });
-    const r = await res.json();
-    if (r.status === 'saved') {
-      setCloud('Drive synced ✓'); $('syncTimestamp').textContent = "Last synced to Google Drive: " + new Date().toLocaleTimeString();
-      if (manual) showToast("Synced to your 5TB Google Drive!");
-    } else { setCloud('Passkey error', 'err'); if (manual) showToast(r.error || "Check your SECRET_PASSKEY", true); }
-  } catch (err) { setCloud('Offline · saved locally', 'warn'); if (manual) showToast("Couldn't reach Google — saved locally", true); }
-  syncing = false; if (syncAgain) { syncAgain = false; syncToGoogleDrive(); }
-}
-async function pullFromGoogleDrive(silent = false) {
-  const url = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL, secret = localStorage.getItem('aura_drive_passkey');
-  if (!secret) { if (!silent) showToast("Enter your SECRET_PASSKEY first", true); return; }
-  try {
-    if (!silent) $('driveStatusText').textContent = "Downloading from Google Drive…"; setCloud('Syncing…', 'sync');
-    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'loadData', secret }) });
-    const r = await res.json();
-    if (r.data) {
-      const localPhotos = new Map((state.photos || []).map(p => [String(p.id), p]));
-      const incoming = Object.assign(defaultState(), r.data);
-      incoming.photos = (incoming.photos || []).map(p => (!p.url && localPhotos.get(String(p.id))?.url) ? { ...p, url: localPhotos.get(String(p.id)).url } : p);
-      state = incoming; rolloverDay(); await saveToIndexedDB(`workspace_${currentUser.email}`, state); renderAll();
-      setCloud('Drive synced ✓'); $('syncTimestamp').textContent = "Last pulled from Google Drive: " + new Date().toLocaleTimeString();
-      if (!silent) { showToast("Loaded latest data from Google Drive!"); closeDriveModal(); }
-    } else if (r.error) { setCloud('Passkey error', 'err'); if (!silent) showToast("Drive error: " + r.error, true); }
-    else setCloud('Drive synced ✓');
-  } catch (e) { setCloud('Offline · saved locally', 'warn'); if (!silent) showToast("Could not reach Google Script URL", true); }
-}
-
-/* ============================================================
-   NAVIGATION, THEME, ACCENTS
-   ============================================================ */
-function switchSection(sec) {
-  currentSection = sec;
-  ['dashboard','calendar','reminders','notes','photos','vault'].forEach(id => {
-    const el = $('sec-' + id); el.classList.toggle('hidden', id !== sec);
-    if (id === sec) { el.classList.remove('view'); void el.offsetWidth; el.classList.add('view'); }
-  });
-  document.querySelectorAll('[data-nav]').forEach(b => b.classList.toggle('active', b.dataset.nav === sec));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-const ACCENTS = { violet:['139 92 246','251 191 36'], rose:['244 63 94','251 191 36'], emerald:['16 185 129','250 204 21'], sky:['56 189 248','244 114 182'], amber:['245 158 11','167 139 250'] };
-function applyAccent(name) {
-  const a = ACCENTS[name] || ACCENTS.violet; document.documentElement.style.setProperty('--a', a[0]); document.documentElement.style.setProperty('--a2', a[1]);
-  localStorage.setItem('aura_accent', name);
-  $('accentRow').innerHTML = Object.keys(ACCENTS).map(k => `<button class="swatch ${k===name?'on':''}" title="${k}" style="background:rgb(${ACCENTS[k][0]})" onclick="applyAccent('${k}')"></button>`).join('');
-}
-function applyTheme(t) {
-  document.documentElement.dataset.theme = t; localStorage.setItem('aura_theme', t);
-  document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#07090e' : '#f5f1e8';
-  const b = $('themeBtn'); b.innerHTML = ic(t === 'dark' ? 'moon' : 'sun');
-}
-function toggleTheme() { applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
-
-/* ============================================================
-   CLOCK / GREETING / INTENTION
-   ============================================================ */
-function updateClock() {
-  const now = new Date(), h = now.getHours();
-  $('greetingText').textContent = `${h < 12 ? 'GOOD MORNING' : h < 18 ? 'GOOD AFTERNOON' : 'GOOD EVENING'}, ${(currentUser?.name || 'FRIEND').toUpperCase()}`;
-  $('currentDateDisplay').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  $('liveClock').textContent = now.toLocaleTimeString('en-US', { hour12: !use24Hour, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-function toggleClockFormat() { use24Hour = !use24Hour; $('clockFormatBtn').textContent = use24Hour ? '24H' : '12H'; updateClock(); }
-function saveIntention() { state.intention = $('dailyIntentionInput').value; persistState(); showToast("Daily intention saved"); }
-
-/* ============================================================
-   POMODORO (timestamp-based, so it stays accurate in background tabs)
-   ============================================================ */
-const CIRC = 2 * Math.PI * 90;
-let pomo = { total: 25 * 60, left: 25 * 60, endAt: 0, timer: null, mode: 'focus' };
-function setPomodoro(mins, mode = 'focus', btn) {
-  clearInterval(pomo.timer); pomo = { total: mins * 60, left: mins * 60, endAt: 0, timer: null, mode };
-  document.querySelectorAll('#pomoModes button').forEach(b => b.classList.remove('on')); if (btn) btn.classList.add('on');
-  $('pomoStartBtn').innerHTML = ic('play') + '<span>Start focus</span>'; $('pomoStatus').textContent = mode === 'break' ? 'Time to breathe' : 'Ready for deep work';
-  renderPomo(); document.title = 'Aura OS';
-}
-function customPomodoro(e) { e.preventDefault(); const m = Math.max(1, Math.min(240, parseInt($('pomoCustom').value, 10) || 0)); if (!m) return; setPomodoro(m, 'focus'); $('pomoCustom').value = ''; showToast(`Custom focus: ${m} min`); }
-function renderPomo() {
-  $('pomoDisplay').textContent = `${pad2(Math.floor(pomo.left / 60))}:${pad2(pomo.left % 60)}`;
-  $('ringFg').style.strokeDashoffset = CIRC * (1 - pomo.left / pomo.total);
-  $('pomoCount').textContent = state.pomo?.count || 0;
-}
-function togglePomodoro() {
-  if (pomo.timer) {
-    clearInterval(pomo.timer); pomo.timer = null; $('pomoStartBtn').innerHTML = ic('play') + '<span>Resume</span>'; $('pomoStatus').textContent = 'Paused'; return;
-  }
-  chime.primed || (chime.primed = true);
-  pomo.endAt = Date.now() + pomo.left * 1000; $('pomoStartBtn').innerHTML = ic('pause') + '<span>Pause</span>'; $('pomoStatus').textContent = pomo.mode === 'break' ? 'Resting…' : 'In the zone';
-  pomo.timer = setInterval(() => {
-    pomo.left = Math.max(0, Math.round((pomo.endAt - Date.now()) / 1000)); renderPomo(); document.title = `${$('pomoDisplay').textContent} · Aura OS`;
-    if (pomo.left <= 0) {
-      clearInterval(pomo.timer); pomo.timer = null; chime(); document.title = 'Aura OS';
-      if (pomo.mode === 'focus') { if (state.pomo.date !== ymd()) state.pomo = { date: ymd(), count: 0 }; state.pomo.count++; persistState(); }
-      $('pomoStartBtn').innerHTML = ic('play') + '<span>Start focus</span>'; $('pomoStatus').textContent = 'Session complete'; renderPomo();
-      showToast(pomo.mode === 'focus' ? "Focus session complete! 🎉" : "Break's over — ready?");
-    }
-  }, 250);
-}
-function resetPomodoro() { setPomodoro(Math.round(pomo.total / 60), pomo.mode); }
-
-/* ============================================================
-   STOPWATCH (performance.now + rAF; laps with deltas)
-   ============================================================ */
-let sw = { run: false, base: 0, start: 0, raf: 0, laps: [] };
-const swElapsed = () => sw.base + (sw.run ? performance.now() - sw.start : 0);
-function fmtSW(ms) { const c = Math.floor(ms / 10) % 100, s = Math.floor(ms / 1000) % 60, m = Math.floor(ms / 60000); return `${pad2(m)}:${pad2(s)}<small>.${pad2(c)}</small>`; }
-function fmtPlain(ms) { return fmtSW(ms).replace(/<\/?small>/g, ''); }
-function swTick() { $('stopwatchDisplay').innerHTML = fmtSW(swElapsed()); if (sw.run) sw.raf = requestAnimationFrame(swTick); }
-function toggleStopwatch() {
-  if (sw.run) { sw.base = swElapsed(); sw.run = false; cancelAnimationFrame(sw.raf); $('swStartBtn').innerHTML = ic('play') + '<span>Resume</span>'; swTick(); }
-  else { sw.start = performance.now(); sw.run = true; $('swStartBtn').innerHTML = ic('pause') + '<span>Pause</span>'; swTick(); }
-}
-function resetStopwatch() { cancelAnimationFrame(sw.raf); sw = { run: false, base: 0, start: 0, raf: 0, laps: [] }; $('stopwatchDisplay').innerHTML = fmtSW(0); $('swStartBtn').innerHTML = ic('play') + '<span>Start</span>'; renderLaps(); }
-function recordLap() { const t = swElapsed(); if (t <= 0) return; const prev = sw.laps.length ? sw.laps[sw.laps.length - 1].total : 0; sw.laps.push({ total: t, split: t - prev }); renderLaps(); }
-function renderLaps() {
-  const splits = sw.laps.map(l => l.split), best = Math.min(...splits), worst = Math.max(...splits);
-  $('lapList').innerHTML = sw.laps.map((l, i) => {
-    const d = i ? l.split - sw.laps[i - 1].split : 0, col = sw.laps.length > 2 ? (l.split === best ? 'rgb(var(--ok))' : l.split === worst ? 'rgb(var(--bad))' : '') : '';
-    return `<div class="lap"><span class="faint">#${i + 1}</span><span style="${col ? 'color:' + col : ''}">${fmtPlain(l.split)}</span><span class="mut">${fmtPlain(l.total)}</span><span class="faint" style="text-align:right">${i ? (d >= 0 ? '+' : '−') + (Math.abs(d) / 1000).toFixed(2) + 's' : '—'}</span></div>`;
-  }).reverse().join('');
-}
-
-/* ============================================================
-   DAYS TO REMEMBER + CALENDAR
-   ============================================================ */
-function fillCats() { const o = CATS.map(c => `<option value="${c}">${c}</option>`).join(''); $('dayCategory').innerHTML = o; $('dmCat').innerHTML = o; }
-function pushDay(title, date, category) { state.specialDays.push({ id: uid(), title, date, category }); persistState(); renderSpecialDays(); renderCalendar(); showToast("Day to remember added"); }
-function addSpecialDay(e) { e.preventDefault(); pushDay($('dayTitle').value.trim(), $('dayDate').value, $('dayCategory').value); e.target.reset(); }
-function deleteSpecialDay(id) { state.specialDays = state.specialDays.filter(d => String(d.id) !== String(id)); persistState(); renderSpecialDays(); renderCalendar(); if ($('dayModal').classList.contains('show')) openDayModal(dayModalDate); }
-function dayCard(d, withDel = true) {
-  const diff = daysFromToday(d.date), cls = diff === 0 ? 'gold' : diff > 0 ? '' : 'neutral';
-  return `<div class="item"><div style="min-width:0"><div class="mono faint" style="font-size:10.5px">${esc(d.category)} · ${esc(d.date)}</div><div style="font-weight:700;margin-top:2px;overflow:hidden;text-overflow:ellipsis">${esc(d.title)}</div></div>
-    <div class="row" style="gap:8px;flex:none"><span class="chip ${cls}">${badgeFor(diff)}</span>${withDel ? `<button class="icon-btn danger" style="width:30px;height:30px" onclick="deleteSpecialDay('${d.id}')">${ic('x')}</button>` : ''}</div></div>`;
-}
-function renderSpecialDays() {
-  const sorted = [...state.specialDays].sort((a, b) => a.date.localeCompare(b.date));
-  $('specialDaysList').innerHTML = sorted.map(d => dayCard(d)).join('') || `<div class="empty" style="grid-column:1/-1"><span class="big">🌟</span>No special days yet — add one above.</div>`;
-  const upcoming = sorted.filter(d => daysFromToday(d.date) >= 0), show = (upcoming.length ? upcoming : sorted.slice().reverse()).slice(0, 3);
-  $('dashboardDaysPreview').innerHTML = show.map(d => {
-    const diff = daysFromToday(d.date);
-    return `<div class="stat"><div class="row between" style="margin-bottom:10px"><span class="mono faint" style="font-size:11px">${esc(d.category)}</span><span class="chip ${diff === 0 ? 'gold' : diff > 0 ? '' : 'neutral'}">${badgeFor(diff)}</span></div><div style="font-weight:700;font-size:16px">${esc(d.title)}</div><div class="mono faint" style="font-size:11px;margin-top:3px">${esc(d.date)}</div></div>`;
-  }).join('') || `<div class="empty" style="grid-column:1/-1"><span class="big">🌟</span>Nothing on the horizon yet.</div>`;
-}
-function changeMonth(o) { calDate = new Date(calDate.getFullYear(), calDate.getMonth() + o, 1); renderCalendar(); }
-function goToday() { calDate = new Date(); renderCalendar(); }
-function renderCalendar() {
-  const y = calDate.getFullYear(), m = calDate.getMonth(), first = new Date(y, m, 1).getDay(), total = new Date(y, m + 1, 0).getDate(), today = ymd();
-  $('calMonthHeader').textContent = calDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  let h = '';
-  for (let i = 0; i < first; i++) h += `<div class="cell void"></div>`;
-  for (let d = 1; d <= total; d++) {
-    const iso = `${y}-${pad2(m + 1)}-${pad2(d)}`, ev = state.specialDays.filter(x => x.date === iso), rem = state.reminders.filter(r => r.time && r.time.slice(0, 10) === iso && !r.done);
-    h += `<button class="cell ${iso === today ? 'today' : ''}" onclick="openDayModal('${iso}')"><span class="n">${d}</span>
-      ${ev.slice(0, 2).map(e => `<span class="pill">${esc(e.title)}</span>`).join('')}${ev.length > 2 ? `<span class="faint" style="font-size:9px">+${ev.length - 2} more</span>` : ''}
-      <span class="dotrow">${ev.map(() => `<span class="rdot" style="background:rgb(var(--a))"></span>`).join('')}${rem.map(() => `<span class="rdot"></span>`).join('')}</span>
-      ${rem.length ? `<span class="mono mobile-hide" style="font-size:9px;color:rgb(var(--a2))">🔔 ${rem.length}</span>` : ''}</button>`;
-  }
-  $('calendarGrid').innerHTML = h;
-}
-let dayModalDate = ymd();
-function openDayModal(iso) {
-  dayModalDate = iso; $('dayModalTitle').textContent = parseYMD(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  const ev = state.specialDays.filter(d => d.date === iso), rem = state.reminders.filter(r => r.time && r.time.slice(0, 10) === iso);
-  $('dayModalList').innerHTML = (ev.map(d => dayCard(d)).join('') + rem.map(r => `<div class="item"><div>${ic('bell')} <span style="${r.done ? 'text-decoration:line-through;opacity:.5' : ''}">${esc(r.text)}</span></div><span class="mono faint" style="font-size:11px">${esc(r.time.slice(11, 16))}</span></div>`).join('')) || `<div class="empty">Nothing planned. A blank page ✨</div>`;
-  $('dayModal').classList.add('show');
-}
-function closeDayModal() { $('dayModal').classList.remove('show'); }
-function addDayFromModal(e) { e.preventDefault(); pushDay($('dmTitle').value.trim(), dayModalDate, $('dmCat').value); $('dmTitle').value = ''; openDayModal(dayModalDate); }
-
-/* ============================================================
-   REMINDERS
-   ============================================================ */
-const PRI = { high: { w: 0, label: 'High', cls: 'bad' }, med: { w: 1, label: 'Medium', cls: 'gold' }, low: { w: 2, label: 'Low', cls: 'ok' } };
-function addReminder(e) {
-  e.preventDefault();
-  state.reminders.unshift({ id: uid(), text: $('remText').value.trim(), time: $('remTime').value, priority: $('remPriority').value, done: false });
-  if ($('remTime').value && 'Notification' in window && Notification.permission === 'default') Notification.requestPermission();
-  e.target.reset(); $('remPriority').value = 'med'; persistState(); renderReminders(); renderCalendar(); renderStats(); showToast("Reminder set");
-}
-function toggleReminder(id) { const r = state.reminders.find(x => String(x.id) === String(id)); if (r) r.done = !r.done; persistState(); renderReminders(); renderCalendar(); renderStats(); }
-function deleteReminder(id) { state.reminders = state.reminders.filter(x => String(x.id) !== String(id)); persistState(); renderReminders(); renderCalendar(); renderStats(); }
-function setRemFilter(f) { remFilter = f; document.querySelectorAll('#remFilter button').forEach(b => b.classList.toggle('on', b.dataset.f === f)); renderReminders(); }
-function renderReminders() {
-  let list = state.reminders.filter(r => remFilter === 'all' || (remFilter === 'done' ? r.done : !r.done));
-  list.sort((a, b) => (a.done - b.done) || (PRI[a.priority || 'med'].w - PRI[b.priority || 'med'].w) || (a.time || '9').localeCompare(b.time || '9'));
-  const now = new Date();
-  $('remindersList').innerHTML = list.map(r => {
-    const p = PRI[r.priority || 'med'], overdue = !r.done && r.time && new Date(r.time) < now;
-    return `<div class="item"><label class="row grow" style="gap:14px;cursor:pointer;min-width:0"><input type="checkbox" class="chk" ${r.done ? 'checked' : ''} onchange="toggleReminder('${r.id}')" />
-      <div style="min-width:0"><div style="font-weight:600;${r.done ? 'text-decoration:line-through;opacity:.45' : ''}">${esc(r.text)}</div>
-      <div class="row wrap" style="gap:8px;margin-top:4px"><span class="chip ${p.cls}">${p.label}</span>${r.time ? `<span class="mono ${overdue ? '' : 'faint'}" style="font-size:11px;${overdue ? 'color:rgb(var(--bad))' : ''}">${overdue ? 'Overdue · ' : ''}${esc(r.time.replace('T', ' '))}</span>` : ''}</div></div></label>
-      <button class="icon-btn danger" onclick="deleteReminder('${r.id}')">${ic('trash')}</button></div>`;
-  }).join('') || `<div class="empty"><span class="big">🌿</span>${remFilter === 'done' ? 'Nothing completed yet.' : 'All caught up. Enjoy the quiet.'}</div>`;
-}
-function checkDueReminders() {
-  let changed = false; const now = new Date();
-  state.reminders.forEach(r => {
-    if (!r.done && r.time && !r.notified && new Date(r.time) <= now) {
-      r.notified = true; changed = true; chime(); showToast("🔔 " + r.text);
-      if ('Notification' in window && Notification.permission === 'granted') try { new Notification('Aura reminder', { body: r.text }); } catch (e) {}
-    }
-  });
-  if (changed) { persistState(); renderReminders(); }
-}
-
-/* ============================================================
-   JOURNAL
-   ============================================================ */
-function addNote(e) {
-  e.preventDefault();
-  const tags = $('noteTags').value.split(',').map(t => t.trim().replace(/^#/, '').toLowerCase()).filter(Boolean);
-  state.notes.unshift({ id: uid(), title: $('noteTitle').value.trim(), mood: $('noteMood').value, body: $('noteBody').value.trim(), tags, pinned: false, createdAt: new Date().toLocaleString() });
-  e.target.reset(); persistState(); renderNotes(); renderStats(); showToast("Journal entry saved");
-}
-function deleteNote(id) { if (!confirm('Delete this note?')) return; state.notes = state.notes.filter(n => String(n.id) !== String(id)); persistState(); renderNotes(); renderStats(); }
-function pinNote(id) { const n = state.notes.find(x => String(x.id) === String(id)); if (n) n.pinned = !n.pinned; persistState(); renderNotes(); }
-function setTag(t) { tagFilter = tagFilter === t ? null : t; renderNotes(); }
-function renderNotes() {
-  const q = ($('noteSearch')?.value || '').toLowerCase(), all = [...new Set(state.notes.flatMap(n => n.tags || []))];
-  $('tagFilter').innerHTML = all.map(t => `<button class="chip ${tagFilter === t ? '' : 'neutral'}" onclick="setTag('${esc(t)}')">#${esc(t)}</button>`).join('');
-  const list = state.notes.filter(n => (!tagFilter || (n.tags || []).includes(tagFilter)) && (n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q) || (n.tags || []).some(t => t.includes(q))))
-    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
-  $('notesGrid').innerHTML = list.map(n => `<div class="note ${n.pinned ? 'pinned' : ''}">
-    <div class="row between"><span class="chip neutral">${esc(n.mood)}</span><span class="mono faint" style="font-size:10.5px">${esc(n.createdAt)}</span></div>
-    <h4>${esc(n.title)}</h4><p>${esc(n.body)}</p>
-    ${(n.tags || []).length ? `<div class="row wrap" style="gap:6px;margin-top:12px">${n.tags.map(t => `<span class="chip">#${esc(t)}</span>`).join('')}</div>` : ''}
-    <div class="row" style="justify-content:flex-end;gap:6px;margin-top:14px"><button class="icon-btn" style="width:32px;height:32px;${n.pinned ? 'color:rgb(var(--a2))' : ''}" title="Pin" onclick="pinNote('${n.id}')">${ic('pin')}</button><button class="icon-btn danger" style="width:32px;height:32px" onclick="deleteNote('${n.id}')">${ic('trash')}</button></div></div>`).join('')
-    || `<div class="empty" style="column-span:all"><span class="big">📓</span>No journal notes found.</div>`;
-}
-
-/* ============================================================
-   PHOTO VAULT → Drive (uploadPhoto) + local compressed copy
-   ============================================================ */
-const readFileAsDataURL = f => new Promise(r => { const fr = new FileReader(); fr.onload = e => r(e.target.result); fr.readAsDataURL(f); });
-function shrinkImage(dataUrl, max = 1600) {
-  return new Promise(res => {
-    const img = new Image();
-    img.onload = () => {
-      const s = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
-      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .86));
+    // Storage keys (kept compatible with earlier versions).
+    const LS = {
+      url: 'aura_drive_url',
+      password: 'aura_drive_passkey',
+      pin: 'aura_pin',
+      workspaceKey: 'aura_workspace_key',
+      legacyUser: 'aura_active_user',
+      theme: 'aura_theme',
+      clock24: 'aura_clock24',
+      section: 'aura_section'
     };
-    img.onerror = () => res(dataUrl); img.src = dataUrl;
-  });
-}
-async function processFiles(files) {
-  const caption = $('photoCaptionInput').value.trim(), secret = localStorage.getItem('aura_drive_passkey'), scriptUrl = localStorage.getItem('aura_drive_url') || DEFAULT_DRIVE_WEB_APP_URL;
-  for (const file of files) {
-    if (!file.type.startsWith('image/')) continue;
-    const original = await readFileAsDataURL(file), local = await shrinkImage(original);
-    const photo = { id: uid(), caption: caption || file.name.replace(/\.[^/.]+$/, ""), date: new Date().toLocaleDateString(), url: local };
-    if (secret) {
-      showToast(`Uploading ${file.name} to Google Drive…`);
+    const DB_NAME = "AuraOS_DB";
+    const LEGACY_DB_NAME = "AuraOS_5TB_DB"; // used by earlier versions; read once to migrate
+    const STORE_NAME = "user_workspace";
+    const DEFAULT_PIN = "1234";
+
+    const SECTIONS = {
+      today: { title: 'Today' },
+      calendar: { title: 'Calendar', sub: 'Dates worth remembering' },
+      reminders: { title: 'Reminders', sub: 'Things to get done' },
+      journal: { title: 'Journal', sub: 'Thoughts, notes and memories' },
+      photos: { title: 'Photos', sub: 'Saved on this device and in your Google Drive' },
+      vault: { title: 'Vault', sub: 'Codes and details you need on hand. Tap a value to reveal it.' },
+      habits: { title: 'Habits', sub: 'Small things, every day' },
+      settings: { title: 'Settings', sub: 'Sync, security and preferences' }
+    };
+
+    let state = emptyState();
+    let currentSection = 'today';
+    let use24Hour = localStorage.getItem(LS.clock24) === '1';
+    let calDate = new Date();
+    let pinEntry = "";
+    let unlocked = false;
+
+    function emptyState() {
+      return { intention: "", specialDays: [], reminders: [], notes: [], photos: [], vault: [], habits: [] };
+    }
+    function normalize(s) {
+      const base = emptyState();
+      const out = { ...base, ...(s || {}) };
+      for (const k of Object.keys(base)) {
+        if (Array.isArray(base[k]) && !Array.isArray(out[k])) out[k] = [];
+      }
+      return out;
+    }
+
+    // ---------- Helpers ----------
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const pad = n => String(n).padStart(2, '0');
+    const isoLocal = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const parseISODate = s => { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+    const daysUntil = s => Math.round((parseISODate(s) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+    const fmtDate = s => parseISODate(s).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    // Older entries carry an emoji prefix ("🎂 Birthday"); show just the words.
+    const plainLabel = s => String(s || '').replace(/^[^\p{L}\p{N}]+/u, '').trim();
+    const icon = (name, cls = '') => `<svg class="icon ${cls}"><use href="#i-${name}"/></svg>`;
+
+    function relDay(n) {
+      if (n === 0) return 'Today';
+      if (n === 1) return 'Tomorrow';
+      if (n === -1) return 'Yesterday';
+      return n > 0 ? `In ${n} days` : `${-n} days ago`;
+    }
+    function fmtDateTime(v) {
+      const d = new Date(v);
+      if (isNaN(d)) return v;
+      return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: !use24Hour });
+    }
+
+    let toastTimer;
+    function toast(msg, isError = false) {
+      const t = $('toast');
+      $('toastMsg').textContent = msg;
+      t.classList.toggle('error', isError);
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // ---------- Local storage (IndexedDB) ----------
+    function openLocalDB(name = DB_NAME) {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(name, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function idbPut(key, val) {
+      const db = await openLocalDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).put(val, key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+    async function idbGet(key, dbName = DB_NAME) {
+      const db = await openLocalDB(dbName);
+      return new Promise(resolve => {
+        const req = db.transaction(STORE_NAME, "readonly").objectStore(STORE_NAME).get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    }
+
+    function legacyUser() {
+      try { return JSON.parse(localStorage.getItem(LS.legacyUser) || 'null'); } catch { return null; }
+    }
+    // Keeps reading the workspace that earlier versions stored under workspace_<email>.
+    function workspaceKey() {
+      let key = localStorage.getItem(LS.workspaceKey);
+      if (!key) {
+        key = `workspace_${legacyUser()?.email || 'owner@aura.local'}`;
+        localStorage.setItem(LS.workspaceKey, key);
+      }
+      return key;
+    }
+    function migrateLegacyPin() {
+      const legacy = legacyUser();
+      if (!localStorage.getItem(LS.pin) && legacy && /^\d{4}$/.test(legacy.pin || '')) {
+        localStorage.setItem(LS.pin, legacy.pin);
+      }
+    }
+    // Earlier versions kept the PIN only as a hash on the account record.
+    function legacyPinHash() {
+      const legacy = legacyUser();
+      if (!legacy?.email) return null;
       try {
-        const res = await fetch(scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'uploadPhoto', secret, fileName: `Aura_${Date.now()}_${file.name}`, dataUrl: original }) });
-        const out = await res.json();
-        if (out.viewUrl) { photo.driveUrl = out.viewUrl; photo.fileId = out.fileId; showToast("Saved high-res photo to your 5TB Drive!"); }
-        else showToast(out.error || "Drive rejected the upload — kept locally", true);
-      } catch (err) { showToast("Saved photo locally (Drive offline)", true); }
-    } else showToast("Photo saved to local vault");
-    state.photos.unshift(photo); renderPhotos(); renderStats();
-  }
-  $('photoCaptionInput').value = ""; await persistState();
-}
-function handlePhotoUpload(e) { const f = Array.from(e.target.files); e.target.value = ""; processFiles(f); }
-let lbList = [], lbIdx = 0;
-function openLightbox(id) {
-  lbList = state.photos; lbIdx = lbList.findIndex(x => String(x.id) === String(id)); if (lbIdx < 0) return; showLb(); $('lightboxModal').classList.add('show');
-}
-function showLb() { const p = lbList[lbIdx]; $('lightboxImg').src = p.url || p.driveUrl; $('lightboxCaption').textContent = p.caption; $('lightboxDate').textContent = p.date; }
-function lbStep(d) { if (!lbList.length) return; lbIdx = (lbIdx + d + lbList.length) % lbList.length; showLb(); }
-function closeLightbox() { $('lightboxModal').classList.remove('show'); }
-function lbDownload() { const p = lbList[lbIdx]; if (!p) return; const a = document.createElement('a'); a.href = p.url || p.driveUrl; a.download = (p.caption || 'memory') + '.jpg'; a.target = '_blank'; a.click(); }
-function lbDelete() { const p = lbList[lbIdx]; if (p && confirm('Delete this photo from your vault?\n(The original stays in your Drive folder.)')) { removePhoto(p.id); closeLightbox(); } }
-function removePhoto(id) { state.photos = state.photos.filter(x => String(x.id) !== String(id)); persistState(); renderPhotos(); renderStats(); }
-function renderPhotos() {
-  const hasKey = !!localStorage.getItem('aura_drive_passkey');
-  $('photoGrid').innerHTML = state.photos.map(p => `<div class="ph" onclick="openLightbox('${p.id}')"><img loading="lazy" src="${esc(p.url || p.driveUrl)}" alt="${esc(p.caption)}" />
-    ${hasKey && !p.driveUrl ? `<span class="chip gold tag">${ic('cloudOff', 12)} Local</span>` : ''}
-    <div class="cap row between"><div style="min-width:0"><div style="font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.caption)}</div><div class="mono" style="font-size:10px;opacity:.7">${esc(p.date)}</div></div></div></div>`).join('')
-    || `<div class="empty" style="column-span:all"><span class="big">🖼️</span>Your vault is ready. Upload your first memory!</div>`;
-}
+        const acc = JSON.parse(localStorage.getItem('aura_accounts') || '{}')[legacy.email];
+        return acc?.pinHash ? { email: legacy.email, hash: acc.pinHash } : null;
+      } catch { return null; }
+    }
+    async function sha256(s) {
+      if (!(window.crypto && crypto.subtle)) return 'plain:' + s;
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    const hasPin = () => !!localStorage.getItem(LS.pin) || !!legacyPinHash();
+    async function pinMatches(pin) {
+      if (localStorage.getItem(LS.pin)) return pin === localStorage.getItem(LS.pin);
+      const legacy = legacyPinHash();
+      if (legacy) {
+        const ok = legacy.hash === await sha256(`pin:${legacy.email}:${pin}`);
+        if (ok) localStorage.setItem(LS.pin, pin);
+        return ok;
+      }
+      return pin === DEFAULT_PIN;
+    }
 
-/* ============================================================
-   SECRET VAULT + HABITS
-   ============================================================ */
-function addVaultItem(e) { e.preventDefault(); state.vault.unshift({ id: uid(), label: $('vaultLabel').value.trim(), secret: $('vaultSecret').value.trim() }); e.target.reset(); persistState(); renderVault(); showToast("Saved in vault"); }
-function deleteVaultItem(id) { if (!confirm('Remove this secret?')) return; state.vault = state.vault.filter(v => String(v.id) !== String(id)); persistState(); renderVault(); }
-function copySecret(id) {
-  const v = state.vault.find(x => String(x.id) === String(id)); if (!v) return;
-  const done = () => showToast("Copied to clipboard");
-  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(v.secret).then(done, () => showToast("Copy failed", true));
-  else { const t = document.createElement('textarea'); t.value = v.secret; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { showToast("Copy failed", true); } t.remove(); }
-}
-function renderVault() {
-  $('vaultList').innerHTML = state.vault.map(v => `<div class="item"><div style="min-width:0;flex:1"><div style="font-weight:700">${esc(v.label)}</div><div class="secret" onclick="this.classList.toggle('revealed')" style="margin-top:3px;font-size:13px">${esc(v.secret)}</div></div>
-    <div class="row" style="gap:6px;flex:none"><button class="icon-btn" onclick="copySecret('${v.id}')" title="Copy">${ic('copy')}</button><button class="icon-btn danger" onclick="deleteVaultItem('${v.id}')">${ic('trash')}</button></div></div>`).join('')
-    || `<div class="empty"><span class="big">🔐</span>No secrets stored yet.</div>`;
-}
-function rolloverDay() {
-  const today = ymd(), yest = ymd(new Date(Date.now() - 864e5));
-  state.habits.forEach(h => {
-    if (h.lastDone && h.lastDone < yest) h.streak = 0;
-    if (state.habitDay !== today && !h.lastDone) h.doneToday = false;
-    if (h.lastDone) h.doneToday = h.lastDone === today;
-  });
-  state.habitDay = today; if (!state.pomo || state.pomo.date !== today) state.pomo = { date: today, count: 0 };
-}
-function addHabit(e) { e.preventDefault(); state.habits.push({ id: uid(), name: $('habitName').value.trim(), streak: 0, doneToday: false }); e.target.reset(); persistState(); renderHabits(); renderStats(); }
-function deleteHabit(id) { state.habits = state.habits.filter(h => String(h.id) !== String(id)); persistState(); renderHabits(); renderStats(); }
-function toggleHabit(id) {
-  const h = state.habits.find(x => String(x.id) === String(id)); if (!h) return;
-  const today = ymd(), yest = ymd(new Date(Date.now() - 864e5));
-  if (!h.doneToday) { h.streak = (h.lastDone === yest || !h.lastDone ? h.streak : 0) + 1; h.lastDone = today; h.doneToday = true; if (h.streak > 0 && h.streak % 7 === 0) showToast(`🔥 ${h.streak}-day streak on "${h.name}"!`); }
-  else { h.streak = Math.max(0, h.streak - 1); h.lastDone = h.streak > 0 ? yest : null; h.doneToday = false; }
-  persistState(); renderHabits(); renderStats();
-}
-function renderHabits() {
-  const done = state.habits.filter(h => h.doneToday).length, tot = state.habits.length;
-  $('habitProgressText').textContent = `${done}/${tot}`; $('habitBar').style.width = tot ? (done / tot * 100) + '%' : '0%';
-  $('habitsList').innerHTML = state.habits.map(h => `<div class="item"><label class="row grow" style="gap:14px;cursor:pointer;min-width:0"><input type="checkbox" class="chk" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit('${h.id}')" /><span style="font-weight:600;${h.doneToday ? 'text-decoration:line-through;opacity:.5' : ''}">${esc(h.name)}</span></label>
-    <div class="row" style="gap:8px;flex:none"><span class="chip gold">${ic('flame')} ${h.streak}d</span><button class="icon-btn danger" style="width:30px;height:30px" onclick="deleteHabit('${h.id}')">${ic('x')}</button></div></div>`).join('')
-    || `<div class="empty"><span class="big">🔥</span>Add your first habit.</div>`;
-}
+    const getPassword = () => localStorage.getItem(LS.password) || '';
+    const getSyncUrl = () => localStorage.getItem(LS.url) || DEFAULT_SYNC_URL;
 
-/* ============================================================
-   STATS + BACKUP
-   ============================================================ */
-function renderStats() {
-  const open = state.reminders.filter(r => !r.done).length, done = state.habits.filter(h => h.doneToday).length;
-  $('statTiles').innerHTML = [
-    ['Open tasks', open, 'bell', 'reminders'], ['Habits today', `${done}/${state.habits.length}`, 'flame', 'vault'], ['Memories', state.photos.length, 'image', 'photos']
-  ].map(([l, v, i, s]) => `<button class="stat glass" style="text-align:left;border-radius:22px;padding:18px" onclick="switchSection('${s}')"><div class="row between"><span class="label">${l}</span><span style="color:rgb(var(--a))">${ic(i)}</span></div><b style="margin-top:8px">${v}</b></button>`).join('');
-}
-function exportBackup() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }), a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = `aura-os-backup-${ymd()}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-}
-function importBackup(e) {
-  const file = e.target.files[0]; if (!file) return; const r = new FileReader();
-  r.onload = async ev => {
-    try { const d = JSON.parse(ev.target.result); if (typeof d !== 'object' || d === null) throw 0; state = Object.assign(defaultState(), d); rolloverDay(); await persistState(); renderAll(); showToast("Backup restored & synced!"); }
-    catch (err) { showToast("Invalid backup file", true); }
-  };
-  r.readAsText(file); e.target.value = '';
-}
-function renderAll() {
-  $('dailyIntentionInput').value = state.intention || '';
-  renderSpecialDays(); renderCalendar(); renderReminders(); renderNotes(); renderPhotos(); renderVault(); renderHabits(); renderStats(); renderPomo();
-}
+    async function persist() {
+      await idbPut(workspaceKey(), state);
+      scheduleSync();
+    }
 
-/* ============================================================
-   BOOT
-   ============================================================ */
-function setupDropZone() {
-  const z = $('dropZone');
-  ['dragenter', 'dragover'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.classList.add('over'); }));
-  ['dragleave', 'drop'].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.classList.remove('over'); }));
-  z.addEventListener('drop', e => processFiles(Array.from(e.dataTransfer.files)));
-}
-function setupManifest() {   // makes "Add to Home Screen" feel like an app
-  try {
-    const icon = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#fbbf24"/></linearGradient></defs><rect width="192" height="192" rx="44" fill="url(#g)"/><text x="96" y="130" font-family="Georgia,serif" font-size="110" font-weight="700" fill="#fff" text-anchor="middle">A</text></svg>');
-    const m = { name: "Aura OS", short_name: "Aura", display: "standalone", background_color: "#07090e", theme_color: "#07090e", start_url: location.href, icons: [{ src: icon, sizes: "192x192", type: "image/svg+xml" }] };
-    const l = document.createElement('link'); l.rel = 'manifest'; l.href = URL.createObjectURL(new Blob([JSON.stringify(m)], { type: 'application/manifest+json' })); document.head.appendChild(l);
-    const ai = document.createElement('link'); ai.rel = 'apple-touch-icon'; ai.href = icon; document.head.appendChild(ai);
-  } catch (e) {}
-}
-window.addEventListener('DOMContentLoaded', async () => {
-  hydrateIcons(); fillCats(); setupDropZone(); setupManifest();
-  applyTheme(localStorage.getItem('aura_theme') || 'dark'); applyAccent(localStorage.getItem('aura_accent') || 'violet');
-  $('dayDate').value = ymd();
-  if (!localStorage.getItem('aura_drive_url')) localStorage.setItem('aura_drive_url', DEFAULT_DRIVE_WEB_APP_URL);
-  updateClock(); setInterval(updateClock, 1000); setInterval(checkDueReminders, 15000);
-  setInterval(() => { if (currentUser && state.habitDay !== ymd()) { rolloverDay(); renderAll(); persistState(); } }, 60000);
-  $('stopwatchDisplay').innerHTML = fmtSW(0);
-  let saved = null; try { saved = JSON.parse(localStorage.getItem('aura_active_user') || 'null'); } catch (e) {}
-  if (saved) { currentUser = { name: saved.name, email: saved.email }; lockScreen(); await loadUserWorkspace(); }   // PIN required on refresh
-  else renderAll();
-});
-</script>
+    // ---------- Cloud sync ----------
+    async function cloudRequest(body, secret = getPassword()) {
+      const res = await fetch(getSyncUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ ...body, secret })
+      });
+      return res.json();
+    }
+    const looksLikeAuthError = msg => /pass|key|secret|auth|denied|forbidden|invalid|unauthori/i.test(String(msg || ''));
+
+    function setSync(status, text) {
+      document.querySelectorAll('.sync-status').forEach(el => {
+        el.dataset.state = status;
+        el.querySelector('.sync-text').textContent = text;
+      });
+    }
+    const timeNow = () => new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: !use24Hour });
+
+    let syncTimer;
+    function scheduleSync() {
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => syncToCloud(false), 1200);
+    }
+
+    async function syncToCloud(manual = false) {
+      clearTimeout(syncTimer);
+      if (!getPassword()) {
+        setSync('local', 'Saved on this device');
+        if (manual) toast('Add your password to sync', true);
+        return;
+      }
+      setSync('syncing', 'Syncing…');
+      try {
+        const result = await cloudRequest({ action: 'saveData', data: state });
+        if (result.status === 'saved') {
+          setSync('ok', `Synced at ${timeNow()}`);
+          if (manual) toast('Synced to Google Drive');
+        } else {
+          setSync('error', 'Sync failed');
+          if (manual) toast(result.error || 'Sync was rejected. Check your password.', true);
+        }
+      } catch {
+        setSync('local', 'Offline · saved on this device');
+        if (manual) toast("Couldn't reach Google Drive", true);
+      }
+    }
+
+    async function pullFromCloud(silent = false) {
+      if (!getPassword()) return;
+      if (!silent) setSync('syncing', 'Loading…');
+      try {
+        const result = await cloudRequest({ action: 'loadData' });
+        if (result.data) {
+          state = normalize(result.data);
+          await idbPut(workspaceKey(), state);
+          renderAll();
+          setSync('ok', `Synced at ${timeNow()}`);
+          if (!silent) toast('Loaded the latest from Google Drive');
+        } else if (result.error) {
+          setSync('error', 'Sync failed');
+          if (!silent) toast(result.error, true);
+        } else if (!silent) {
+          setSync('ok', `Synced at ${timeNow()}`);
+          toast('Nothing new in Google Drive');
+        }
+      } catch {
+        setSync('local', 'Offline · saved on this device');
+        if (!silent) toast("Couldn't reach Google Drive", true);
+      }
+    }
+
+    function saveSyncUrl(e) {
+      e.preventDefault();
+      const url = $('syncUrlInput').value.trim();
+      if (url) localStorage.setItem(LS.url, url); else localStorage.removeItem(LS.url);
+      $('syncUrlInput').value = getSyncUrl();
+      toast('Sync address saved');
+      syncToCloud(false);
+    }
+
+    // ---------- Gate: setup, PIN lock, password unlock ----------
+    function showGate(view) {
+      $('gate').classList.remove('hidden');
+      showGateView(view);
+    }
+    function showGateView(view) {
+      ['setup', 'pin', 'password'].forEach(v => $(`${v}View`).classList.toggle('hidden', v !== view));
+      if (view === 'pin') { pinEntry = ""; renderPinDots(); $('pinPrompt').textContent = 'Enter your PIN'; }
+      if (view === 'password') { $('unlockError').textContent = ''; $('unlockPassword').value = ''; setTimeout(() => $('unlockPassword').focus(), 30); }
+      if (view === 'setup') setTimeout(() => $('setupPassword').focus(), 30);
+    }
+    function unlock() {
+      unlocked = true;
+      $('gate').classList.add('hidden');
+      $('unlockPassword').value = '';
+      pinEntry = "";
+    }
+    function lock() {
+      unlocked = false;
+      toggleMore(false);
+      closeLightbox();
+      showGate('pin');
+    }
+
+    function renderPinDots() {
+      document.querySelectorAll('#pinDots span').forEach((d, i) => d.classList.toggle('filled', i < pinEntry.length));
+    }
+    async function pinPress(digit) {
+      if (pinEntry.length >= 4) return;
+      pinEntry += digit;
+      renderPinDots();
+      if (pinEntry.length === 4) {
+        if (await pinMatches(pinEntry)) {
+          setTimeout(unlock, 120);
+        } else {
+          const dots = $('pinDots');
+          dots.classList.add('error');
+          $('pinPrompt').textContent = 'Incorrect PIN. Try again.';
+          setTimeout(() => { dots.classList.remove('error'); pinEntry = ""; renderPinDots(); }, 450);
+        }
+      }
+    }
+    function pinBackspace() {
+      pinEntry = pinEntry.slice(0, -1);
+      renderPinDots();
+    }
+
+    function unlockWithPassword(e) {
+      e.preventDefault();
+      if ($('unlockPassword').value === getPassword()) {
+        unlock();
+        switchSection('settings');
+        toast('Unlocked. You can set a new PIN here.');
+      } else {
+        $('unlockError').textContent = 'That password is incorrect.';
+      }
+    }
+
+    async function completeSetup(e) {
+      e.preventDefault();
+      const password = $('setupPassword').value;
+      const needsPin = !$('setupPinField').classList.contains('hidden');
+      const pin = $('setupPin').value.trim();
+      const err = $('setupError');
+      err.textContent = '';
+      if (needsPin && !/^\d{4}$/.test(pin)) { err.textContent = 'PIN must be exactly 4 digits.'; return; }
+
+      const btn = $('setupBtn');
+      btn.disabled = true;
+      btn.textContent = 'Connecting…';
+      let remote = null, offline = false;
+      try {
+        const result = await cloudRequest({ action: 'loadData' }, password);
+        if (result.error && looksLikeAuthError(result.error)) {
+          err.textContent = 'Google Drive did not accept that password.';
+          btn.disabled = false; btn.textContent = 'Continue';
+          return;
+        }
+        remote = result.data || null;
+      } catch {
+        offline = true;
+      }
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+
+      localStorage.setItem(LS.password, password);
+      if (needsPin) localStorage.setItem(LS.pin, pin);
+      if (remote) {
+        state = normalize(remote);
+        await idbPut(workspaceKey(), state);
+        renderAll();
+        setSync('ok', `Synced at ${timeNow()}`);
+      }
+      $('setupPassword').value = '';
+      $('setupPin').value = '';
+      unlock();
+      toast(offline ? "Saved. Couldn't reach Google Drive yet." : 'Connected to Google Drive');
+    }
+
+    function formError(form, msg) {
+      form.querySelector('.form-error').textContent = msg;
+      return false;
+    }
+
+    function changePin(e) {
+      e.preventDefault();
+      const f = e.target;
+      const { pw, newPin, confirmPin } = f.elements;
+      if (pw.value !== getPassword()) return formError(f, 'Password is incorrect.');
+      if (!/^\d{4}$/.test(newPin.value)) return formError(f, 'PIN must be exactly 4 digits.');
+      if (newPin.value !== confirmPin.value) return formError(f, "The PINs don't match.");
+      localStorage.setItem(LS.pin, newPin.value);
+      f.reset();
+      formError(f, '');
+      toast('PIN updated');
+    }
+
+    async function changePassword(e) {
+      e.preventDefault();
+      const f = e.target;
+      const { current, next } = f.elements;
+      if (current.value !== getPassword()) return formError(f, 'Current password is incorrect.');
+      if (!next.value) return formError(f, 'Enter a new password.');
+      const btn = f.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      try {
+        const result = await cloudRequest({ action: 'loadData' }, next.value);
+        if (result.error && looksLikeAuthError(result.error)) {
+          btn.disabled = false;
+          return formError(f, 'Google Drive did not accept the new password.');
+        }
+      } catch { /* offline: save anyway, sync will report problems */ }
+      btn.disabled = false;
+      localStorage.setItem(LS.password, next.value);
+      f.reset();
+      formError(f, '');
+      toast('Password updated');
+      syncToCloud(false);
+    }
+
+    // ---------- Navigation & preferences ----------
+    function switchSection(sec) {
+      if (!SECTIONS[sec]) sec = 'today';
+      currentSection = sec;
+      Object.keys(SECTIONS).forEach(id => $(`sec-${id}`).classList.toggle('hidden', id !== sec));
+      document.querySelectorAll('[data-section]').forEach(el => el.classList.toggle('active', el.dataset.section === sec));
+      $('moreTab').classList.toggle('active', ['photos', 'vault', 'habits', 'settings'].includes(sec));
+      $('pageTitle').textContent = SECTIONS[sec].title;
+      $('pageSub').textContent = sec === 'today' ? todayLabel() : SECTIONS[sec].sub;
+      if (sec === 'settings') $('syncUrlInput').value = getSyncUrl();
+      toggleMore(false);
+      try { localStorage.setItem(LS.section, sec); } catch {}
+      window.scrollTo(0, 0);
+    }
+    function toggleMore(force) {
+      const open = typeof force === 'boolean' ? force : $('moreSheet').classList.contains('hidden');
+      $('moreSheet').classList.toggle('hidden', !open);
+      $('moreBackdrop').classList.toggle('hidden', !open);
+    }
+
+    function effectiveTheme() {
+      const pref = localStorage.getItem(LS.theme) || 'system';
+      if (pref !== 'system') return pref;
+      return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function applyTheme() {
+      const pref = localStorage.getItem(LS.theme) || 'system';
+      if (pref === 'system') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', pref);
+      document.querySelectorAll('#themeSeg button').forEach(b => b.classList.toggle('active', b.dataset.val === pref));
+    }
+    function setTheme(pref) {
+      localStorage.setItem(LS.theme, pref);
+      applyTheme();
+    }
+    function toggleTheme() {
+      setTheme(effectiveTheme() === 'dark' ? 'light' : 'dark');
+    }
+    function setClockFormat(is24) {
+      use24Hour = is24;
+      localStorage.setItem(LS.clock24, is24 ? '1' : '0');
+      document.querySelectorAll('#clockSeg button').forEach(b => b.classList.toggle('active', b.dataset.val === (is24 ? '24' : '12')));
+      updateClock();
+      renderReminders();
+    }
+
+    // ---------- Clock ----------
+    function todayLabel() {
+      return new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours();
+      $('greeting').textContent = h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+      const hh = use24Hour ? pad(h) : String(h % 12 || 12);
+      $('clockMain').textContent = `${hh}:${pad(now.getMinutes())}`;
+      $('clockSec').textContent = `:${pad(now.getSeconds())}`;
+      $('clockAmPm').textContent = use24Hour ? '' : (h < 12 ? 'AM' : 'PM');
+      if (currentSection === 'today') $('pageSub').textContent = todayLabel();
+    }
+
+    function saveIntention() {
+      state.intention = $('intentionInput').value;
+      persist();
+    }
+
+    // ---------- Focus timer ----------
+    let pomoTotal = 25 * 60, pomoSeconds = pomoTotal, pomoInterval = null;
+    function setPomodoro(mins) {
+      clearInterval(pomoInterval);
+      pomoInterval = null;
+      pomoTotal = pomoSeconds = mins * 60;
+      document.querySelectorAll('#pomoSeg button').forEach(b => b.classList.toggle('active', Number(b.dataset.min) === mins));
+      $('pomoStartBtn').textContent = 'Start';
+      $('pomoStatus').textContent = mins === 5 ? 'Time for a short break' : 'Ready when you are';
+      renderPomo();
+    }
+    function renderPomo() {
+      $('pomoDisplay').textContent = `${pad(Math.floor(pomoSeconds / 60))}:${pad(pomoSeconds % 60)}`;
+      $('pomoBar').style.width = `${((pomoTotal - pomoSeconds) / pomoTotal) * 100}%`;
+    }
+    function togglePomodoro() {
+      if (pomoInterval) {
+        clearInterval(pomoInterval);
+        pomoInterval = null;
+        $('pomoStartBtn').textContent = 'Resume';
+        $('pomoStatus').textContent = 'Paused';
+        return;
+      }
+      if (pomoSeconds === 0) pomoSeconds = pomoTotal;
+      $('pomoStartBtn').textContent = 'Pause';
+      $('pomoStatus').textContent = 'In progress';
+      pomoInterval = setInterval(() => {
+        if (pomoSeconds > 0) {
+          pomoSeconds--;
+          renderPomo();
+        }
+        if (pomoSeconds === 0) {
+          clearInterval(pomoInterval);
+          pomoInterval = null;
+          $('pomoStartBtn').textContent = 'Start';
+          $('pomoStatus').textContent = 'Session complete';
+          toast('Focus session complete');
+        }
+      }, 1000);
+    }
+    function resetPomodoro() { setPomodoro(pomoTotal / 60); }
+
+    // ---------- Stopwatch ----------
+    let swElapsed = 0, swStartedAt = 0, swInterval = null, laps = [];
+    const swNow = () => swElapsed + (swInterval ? performance.now() - swStartedAt : 0);
+    function fmtSw(ms) {
+      const tenths = Math.floor(ms / 100);
+      return `${pad(Math.floor(tenths / 600))}:${pad(Math.floor((tenths % 600) / 10))}.${tenths % 10}`;
+    }
+    function toggleStopwatch() {
+      if (swInterval) {
+        swElapsed = swNow();
+        clearInterval(swInterval);
+        swInterval = null;
+        $('swStartBtn').textContent = 'Resume';
+        $('swStatus').textContent = 'Paused';
+      } else {
+        swStartedAt = performance.now();
+        swInterval = setInterval(() => { $('stopwatchDisplay').textContent = fmtSw(swNow()); }, 100);
+        $('swStartBtn').textContent = 'Pause';
+        $('swStatus').textContent = 'Running';
+      }
+    }
+    function resetStopwatch() {
+      clearInterval(swInterval);
+      swInterval = null;
+      swElapsed = 0;
+      laps = [];
+      $('stopwatchDisplay').textContent = '00:00.0';
+      $('swStartBtn').textContent = 'Start';
+      $('swStatus').textContent = 'Not started';
+      renderLaps();
+    }
+    function recordLap() {
+      const t = swNow();
+      if (!t) return;
+      laps.unshift(t);
+      renderLaps();
+    }
+    function renderLaps() {
+      $('lapList').innerHTML = laps.map((t, i) => {
+        const split = t - (laps[i + 1] || 0);
+        return `<div class="lap"><span>Lap ${laps.length - i}</span><span>+${fmtSw(split)}</span><strong>${fmtSw(t)}</strong></div>`;
+      }).join('');
+    }
+
+    // ---------- Calendar & dates ----------
+    function addSpecialDay(e) {
+      e.preventDefault();
+      state.specialDays.push({
+        id: Date.now(),
+        title: $('dayTitle').value.trim(),
+        date: $('dayDate').value,
+        category: $('dayCategory').value
+      });
+      e.target.reset();
+      persist();
+      renderDays();
+      toast('Date saved');
+    }
+    function deleteSpecialDay(id) {
+      state.specialDays = state.specialDays.filter(d => d.id !== id);
+      persist();
+      renderDays();
+    }
+    function dayItem(d, withDelete) {
+      const n = daysUntil(d.date);
+      const badgeCls = n === 0 ? 'warn' : n > 0 && n <= 7 ? 'accent' : '';
+      return `
+        <div class="item">
+          <div class="item-main">
+            <div class="item-title">${esc(d.title)}</div>
+            <div class="item-sub">${esc(plainLabel(d.category))} · ${esc(fmtDate(d.date))}</div>
+          </div>
+          <span class="badge ${badgeCls}">${relDay(n)}</span>
+          ${withDelete ? `<button class="btn-icon danger" onclick="deleteSpecialDay(${Number(d.id)})" aria-label="Delete">${icon('x', 'icon-sm')}</button>` : ''}
+        </div>`;
+    }
+    function renderDays() {
+      const sorted = [...state.specialDays].sort((a, b) => parseISODate(a.date) - parseISODate(b.date));
+      const upcoming = sorted.filter(d => daysUntil(d.date) >= 0);
+      const past = sorted.filter(d => daysUntil(d.date) < 0).reverse();
+      $('specialDaysList').innerHTML = [...upcoming, ...past].map(d => dayItem(d, true)).join('')
+        || `<p class="empty">No dates saved yet.</p>`;
+      renderCalendar();
+      renderToday();
+    }
+    function changeMonth(offset) {
+      calDate = new Date(calDate.getFullYear(), calDate.getMonth() + offset, 1);
+      renderCalendar();
+    }
+    function goToToday() {
+      calDate = new Date();
+      renderCalendar();
+    }
+    function pickDay(iso) {
+      $('dayDate').value = iso;
+      $('dayTitle').focus();
+      if (window.innerWidth <= 1080) $('dayTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function renderCalendar() {
+      const year = calDate.getFullYear(), month = calDate.getMonth();
+      $('calMonthHeader').textContent = calDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const todayIso = isoLocal(new Date());
+      let html = '<div class="cal-day blank"></div>'.repeat(firstDay);
+      for (let day = 1; day <= totalDays; day++) {
+        const iso = `${year}-${pad(month + 1)}-${pad(day)}`;
+        const events = state.specialDays.filter(d => d.date === iso);
+        html += `
+          <button class="cal-day ${iso === todayIso ? 'is-today' : ''}" onclick="pickDay('${iso}')" title="${events.map(e => esc(e.title)).join(', ')}">
+            <span class="num">${day}</span>
+            <span class="cal-events">${events.slice(0, 2).map(e => `<span class="cal-event">${esc(e.title)}</span>`).join('')}</span>
+            ${events.length > 2 ? `<span class="cal-more">+${events.length - 2} more</span>` : ''}
+          </button>`;
+      }
+      $('calendarGrid').innerHTML = html;
+    }
+
+    // ---------- Reminders ----------
+    function addReminder(e) {
+      e.preventDefault();
+      state.reminders.unshift({ id: Date.now(), text: $('remText').value.trim(), time: $('remTime').value, done: false });
+      e.target.reset();
+      persist();
+      renderReminders();
+    }
+    function toggleReminder(id) {
+      const r = state.reminders.find(x => x.id === id);
+      if (r) r.done = !r.done;
+      persist();
+      renderReminders();
+    }
+    function deleteReminder(id) {
+      state.reminders = state.reminders.filter(x => x.id !== id);
+      persist();
+      renderReminders();
+    }
+    function reminderItem(r, withDelete = true) {
+      const overdue = !r.done && r.time && new Date(r.time) < new Date();
+      return `
+        <label class="item ${r.done ? 'done' : ''}">
+          <input type="checkbox" class="check" ${r.done ? 'checked' : ''} onchange="toggleReminder(${Number(r.id)})" />
+          <div class="item-main">
+            <div class="item-title">${esc(r.text)}</div>
+            ${r.time ? `<div class="item-sub" ${overdue ? 'style="color:var(--danger)"' : ''}>${esc(fmtDateTime(r.time))}${overdue ? ' · overdue' : ''}</div>` : ''}
+          </div>
+          ${withDelete ? `<button class="btn-icon danger" onclick="event.preventDefault(); deleteReminder(${Number(r.id)})" aria-label="Delete">${icon('x', 'icon-sm')}</button>` : ''}
+        </label>`;
+    }
+    function sortedOpenReminders() {
+      return state.reminders.filter(r => !r.done).sort((a, b) => {
+        if (a.time && b.time) return new Date(a.time) - new Date(b.time);
+        return a.time ? -1 : b.time ? 1 : 0;
+      });
+    }
+    function renderReminders() {
+      const open = sortedOpenReminders();
+      const done = state.reminders.filter(r => r.done);
+      $('remindersOpen').innerHTML = open.map(r => reminderItem(r)).join('') || `<p class="empty">You're all caught up.</p>`;
+      $('remindersDone').innerHTML = done.map(r => reminderItem(r)).join('');
+      $('remOpenCount').textContent = open.length || '';
+      $('remDoneCount').textContent = done.length || '';
+      $('remDoneCard').classList.toggle('hidden', !done.length);
+      renderToday();
+    }
+
+    // ---------- Journal ----------
+    function addNote(e) {
+      e.preventDefault();
+      state.notes.unshift({
+        id: Date.now(),
+        title: $('noteTitle').value.trim(),
+        mood: $('noteMood').value,
+        body: $('noteBody').value.trim(),
+        createdAt: new Date().toLocaleString()
+      });
+      e.target.reset();
+      persist();
+      renderNotes();
+      toast('Entry saved');
+    }
+    function deleteNote(id) {
+      if (!confirm('Delete this entry?')) return;
+      state.notes = state.notes.filter(n => n.id !== id);
+      persist();
+      renderNotes();
+    }
+    function renderNotes() {
+      const q = ($('noteSearch').value || '').toLowerCase();
+      const filtered = state.notes.filter(n => (n.title || '').toLowerCase().includes(q) || (n.body || '').toLowerCase().includes(q));
+      $('noteCount').textContent = state.notes.length || '';
+      $('notesGrid').innerHTML = filtered.map(n => `
+        <article class="card note">
+          <div class="note-meta"><span class="badge">${esc(plainLabel(n.mood))}</span><span>${esc(n.createdAt)}</span></div>
+          <h2>${esc(n.title)}</h2>
+          <p class="note-body">${esc(n.body)}</p>
+          <div class="note-foot"><button class="btn-icon danger" onclick="deleteNote(${Number(n.id)})" aria-label="Delete">${icon('trash', 'icon-sm')}</button></div>
+        </article>
+      `).join('') || `<p class="empty">${q ? 'No entries match your search.' : 'No entries yet. Your first one is a few words away.'}</p>`;
+    }
+
+    // ---------- Photos ----------
+    function readFileAsDataURL(file) {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = ev => resolve(ev.target.result);
+        reader.readAsDataURL(file);
+      });
+    }
+    async function handlePhotoUpload(e) {
+      const files = Array.from(e.target.files);
+      const caption = $('photoCaptionInput').value.trim();
+      for (const file of files) {
+        const dataUrl = await readFileAsDataURL(file);
+        const photo = {
+          id: Date.now() + Math.random(),
+          caption: caption || file.name.replace(/\.[^/.]+$/, ""),
+          date: new Date().toLocaleDateString(),
+          url: dataUrl
+        };
+        if (getPassword()) {
+          toast(`Uploading ${file.name}…`);
+          try {
+            const out = await cloudRequest({ action: 'uploadPhoto', fileName: `Aura_${Date.now()}_${file.name}`, dataUrl });
+            if (out.viewUrl) {
+              photo.driveUrl = out.viewUrl;
+              toast('Photo saved to Google Drive');
+            }
+          } catch {
+            toast('Saved on this device. Google Drive is unreachable.', true);
+          }
+        } else {
+          toast('Photo saved on this device');
+        }
+        state.photos.unshift(photo);
+      }
+      $('photoCaptionInput').value = "";
+      e.target.value = "";
+      await persist();
+      renderPhotos();
+    }
+    function openLightbox(id) {
+      const p = state.photos.find(x => String(x.id) === String(id));
+      if (!p) return;
+      $('lightboxImg').src = p.url || p.driveUrl;
+      $('lightboxImg').alt = p.caption || '';
+      $('lightboxCaption').textContent = p.caption;
+      $('lightboxDate').textContent = p.date;
+      $('lightbox').classList.remove('hidden');
+    }
+    function closeLightbox() {
+      $('lightbox').classList.add('hidden');
+      $('lightboxImg').src = '';
+    }
+    function deletePhoto(id, ev) {
+      ev.stopPropagation();
+      if (!confirm('Delete this photo?')) return;
+      state.photos = state.photos.filter(x => String(x.id) !== String(id));
+      persist();
+      renderPhotos();
+    }
+    function renderPhotos() {
+      $('photoGrid').innerHTML = state.photos.map(p => `
+        <figure class="photo" onclick="openLightbox('${esc(p.id)}')">
+          <img loading="lazy" src="${esc(p.url || p.driveUrl)}" alt="${esc(p.caption)}" />
+          <figcaption>
+            <span>${esc(p.caption)}</span>
+            <button class="btn-icon" onclick="deletePhoto('${esc(p.id)}', event)" aria-label="Delete">${icon('trash', 'icon-sm')}</button>
+          </figcaption>
+        </figure>
+      `).join('') || `<p class="empty">No photos yet.</p>`;
+    }
+
+    // ---------- Vault ----------
+    function addVaultItem(e) {
+      e.preventDefault();
+      state.vault.unshift({ id: Date.now(), label: $('vaultLabel').value.trim(), secret: $('vaultSecret').value.trim() });
+      e.target.reset();
+      persist();
+      renderVault();
+      toast('Saved to vault');
+    }
+    function deleteVaultItem(id) {
+      if (!confirm('Delete this item?')) return;
+      state.vault = state.vault.filter(v => v.id !== id);
+      persist();
+      renderVault();
+    }
+    async function copySecret(id) {
+      const v = state.vault.find(x => x.id === id);
+      if (!v) return;
+      try {
+        await navigator.clipboard.writeText(v.secret);
+        toast('Copied');
+      } catch {
+        toast("Couldn't copy. Reveal it and select instead.", true);
+      }
+    }
+    function renderVault() {
+      $('vaultList').innerHTML = state.vault.map(v => `
+        <div class="item">
+          <div class="item-main">
+            <div class="item-title">${esc(v.label)}</div>
+            <div class="secret" onclick="this.classList.toggle('revealed')">${esc(v.secret)}</div>
+          </div>
+          <button class="btn-icon" onclick="this.closest('.item').querySelector('.secret').classList.toggle('revealed')" aria-label="Show or hide">${icon('eye', 'icon-sm')}</button>
+          <button class="btn-icon" onclick="copySecret(${Number(v.id)})" aria-label="Copy">${icon('copy', 'icon-sm')}</button>
+          <button class="btn-icon danger" onclick="deleteVaultItem(${Number(v.id)})" aria-label="Delete">${icon('x', 'icon-sm')}</button>
+        </div>
+      `).join('') || `<p class="empty">Nothing stored yet.</p>`;
+    }
+
+    // ---------- Habits ----------
+    function addHabit(e) {
+      e.preventDefault();
+      state.habits.push({ id: Date.now(), name: $('habitName').value.trim(), streak: 0, doneToday: false });
+      e.target.reset();
+      persist();
+      renderHabits();
+    }
+    function toggleHabit(id) {
+      const h = state.habits.find(x => x.id === id);
+      if (h) {
+        h.doneToday = !h.doneToday;
+        h.streak += h.doneToday ? 1 : -1;
+      }
+      persist();
+      renderHabits();
+    }
+    function deleteHabit(id) {
+      if (!confirm('Delete this habit?')) return;
+      state.habits = state.habits.filter(h => h.id !== id);
+      persist();
+      renderHabits();
+    }
+    function habitItem(h, withDelete) {
+      return `
+        <label class="item ${h.doneToday ? 'done' : ''}">
+          <input type="checkbox" class="check" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${Number(h.id)})" />
+          <div class="item-main"><div class="item-title">${esc(h.name)}</div></div>
+          <span class="badge ${h.streak > 0 ? 'accent' : ''}">${Number(h.streak) || 0} day${h.streak === 1 ? '' : 's'}</span>
+          ${withDelete ? `<button class="btn-icon danger" onclick="event.preventDefault(); deleteHabit(${Number(h.id)})" aria-label="Delete">${icon('x', 'icon-sm')}</button>` : ''}
+        </label>`;
+    }
+    function renderHabits() {
+      $('habitsList').innerHTML = state.habits.map(h => habitItem(h, true)).join('') || `<p class="empty">No habits yet.</p>`;
+      renderToday();
+    }
+
+    // ---------- Today overview ----------
+    function renderToday() {
+      const upcoming = [...state.specialDays]
+        .filter(d => daysUntil(d.date) >= 0)
+        .sort((a, b) => parseISODate(a.date) - parseISODate(b.date))
+        .slice(0, 4);
+      $('todayDays').innerHTML = upcoming.map(d => dayItem(d, false)).join('') || `<p class="empty">Nothing coming up.</p>`;
+      $('todayReminders').innerHTML = sortedOpenReminders().slice(0, 4).map(r => reminderItem(r, false)).join('') || `<p class="empty">You're all caught up.</p>`;
+      $('todayHabits').innerHTML = state.habits.map(h => habitItem(h, false)).join('') || `<p class="empty">No habits yet.</p>`;
+    }
+
+    // ---------- Backup ----------
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `aura-backup-${isoLocal(new Date())}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }
+    function importBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (!confirm('Replace everything in the app with this backup?')) return;
+          state = normalize(data);
+          await persist();
+          renderAll();
+          toast('Backup restored');
+        } catch {
+          toast('That file is not a valid backup', true);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function renderAll() {
+      $('intentionInput').value = state.intention || "";
+      renderDays();
+      renderReminders();
+      renderNotes();
+      renderPhotos();
+      renderVault();
+      renderHabits();
+    }
+
+    // ---------- Keyboard ----------
+    document.addEventListener('keydown', e => {
+      if (!$('pinView').classList.contains('hidden') && !$('gate').classList.contains('hidden')) {
+        if (/^\d$/.test(e.key)) { pinPress(e.key); e.preventDefault(); }
+        else if (e.key === 'Backspace') { pinBackspace(); e.preventDefault(); }
+        return;
+      }
+      if (e.key === 'Escape') { closeLightbox(); toggleMore(false); }
+    });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', applyTheme);
+
+    // ---------- Boot ----------
+    window.addEventListener('DOMContentLoaded', async () => {
+      applyTheme();
+      setClockFormat(use24Hour);
+      migrateLegacyPin();
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      if (!getPassword()) {
+        $('setupPinField').classList.toggle('hidden', hasPin());
+        $('setupPin').required = !hasPin();
+        showGate('setup');
+      } else {
+        showGate('pin');
+      }
+
+      let saved = null;
+      try {
+        saved = await idbGet(workspaceKey());
+        if (!saved) {
+          saved = await idbGet(workspaceKey(), LEGACY_DB_NAME);
+          if (saved) await idbPut(workspaceKey(), saved);
+        }
+      } catch {}
+      if (saved) state = normalize(saved);
+      renderAll();
+      let lastSection = 'today';
+      try { lastSection = localStorage.getItem(LS.section) || 'today'; } catch {}
+      switchSection(lastSection);
+      if (getPassword()) pullFromCloud(true);
+    });
+  </script>
 </body>
 </html>
