@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#F5F4F1" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)" />
-  <title>Aura</title>
+  <title>Keepsake</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -343,6 +343,10 @@
     }
     .photo figcaption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .photo .btn-icon { color: #fff; width: 28px; height: 28px; opacity: 0; }
+    .photo-badge {
+      position: absolute; top: 8px; left: 8px; padding: 2px 8px; border-radius: 999px;
+      background: rgba(0,0,0,0.55); color: #fff; font-size: 11.5px; font-weight: 500;
+    }
     .photo:hover .btn-icon, .photo .btn-icon:focus-visible { opacity: 1; }
     .photo .btn-icon:hover { background: rgba(0,0,0,0.35); color: #fff; }
 
@@ -505,10 +509,10 @@
   <!-- SETUP + LOCK -->
   <div id="gate" class="gate">
     <div class="gate-card">
-      <div class="brand-mark">A</div>
+      <div class="brand-mark">K</div>
 
       <form id="setupView" class="gate-view hidden" onsubmit="completeSetup(event)" autocomplete="off">
-        <h1>Welcome to Aura</h1>
+        <h1>Welcome to Keepsake</h1>
         <p class="muted">Enter your password to connect your Google Drive.</p>
         <div class="gate-form">
           <label class="field"><span>Password</span>
@@ -559,7 +563,7 @@
   <div class="app">
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <div class="brand"><div class="brand-mark">A</div><span class="brand-name">Aura</span></div>
+      <div class="brand"><div class="brand-mark">K</div><span class="brand-name">Keepsake</span></div>
       <nav class="nav">
         <button class="nav-item" data-section="today" onclick="switchSection('today')"><svg class="icon"><use href="#i-today"/></svg>Today</button>
         <button class="nav-item" data-section="calendar" onclick="switchSection('calendar')"><svg class="icon"><use href="#i-calendar"/></svg>Calendar</button>
@@ -780,14 +784,13 @@
         <section id="sec-settings" class="section hidden">
           <div class="card settings-group">
             <h2>Sync</h2>
-            <p class="muted">Everything is saved on this device and backed up to your Google Drive.</p>
+            <p class="muted">Changes are saved on this device and sync with your Google Drive automatically, both ways. Drive is checked every 30 seconds while Keepsake is open.</p>
             <div class="setting-row">
               <div>
                 <div class="sync-status" data-state="local" style="padding:0"><span class="dot"></span><span class="sync-text">Saved on this device</span></div>
               </div>
               <div class="row">
-                <button class="btn" onclick="pullFromCloud(false)">Pull latest</button>
-                <button class="btn btn-primary" onclick="syncToCloud(true)">Sync now</button>
+                <button class="btn" onclick="syncNow({ force: true, manual: true })">Sync now</button>
               </div>
             </div>
             <details class="advanced">
@@ -826,7 +829,7 @@
 
           <div class="card settings-group">
             <h2>Preferences</h2>
-            <p class="muted">How Aura looks on this device.</p>
+            <p class="muted">How Keepsake looks on this device.</p>
             <div class="setting-row">
               <div><div class="item-title">Appearance</div></div>
               <div class="seg" id="themeSeg">
@@ -905,19 +908,25 @@
       legacyUser: 'aura_active_user',
       theme: 'aura_theme',
       clock24: 'aura_clock24',
-      section: 'aura_section'
+      section: 'aura_section',
+      rev: 'aura_rev',
+      photoHash: 'aura_photo_hash',
+      dirty: 'aura_dirty',
+      deleteQueue: 'aura_delete_queue'
     };
     const DB_NAME = "AuraOS_DB";
     const LEGACY_DB_NAME = "AuraOS_5TB_DB"; // used by earlier versions; read once to migrate
     const STORE_NAME = "user_workspace";
     const DEFAULT_PIN = "1234";
+    const POLL_MS = 30000;
+    const COLLECTIONS = ['specialDays', 'reminders', 'notes', 'photos', 'vault', 'habits'];
 
     const SECTIONS = {
       today: { title: 'Today' },
       calendar: { title: 'Calendar', sub: 'Dates worth remembering' },
       reminders: { title: 'Reminders', sub: 'Things to get done' },
       journal: { title: 'Journal', sub: 'Thoughts, notes and memories' },
-      photos: { title: 'Photos', sub: 'Saved on this device and in your Google Drive' },
+      photos: { title: 'Photos', sub: 'Saved to the Keepsake folder in your Google Drive' },
       vault: { title: 'Vault', sub: 'Codes and details you need on hand. Tap a value to reveal it.' },
       habits: { title: 'Habits', sub: 'Small things, every day' },
       settings: { title: 'Settings', sub: 'Sync, security and preferences' }
@@ -931,7 +940,7 @@
     let unlocked = false;
 
     function emptyState() {
-      return { intention: "", specialDays: [], reminders: [], notes: [], photos: [], vault: [], habits: [] };
+      return { intention: "", specialDays: [], reminders: [], notes: [], photos: [], vault: [], habits: [], deleted: {} };
     }
     function normalize(s) {
       const base = emptyState();
@@ -939,6 +948,7 @@
       for (const k of Object.keys(base)) {
         if (Array.isArray(base[k]) && !Array.isArray(out[k])) out[k] = [];
       }
+      if (!out.deleted || typeof out.deleted !== 'object') out.deleted = {};
       return out;
     }
 
@@ -992,6 +1002,15 @@
         tx.objectStore(STORE_NAME).put(val, key);
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
+      });
+    }
+    async function idbDel(key) {
+      const db = await openLocalDB();
+      return new Promise(resolve => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).delete(key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
       });
     }
     async function idbGet(key, dbName = DB_NAME) {
@@ -1050,12 +1069,32 @@
     const getPassword = () => localStorage.getItem(LS.password) || '';
     const getSyncUrl = () => localStorage.getItem(LS.url) || DEFAULT_SYNC_URL;
 
-    async function persist() {
+    // Marks an item as deleted so the deletion also reaches other devices when changes are merged.
+    function removeItem(collection, id) {
+      state[collection] = state[collection].filter(x => String(x.id) !== String(id));
+      state.deleted[String(id)] = Date.now();
+    }
+
+    async function saveLocal() {
       await idbPut(workspaceKey(), state);
+    }
+    async function persist() {
+      changeSeq++;
+      setDirty(true);
+      await saveLocal();
       scheduleSync();
     }
 
     // ---------- Cloud sync ----------
+    // Every change is saved on the device first, then pushed to Drive about a second later.
+    // While the app is open it also checks Drive every 30 seconds (and whenever you come back
+    // to it), so changes made on another device or directly in Drive show up on their own.
+    class SyncError extends Error {}
+    let knownRev = Number(localStorage.getItem(LS.rev) || 0);
+    let knownPhotoHash = localStorage.getItem(LS.photoHash) || '';
+    let dirty = localStorage.getItem(LS.dirty) === '1';
+    let changeSeq = 0, syncing = false, syncAgain = false, syncTimer;
+
     async function cloudRequest(body, secret = getPassword()) {
       const res = await fetch(getSyncUrl(), {
         method: 'POST',
@@ -1074,56 +1113,172 @@
     }
     const timeNow = () => new Date().toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: !use24Hour });
 
-    let syncTimer;
-    function scheduleSync() {
-      clearTimeout(syncTimer);
-      syncTimer = setTimeout(() => syncToCloud(false), 1200);
+    function setRev(rev, photoHash) {
+      if (typeof rev === 'number') { knownRev = rev; localStorage.setItem(LS.rev, String(rev)); }
+      if (typeof photoHash === 'string') { knownPhotoHash = photoHash; localStorage.setItem(LS.photoHash, photoHash); }
+    }
+    // A revision bump caused by our own photo upload or delete doesn't need a re-download.
+    function adoptRev(rev) {
+      if (typeof rev === 'number' && rev === knownRev + 1) setRev(rev);
+    }
+    function setDirty(v) {
+      dirty = v;
+      localStorage.setItem(LS.dirty, v ? '1' : '0');
+    }
+    function getDeleteQueue() {
+      try { return JSON.parse(localStorage.getItem(LS.deleteQueue) || '[]'); } catch { return []; }
+    }
+    function setDeleteQueue(q) {
+      localStorage.setItem(LS.deleteQueue, JSON.stringify(q));
     }
 
-    async function syncToCloud(manual = false) {
+    function scheduleSync(delay = 1000) {
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => syncNow(), delay);
+    }
+
+    async function syncNow({ force = false, manual = false } = {}) {
       clearTimeout(syncTimer);
       if (!getPassword()) {
         setSync('local', 'Saved on this device');
         if (manual) toast('Add your password to sync', true);
         return;
       }
-      setSync('syncing', 'Syncing…');
+      if (syncing) { syncAgain = true; return; }
+      syncing = true;
       try {
-        const result = await cloudRequest({ action: 'saveData', data: state });
-        if (result.status === 'saved') {
-          setSync('ok', `Synced at ${timeNow()}`);
-          if (manual) toast('Synced to Google Drive');
+        await flushPhotoQueue();
+        if (dirty) {
+          setSync('syncing', 'Syncing…');
+          await push();
         } else {
-          setSync('error', 'Sync failed');
-          if (manual) toast(result.error || 'Sync was rejected. Check your password.', true);
+          const s = await cloudRequest({ action: 'status' });
+          if (s.error) throw new SyncError(s.error);
+          if (force || s.rev !== knownRev || s.photos !== knownPhotoHash) {
+            setSync('syncing', 'Syncing…');
+            await pull();
+          }
         }
-      } catch {
-        setSync('local', 'Offline · saved on this device');
-        if (manual) toast("Couldn't reach Google Drive", true);
+        setSync('ok', `Synced at ${timeNow()}`);
+        if (manual) toast('Everything is up to date');
+      } catch (err) {
+        if (err instanceof SyncError) {
+          setSync('error', 'Sync failed');
+          if (manual) toast(err.message, true);
+        } else {
+          setSync('local', 'Offline · saved on this device');
+          if (manual) toast("Couldn't reach Google Drive", true);
+        }
+      } finally {
+        syncing = false;
+        if (syncAgain) { syncAgain = false; scheduleSync(300); }
       }
     }
 
-    async function pullFromCloud(silent = false) {
-      if (!getPassword()) return;
-      if (!silent) setSync('syncing', 'Loading…');
-      try {
-        const result = await cloudRequest({ action: 'loadData' });
-        if (result.data) {
-          state = normalize(result.data);
-          await idbPut(workspaceKey(), state);
-          renderAll();
-          setSync('ok', `Synced at ${timeNow()}`);
-          if (!silent) toast('Loaded the latest from Google Drive');
-        } else if (result.error) {
-          setSync('error', 'Sync failed');
-          if (!silent) toast(result.error, true);
-        } else if (!silent) {
-          setSync('ok', `Synced at ${timeNow()}`);
-          toast('Nothing new in Google Drive');
+    // What goes to Drive: everything except photos that haven't finished uploading.
+    function cloudCopy(s) {
+      return {
+        ...s,
+        photos: s.photos.filter(p => p.fileId).map(({ url, driveUrl, pending, fileName, ...rest }) => rest)
+      };
+    }
+
+    async function push(attempt = 0) {
+      const seq = changeSeq;
+      const r = await cloudRequest({ action: 'saveData', data: cloudCopy(state), baseRev: knownRev });
+      if (r.status === 'saved') {
+        setRev(r.rev);
+        if (seq === changeSeq) setDirty(false); else syncAgain = true;
+        return;
+      }
+      if (r.status === 'conflict' && attempt < 3) {
+        state = mergeStates(state, normalize(r.data));
+        setRev(r.rev);
+        await saveLocal();
+        renderAll();
+        return push(attempt + 1);
+      }
+      throw new SyncError(r.error || 'Google Drive rejected the update. Check your password.');
+    }
+
+    async function pull() {
+      const r = await cloudRequest({ action: 'loadData' });
+      if (r.error) throw new SyncError(r.error);
+      if (!r.data) {
+        // Nothing in Drive yet: this device's data becomes the first copy.
+        setRev(r.rev, r.photos);
+        setDirty(true);
+        return push();
+      }
+      const remote = normalize(r.data);
+      if (dirty) {
+        state = mergeStates(state, remote);
+      } else {
+        remote.photos = [...state.photos.filter(p => p.pending), ...remote.photos];
+        state = remote;
+      }
+      await migratePhotos();
+      setRev(r.rev, r.photos);
+      await saveLocal();
+      renderAll();
+      if (dirty) await push();
+    }
+
+    // Combines this device's unsynced changes with what's in Drive, item by item.
+    function mergeStates(local, remote) {
+      const cutoff = Date.now() - 90 * 86400000;
+      const deleted = {};
+      for (const [id, t] of Object.entries({ ...remote.deleted, ...local.deleted })) {
+        if (t > cutoff) deleted[id] = t;
+      }
+      const out = { ...remote, intention: local.intention, deleted };
+      for (const key of COLLECTIONS) {
+        const byId = new Map();
+        remote[key].forEach(x => byId.set(String(x.id), x));
+        local[key].forEach(x => byId.set(String(x.id), { ...byId.get(String(x.id)), ...x }));
+        out[key] = [...byId.values()].filter(x => !deleted[String(x.id)]);
+      }
+      const newestFirst = (a, b) => (Number(b.addedAt || b.id) || 0) - (Number(a.addedAt || a.id) || 0);
+      ['reminders', 'notes', 'photos', 'vault'].forEach(k => out[k].sort(newestFirst));
+      return out;
+    }
+
+    async function flushPhotoQueue() {
+      for (const fileId of getDeleteQueue()) {
+        const r = await cloudRequest({ action: 'deletePhoto', fileId });
+        if (r.error) throw new SyncError(r.error);
+        adoptRev(r.rev);
+        setDeleteQueue(getDeleteQueue().filter(x => x !== fileId));
+      }
+      const pending = state.photos.filter(p => p.pending);
+      for (const [i, p] of pending.entries()) {
+        setSync('syncing', pending.length > 1 ? `Uploading photo ${i + 1} of ${pending.length}…` : 'Uploading photo…');
+        const full = await idbGet(`full_${p.id}`);
+        if (!full) {
+          state.photos = state.photos.filter(x => x !== p);
+          continue;
         }
-      } catch {
-        setSync('local', 'Offline · saved on this device');
-        if (!silent) toast("Couldn't reach Google Drive", true);
+        const r = await cloudRequest({
+          action: 'uploadPhoto',
+          fileName: p.fileName || `${p.caption || 'photo'}.jpg`,
+          dataUrl: full,
+          thumbDataUrl: await idbGet(`thumb_${p.id}`),
+          photo: { id: p.id, caption: p.caption, date: p.date, addedAt: p.addedAt }
+        });
+        if (!r.fileId) throw new SyncError(r.error || 'Photo upload failed');
+        const current = state.photos.find(x => String(x.id) === String(p.id));
+        if (current) {
+          current.fileId = r.fileId;
+          delete current.pending;
+          delete current.fileName;
+        } else {
+          // Deleted while it was uploading.
+          setDeleteQueue([...getDeleteQueue(), r.fileId]);
+        }
+        await idbDel(`full_${p.id}`);
+        adoptRev(r.rev);
+        await saveLocal();
+        renderPhotos();
       }
     }
 
@@ -1133,7 +1288,7 @@
       if (url) localStorage.setItem(LS.url, url); else localStorage.removeItem(LS.url);
       $('syncUrlInput').value = getSyncUrl();
       toast('Sync address saved');
-      syncToCloud(false);
+      syncNow({ force: true });
     }
 
     // ---------- Gate: setup, PIN lock, password unlock ----------
@@ -1206,15 +1361,14 @@
       const btn = $('setupBtn');
       btn.disabled = true;
       btn.textContent = 'Connecting…';
-      let remote = null, offline = false;
+      let offline = false;
       try {
-        const result = await cloudRequest({ action: 'loadData' }, password);
+        const result = await cloudRequest({ action: 'status' }, password);
         if (result.error && looksLikeAuthError(result.error)) {
           err.textContent = 'Google Drive did not accept that password.';
           btn.disabled = false; btn.textContent = 'Continue';
           return;
         }
-        remote = result.data || null;
       } catch {
         offline = true;
       }
@@ -1223,16 +1377,12 @@
 
       localStorage.setItem(LS.password, password);
       if (needsPin) localStorage.setItem(LS.pin, pin);
-      if (remote) {
-        state = normalize(remote);
-        await idbPut(workspaceKey(), state);
-        renderAll();
-        setSync('ok', `Synced at ${timeNow()}`);
-      }
       $('setupPassword').value = '';
       $('setupPin').value = '';
       unlock();
       toast(offline ? "Saved. Couldn't reach Google Drive yet." : 'Connected to Google Drive');
+      if (state.photos.length || state.notes.length || state.reminders.length) setDirty(true);
+      syncNow({ force: true });
     }
 
     function formError(form, msg) {
@@ -1262,7 +1412,7 @@
       const btn = f.querySelector('button[type="submit"]');
       btn.disabled = true;
       try {
-        const result = await cloudRequest({ action: 'loadData' }, next.value);
+        const result = await cloudRequest({ action: 'status' }, next.value);
         if (result.error && looksLikeAuthError(result.error)) {
           btn.disabled = false;
           return formError(f, 'Google Drive did not accept the new password.');
@@ -1273,7 +1423,7 @@
       f.reset();
       formError(f, '');
       toast('Password updated');
-      syncToCloud(false);
+      syncNow({ force: true });
     }
 
     // ---------- Navigation & preferences ----------
@@ -1286,6 +1436,7 @@
       $('pageTitle').textContent = SECTIONS[sec].title;
       $('pageSub').textContent = sec === 'today' ? todayLabel() : SECTIONS[sec].sub;
       if (sec === 'settings') $('syncUrlInput').value = getSyncUrl();
+      if (sec === 'photos') hydrateThumbs();
       toggleMore(false);
       try { localStorage.setItem(LS.section, sec); } catch {}
       window.scrollTo(0, 0);
@@ -1443,7 +1594,7 @@
       toast('Date saved');
     }
     function deleteSpecialDay(id) {
-      state.specialDays = state.specialDays.filter(d => d.id !== id);
+      removeItem('specialDays', id);
       persist();
       renderDays();
     }
@@ -1517,7 +1668,7 @@
       renderReminders();
     }
     function deleteReminder(id) {
-      state.reminders = state.reminders.filter(x => x.id !== id);
+      removeItem('reminders', id);
       persist();
       renderReminders();
     }
@@ -1567,7 +1718,7 @@
     }
     function deleteNote(id) {
       if (!confirm('Delete this entry?')) return;
-      state.notes = state.notes.filter(n => n.id !== id);
+      removeItem('notes', id);
       persist();
       renderNotes();
     }
@@ -1586,6 +1737,11 @@
     }
 
     // ---------- Photos ----------
+    // Originals live in Drive (Keepsake/Photos/<year>/<month>). This device keeps small
+    // previews, plus the original only until it has finished uploading.
+    const thumbCache = new Map();
+    const fullCache = new Map();
+
     function readFileAsDataURL(file) {
       return new Promise(resolve => {
         const reader = new FileReader();
@@ -1593,68 +1749,163 @@
         reader.readAsDataURL(file);
       });
     }
+    function makeThumb(dataUrl, max = 480) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width * scale);
+          c.height = Math.round(img.height * scale);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          resolve(c.toDataURL('image/jpeg', 0.8));
+        };
+        img.onerror = () => resolve(null);
+        img.src = dataUrl;
+      });
+    }
+
     async function handlePhotoUpload(e) {
       const files = Array.from(e.target.files);
       const caption = $('photoCaptionInput').value.trim();
-      for (const file of files) {
-        const dataUrl = await readFileAsDataURL(file);
-        const photo = {
-          id: Date.now() + Math.random(),
+      e.target.value = "";
+      $('photoCaptionInput').value = "";
+      for (const [i, file] of files.entries()) {
+        const id = Date.now() + i;
+        const full = await readFileAsDataURL(file);
+        const thumb = await makeThumb(full);
+        await idbPut(`full_${id}`, full);
+        if (thumb) { await idbPut(`thumb_${id}`, thumb); thumbCache.set(String(id), thumb); }
+        state.photos.unshift({
+          id,
           caption: caption || file.name.replace(/\.[^/.]+$/, ""),
           date: new Date().toLocaleDateString(),
-          url: dataUrl
-        };
-        if (getPassword()) {
-          toast(`Uploading ${file.name}…`);
-          try {
-            const out = await cloudRequest({ action: 'uploadPhoto', fileName: `Aura_${Date.now()}_${file.name}`, dataUrl });
-            if (out.viewUrl) {
-              photo.driveUrl = out.viewUrl;
-              toast('Photo saved to Google Drive');
-            }
-          } catch {
-            toast('Saved on this device. Google Drive is unreachable.', true);
-          }
-        } else {
-          toast('Photo saved on this device');
-        }
-        state.photos.unshift(photo);
+          addedAt: Date.now(),
+          fileName: file.name,
+          pending: true
+        });
+        renderPhotos();
       }
-      $('photoCaptionInput').value = "";
-      e.target.value = "";
-      await persist();
-      renderPhotos();
+      await saveLocal();
+      syncNow();
     }
-    function openLightbox(id) {
+
+    // Old versions stored each photo inside the data itself; move those to the upload queue.
+    async function migratePhotos() {
+      let changed = false;
+      for (const p of [...state.photos]) {
+        if (!p.fileId && !p.pending) {
+          if (String(p.url || '').startsWith('data:')) {
+            await idbPut(`full_${p.id}`, p.url);
+            const thumb = await makeThumb(p.url);
+            if (thumb) await idbPut(`thumb_${p.id}`, thumb);
+            p.pending = true;
+            p.addedAt = p.addedAt || (Number(p.id) > 1e12 ? Math.floor(Number(p.id)) : Date.parse(p.date) || Date.now());
+          } else {
+            state.photos = state.photos.filter(x => x !== p);
+          }
+          changed = true;
+        }
+        if (p.url || p.driveUrl) {
+          delete p.url;
+          delete p.driveUrl;
+          changed = true;
+        }
+      }
+      if (changed) await saveLocal();
+      return changed;
+    }
+
+    async function loadThumb(id) {
+      if (thumbCache.has(id)) return thumbCache.get(id);
+      let url = await idbGet(`thumb_${id}`);
+      if (!url) {
+        const p = state.photos.find(x => String(x.id) === id);
+        if (p?.fileId && getPassword()) {
+          try {
+            const r = await cloudRequest({ action: 'getPhoto', fileId: p.fileId, size: 'thumb' });
+            if (r.dataUrl) { url = r.dataUrl; await idbPut(`thumb_${id}`, url); }
+          } catch {}
+        }
+      }
+      if (url) thumbCache.set(id, url);
+      return url;
+    }
+    let hydrating = false;
+    async function hydrateThumbs() {
+      if (hydrating) return;
+      hydrating = true;
+      try {
+        const imgs = [...document.querySelectorAll('#photoGrid img:not([src])')];
+        const worker = async () => {
+          for (let img = imgs.shift(); img; img = imgs.shift()) {
+            const url = await loadThumb(img.dataset.id);
+            if (url) img.src = url;
+          }
+        };
+        await Promise.all([worker(), worker(), worker(), worker()]);
+      } finally {
+        hydrating = false;
+      }
+    }
+
+    let lightboxId = null;
+    async function openLightbox(id) {
       const p = state.photos.find(x => String(x.id) === String(id));
       if (!p) return;
-      $('lightboxImg').src = p.url || p.driveUrl;
+      lightboxId = String(p.id);
+      $('lightboxImg').src = thumbCache.get(lightboxId) || '';
       $('lightboxImg').alt = p.caption || '';
       $('lightboxCaption').textContent = p.caption;
       $('lightboxDate').textContent = p.date;
       $('lightbox').classList.remove('hidden');
+
+      let full = fullCache.get(lightboxId) || await idbGet(`full_${lightboxId}`);
+      if (!full && p.fileId && getPassword()) {
+        $('lightboxDate').textContent = 'Loading full photo…';
+        try {
+          const r = await cloudRequest({ action: 'getPhoto', fileId: p.fileId });
+          full = r.dataUrl;
+        } catch {}
+      }
+      if (full) {
+        fullCache.set(String(p.id), full);
+        if (fullCache.size > 6) fullCache.delete(fullCache.keys().next().value);
+      }
+      if (lightboxId !== String(p.id)) return;
+      if (full) $('lightboxImg').src = full;
+      $('lightboxDate').textContent = p.date;
     }
     function closeLightbox() {
+      lightboxId = null;
       $('lightbox').classList.add('hidden');
       $('lightboxImg').src = '';
     }
-    function deletePhoto(id, ev) {
-      ev.stopPropagation();
-      if (!confirm('Delete this photo?')) return;
-      state.photos = state.photos.filter(x => String(x.id) !== String(id));
-      persist();
+    async function deletePhoto(id, ev) {
+      ev?.stopPropagation();
+      if (!confirm('Delete this photo? It will also be removed from Google Drive.')) return;
+      const p = state.photos.find(x => String(x.id) === String(id));
+      removeItem('photos', id);
+      if (p?.fileId) setDeleteQueue([...getDeleteQueue(), p.fileId]);
+      thumbCache.delete(String(id));
+      fullCache.delete(String(id));
+      idbDel(`thumb_${id}`);
+      idbDel(`full_${id}`);
       renderPhotos();
+      await persist();
     }
     function renderPhotos() {
       $('photoGrid').innerHTML = state.photos.map(p => `
         <figure class="photo" onclick="openLightbox('${esc(p.id)}')">
-          <img loading="lazy" src="${esc(p.url || p.driveUrl)}" alt="${esc(p.caption)}" />
+          <img loading="lazy" data-id="${esc(p.id)}" alt="${esc(p.caption)}" />
+          ${p.pending ? '<span class="photo-badge">Uploading</span>' : ''}
           <figcaption>
             <span>${esc(p.caption)}</span>
             <button class="btn-icon" onclick="deletePhoto('${esc(p.id)}', event)" aria-label="Delete">${icon('trash', 'icon-sm')}</button>
           </figcaption>
         </figure>
       `).join('') || `<p class="empty">No photos yet.</p>`;
+      if (currentSection === 'photos') hydrateThumbs();
     }
 
     // ---------- Vault ----------
@@ -1668,7 +1919,7 @@
     }
     function deleteVaultItem(id) {
       if (!confirm('Delete this item?')) return;
-      state.vault = state.vault.filter(v => v.id !== id);
+      removeItem('vault', id);
       persist();
       renderVault();
     }
@@ -1715,7 +1966,7 @@
     }
     function deleteHabit(id) {
       if (!confirm('Delete this habit?')) return;
-      state.habits = state.habits.filter(h => h.id !== id);
+      removeItem('habits', id);
       persist();
       renderHabits();
     }
@@ -1749,7 +2000,7 @@
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `aura-backup-${isoLocal(new Date())}.json`;
+      a.download = `keepsake-backup-${isoLocal(new Date())}.json`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     }
@@ -1761,7 +2012,10 @@
         try {
           const data = JSON.parse(ev.target.result);
           if (!confirm('Replace everything in the app with this backup?')) return;
-          state = normalize(data);
+          const restored = normalize(data);
+          for (const k of COLLECTIONS) state[k].forEach(x => { if (!restored[k].some(y => String(y.id) === String(x.id))) restored.deleted[String(x.id)] = Date.now(); });
+          state = restored;
+          await migratePhotos();
           await persist();
           renderAll();
           toast('Backup restored');
@@ -1774,7 +2028,7 @@
     }
 
     function renderAll() {
-      $('intentionInput').value = state.intention || "";
+      if (document.activeElement !== $('intentionInput')) $('intentionInput').value = state.intention || "";
       renderDays();
       renderReminders();
       renderNotes();
@@ -1819,11 +2073,18 @@
         }
       } catch {}
       if (saved) state = normalize(saved);
+      // First run with the new sync: merge what's on this device instead of replacing it.
+      if (localStorage.getItem(LS.rev) === null) setDirty(true);
+      await migratePhotos();
       renderAll();
       let lastSection = 'today';
       try { lastSection = localStorage.getItem(LS.section) || 'today'; } catch {}
       switchSection(lastSection);
-      if (getPassword()) pullFromCloud(true);
+
+      if (getPassword()) syncNow({ force: true });
+      setInterval(() => { if (document.visibilityState === 'visible') syncNow(); }, POLL_MS);
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncNow(); });
+      window.addEventListener('online', () => syncNow());
     });
   </script>
 </body>
