@@ -512,8 +512,8 @@
       <div class="brand-mark">K</div>
 
       <form id="setupView" class="gate-view hidden" onsubmit="completeSetup(event)" autocomplete="off">
-        <h1>Welcome to Keepsake</h1>
-        <p class="muted">Enter your password to connect your Google Drive.</p>
+        <h1 id="setupTitle">Welcome to Keepsake</h1>
+        <p class="muted" id="setupText">Enter your password to connect your Google Drive.</p>
         <div class="gate-form">
           <label class="field"><span>Password</span>
             <input id="setupPassword" class="input" type="password" required autocomplete="current-password" />
@@ -897,7 +897,9 @@
 
   <script>
     // Google Apps Script web app that stores the workspace in Drive.
-    const DEFAULT_SYNC_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
+    const DEFAULT_SYNC_URL = "https://script.google.com/macros/s/AKfycbxtKM6w4miFn1h1hnII3JG0RURazw9KJBzC0xfR8yM27jp2bBQ5ll5_2QRfbTHZiJa8/exec";
+    // Address of the previous script; devices that saved it are moved to the new default.
+    const OLD_SYNC_URL = "https://script.google.com/macros/s/AKfycbwy7sEd5rKMmwRlDW5b02IKsZimxNkCj5q4pBZ_a96IoJZpbbp8VaN4bnj8q7-7wtx8/exec";
 
     // Storage keys (kept compatible with earlier versions).
     const LS = {
@@ -1162,7 +1164,10 @@
         setSync('ok', `Synced at ${timeNow()}`);
         if (manual) toast('Everything is up to date');
       } catch (err) {
-        if (err instanceof SyncError) {
+        if (err instanceof SyncError && looksLikeAuthError(err.message)) {
+          setSync('error', 'Password not accepted');
+          askForPassword();
+        } else if (err instanceof SyncError) {
           setSync('error', 'Sync failed');
           if (manual) toast(err.message, true);
         } else {
@@ -1383,6 +1388,16 @@
       toast(offline ? "Saved. Couldn't reach Google Drive yet." : 'Connected to Google Drive');
       if (state.photos.length || state.notes.length || state.reminders.length) setDirty(true);
       syncNow({ force: true });
+    }
+
+    // Shown when Drive stops accepting the saved password (for example after it was changed in the script).
+    function askForPassword() {
+      localStorage.removeItem(LS.password);
+      $('setupTitle').textContent = 'Enter your password';
+      $('setupText').textContent = "Google Drive didn't accept the saved password. Enter your current one to keep syncing.";
+      $('setupPinField').classList.toggle('hidden', hasPin());
+      $('setupPin').required = !hasPin();
+      showGate('setup');
     }
 
     function formError(form, msg) {
@@ -2053,6 +2068,7 @@
       applyTheme();
       setClockFormat(use24Hour);
       migrateLegacyPin();
+      if (localStorage.getItem(LS.url) === OLD_SYNC_URL) localStorage.removeItem(LS.url);
       updateClock();
       setInterval(updateClock, 1000);
 
